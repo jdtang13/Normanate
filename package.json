@@ -1,10 +1,11 @@
 {
-  "name": "hackathon-starter",
-  "version": "3.0.1",
+  "name": "Normanate",
+  "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
+    "url": "https://github.com/jdtang13/Normanate.git"
   },
+  "private": true,
   "scripts": {
     "start": "node app.js",
     "test": "mocha"
@@ -35,7 +36,7 @@
     "lodash": "^3.5.0",
     "lusca": "^1.0.2",
     "method-override": "^2.3.1",
-    "mongoose": "^3.8.25",
+    "mongoose": "~3.8.8",
     "morgan": "^1.5.1",
     "multer": "^0.1.8",
     "node-foursquare": "^0.3.0",
@@ -66,6 +67,21 @@
     "chai": "^2.1.1",
     "mocha": "^2.2.1",
     "multiline": "^1.0.2",
-    "supertest": "^0.15.0"
+    "supertest": "^0.15.0",
+    "grunt-sass": "~0.14.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-config-dir": "~0.3.2",
+    "grunt-localizr": "~0.1.0",
+    "grunt-copy-to": "0.0.10",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-mocha-cli": "~1.5.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-nodemon": "~0.3.0",
+    "grunt-concurrent": "~1.0.0",
+    "grunt-browserify": "~3.2.1",
+    "browserify": "~8.1.0",
+    "deamdify": "~0.1.1",
+    "debowerify": "~1.2.0"
   }
 }
