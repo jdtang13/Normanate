@@ -9,6 +9,8 @@ Make sure you have node.js installed (use nvm!) Also make sure you have bower an
     $ npm install -g bower
     $ npm install -g grunt-cli
 
+Make sure to install mongodb as well, and that mongo is running on the default port. The app will yell at you if it isn't.
+
 Then clone the repository, and run
 
     $ npm install
