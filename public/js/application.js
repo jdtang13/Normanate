@@ -13,6 +13,6 @@
  * below via "//= require [filename]".
  */
 
-//= require lib/jquery-2.1.3.min
-//= require lib/bootstrap.min
+//= require jquery/dist/jquery.min.js
+//= require bootstrap/dist/js/bootstrap.min.js
 //= require main
