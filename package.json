@@ -1,9 +1,13 @@
 {
   "name": "Normanate",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "description": "a really cool app",
   "repository": {
     "type": "git",
     "url": "https://github.com/jdtang13/Normanate.git"
+  },
+  "engines": {
+    "node": "0.10.x"
   },
   "private": true,
   "scripts": {
