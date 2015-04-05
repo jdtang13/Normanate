@@ -35,3 +35,22 @@ exports.objectiveHeuristics = function(text) {
 		}
 	}
 }
+
+/* Wordnik: http://videlais.com/2015/03/25/starting-with-the-wordnik-api-in-node-js/ */
+/* API Key: 8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27 */
+
+exports.subjectiveHeuristics = function(text) {
+
+	var APIKEY = '8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27';
+	var Wordnik = require('wordnik-bb').init(APIKEY);
+	 
+	var randomWordPromise = Wordnik.getRandomWordModel({
+	    includePartOfSpeech: "verb-transitive",
+	    minCorpusCount: 10000
+	  }
+	);
+	randomWordPromise.done(function(wordModel) {
+	  console.log("Random word: ", wordModel.attributes.word);
+});
+	
+}
