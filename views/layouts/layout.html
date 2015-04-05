@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content={{_csrf}}>
     <title>Title</title>
-    {{css('main')}}
+    <link rel="stylesheet" href="/build/css/main.css">
   </head>
   <body>
     {% include '../partials/header.html' %}
@@ -15,6 +15,6 @@
       {% endblock %}
     </div>
     {% include '../partials/footer.html' %}
-    {{js('application')}}
+    <script type="text/javascript" src="/build/js/app.js"></script>
   </body>
 </html>

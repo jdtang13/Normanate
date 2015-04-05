@@ -21,7 +21,6 @@ var path = require('path');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var expressValidator = require('express-validator');
-var connectAssets = require('connect-assets');
 
 var walk = require('./utils/walk');
 
@@ -63,9 +62,7 @@ app.locals.cache = 'memory';
 app.engine('html', consolidate['swig']);
 app.set('view engine', 'html');
 app.use(compress());
-app.use(connectAssets({
-  paths: [path.join(__dirname, 'public/css'), path.join(__dirname, 'public/components'), path.join(__dirname, 'public/js')]
-}));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

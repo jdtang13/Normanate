@@ -15,8 +15,15 @@ module.exports = function watch(grunt) {
             }
         },
         scss: {
-            files: ['public/css/**/*'],
+            files: ['public/css/**/*.scss'],
             tasks: ['sass'],
+            options: {
+                livereload: true
+            }
+        },
+        less: {
+            files: ['public/css/**/*.less'],
+            tasks: ['less'],
             options: {
                 livereload: true
             }
