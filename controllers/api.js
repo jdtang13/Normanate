@@ -21,6 +21,8 @@ var ig = require('instagram-node').instagram();
 var Y = require('yui/yql');
 var _ = require('lodash');
 
+var StanfordSimpleNLP = require('stanford-simple-nlp');
+
 /**
  * GET /api
  * List of API examples.
