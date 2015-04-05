@@ -24,24 +24,17 @@ var expressValidator = require('express-validator');
 
 var walk = require('./utils/walk');
 
-/**
- * Controllers (route handlers).
- */
-var homeController = require('./controllers/home');
-var userController = require('./controllers/user');
-var apiController = require('./controllers/api');
-var contactController = require('./controllers/contact');
 
 /**
  * API keys and Passport configuration.
  */
 var secrets = require('./config/secrets');
-var passportConf = require('./config/passport');
 
 /**
  * Create Express server.
  */
 var app = express();
+
 
 /**
  * Connect to MongoDB.
@@ -49,6 +42,15 @@ var app = express();
 mongoose.connect(secrets.db);
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+});
+
+// MODELS
+
+// Add in models from the folder
+var modelsPath = __dirname+'/models';
+
+walk(modelsPath, '', function(path) {
+  require(path);
 });
 
 /**

@@ -1,3 +1,5 @@
+// various app-framework routes, usually with user authentication
+
 var passportConf = require('../config/passport');
 var homeController = require('../controllers/home');
 var userController = require('../controllers/user');

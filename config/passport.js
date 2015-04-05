@@ -11,7 +11,8 @@ var OAuthStrategy = require('passport-oauth').OAuthStrategy;
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
 var secrets = require('./secrets');
-var User = require('../models/User');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);

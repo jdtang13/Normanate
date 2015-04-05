@@ -1,6 +1,7 @@
 var chai = require('chai');
 var should = chai.should();
 var User = require('../models/User');
+var Essay = require('../models/Essay');
 
 describe('User Model', function() {
   it('should create a new user', function(done) {
@@ -35,6 +36,26 @@ describe('User Model', function() {
 
   it('should delete a user', function(done) {
     User.remove({ email: 'test@gmail.com' }, function(err) {
+      if (err) return done(err);
+      done();
+    });
+  });
+});
+
+describe('Essay Model', function() {
+  it('should create a new essay', function(done) {
+    var essay = new Essay({
+      title: 'Test',
+      content: 'The quick brown fox jumps over the lazy dog.'
+    });
+    essay.save(function(err) {
+      if (err) return done(err);
+      done();
+    })
+  });
+
+  it('should delete an essay', function(done) {
+    Essay.remove({ title: 'Test' }, function(err) {
       if (err) return done(err);
       done();
     });

@@ -62,4 +62,17 @@ userSchema.methods.gravatar = function(size) {
   return 'https://gravatar.com/avatar/' + md5 + '?s=' + size + '&d=retro';
 };
 
+
+// Duplicate the ID field.
+userSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+
+// Ensure virtual fields are serialised.
+userSchema.set('toJSON', {
+    virtuals: true
+});
+
+
 module.exports = mongoose.model('User', userSchema);
