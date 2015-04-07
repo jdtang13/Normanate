@@ -1,4 +1,5 @@
 window.$ = window.jQuery = require('jquery');
+require('expanding-textareas');
 require('bootstrap');
 
 function createEssay(data, error) {
@@ -19,6 +20,8 @@ function createEssay(data, error) {
 }
 
 $(document).ready(function() {
+
+    $(".expanding").expanding();
 
   // Place JavaScript code here...
   $('#create-essay-button').click(function() {

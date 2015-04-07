@@ -43,3 +43,8 @@ exports.postCreateEssay = function(req, res) {
         }
     });
 };
+
+// TODO: apply metrics on an essay
+exports.updateEssayMetrics = function(req, res) {
+    return res.json(req.essay);
+};
