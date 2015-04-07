@@ -25,10 +25,14 @@ $(document).ready(function() {
 
   // Place JavaScript code here...
   $('#create-essay-button').click(function() {
+    var essayTitle = $('#title').val();
+    if (! essayTitle || !essayTitle.length) {
+        essayTitle = 'Untitled';
+    }
     createEssay({
-        title: 'Untitled',
+        title: essayTitle,
         _csrf: $('#create-essay-button').data('csrf'),
-        content: 'Lorem ipsum.'
+        content: $('#content').val()
     }, function(err) {
         console.log(err)
     });
