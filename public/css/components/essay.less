@@ -1,0 +1,35 @@
+.essay-title {
+    @essay-typography();
+    padding: none;
+    border: none;
+    box-shadow: none;
+    font-size: 32px;
+    font-weight: 700;
+
+    height: auto;
+
+    &:focus, &:active {
+        box-shadow: none;
+        border: none;
+    }
+}
+
+.essay-content {
+    @essay-typography();
+    padding: none;
+    border: none;
+    box-shadow: none;
+    font-size: 20px;
+    
+    min-height: 320px;
+
+    &:focus, &:active {
+        box-shadow: none;
+        border: none;
+    }
+}
+
+
+.essay-typography {
+    @essay-typography();
+}

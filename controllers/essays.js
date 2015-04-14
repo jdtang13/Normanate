@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Essay = mongoose.model('Essay');
+var _ = require('lodash');
 
 // controller for views related to individual essays
 var passportConf = require('../config/passport');
@@ -24,6 +25,21 @@ exports.getEssay = function(req, res) {
     });
 };
 
+exports.getEssays = function(req, res) {
+
+    Essay.find({ author:req.user.id }).sort('-updated').exec(function(err, essays) {
+        if (err) {
+            res.render('error', {
+                status: 500
+            });
+        } else {
+            res.render('essays/list', {
+                essays: essays
+            });
+        }
+    });
+};
+
 // create an essay
 exports.postCreateEssay = function(req, res) {
     var essay = new Essay(req.body);
@@ -43,6 +59,33 @@ exports.postCreateEssay = function(req, res) {
         }
     });
 };
+
+// update an essay
+exports.updateEssay = function(req, res) {
+    var essay = req.essay;
+    essay = _.extend(essay, req.body);
+    essay.updated = Date.now();
+
+    essay.save(function(err) {
+        if (err) {
+            return res.status(400).json(err.errors);
+        } else {
+            res.json(essay);
+        }
+    });
+}
+
+exports.deleteEssay = function(req, res) {
+    var essay = req.essay;
+
+    essay.remove(function(err) {
+        if (err) {
+            return res.status(400).json(err.errors);
+        } else {
+            res.json(essay);
+        }
+    });
+}
 
 // TODO: apply metrics on an essay
 exports.updateEssayMetrics = function(req, res) {

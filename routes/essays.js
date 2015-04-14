@@ -29,8 +29,11 @@ module.exports = function(app) {
     app.param('essay', essayParam);
 
     app.route('/essays')
-        .post(essayController.postCreateEssay);
+        .post(essayController.postCreateEssay)
+        .get(passportConf.isAuthenticated, essayController.getEssays);
 
     app.route('/essays/:essay')
-        .get(essayController.hasAuthorization, essayController.getEssay);
+        .get(essayController.hasAuthorization, essayController.getEssay)
+        .put(essayController.hasAuthorization, essayController.updateEssay)
+        .delete(essayController.hasAuthorization, essayController.deleteEssay);
 };
