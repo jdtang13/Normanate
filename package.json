@@ -89,6 +89,7 @@
     "blessed": "^0.0.51",
     "chai": "^2.1.1",
     "mocha": "^2.2.1",
+    "wordnik-bb": "0.1.1",
     "multiline": "^1.0.2",
     "supertest": "^0.15.0",
     "grunt-sass": "~0.14.0",

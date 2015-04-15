@@ -1,6 +1,5 @@
 var passport = require('passport');
 
-
 /**
  * OAuth authentication routes. (Sign in)
  */
