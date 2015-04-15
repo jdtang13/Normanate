@@ -1,14 +1,20 @@
 {% extends '../layouts/layout.html' %}
 {% block content %}
 <div class="page-header">
-  <h3>Essay</h3>
+  <div class='text-right'>
+    <a href='/essays/{{essay.id}}/edit' class='btn btn-default'>Edit Essay</a>
+  </div>
 </div>
 <div class='row'>
-  <div class='col-sm-6'>
+  <div class='col-sm-8'>
+  <div class='essay-container'>
     <h1 class='essay-title'>{{essay.title}}</h1>
-    <p class='essay-content'>{{essay.content}}</p>
+    <p class='essay-content'>{{essay.content|striptags|replace('\n', '<br>', 'g')|safe}}</p>
+    </div>
   </div>
-  <div class='col-sm-6'>
+  <div class='col-sm-4'>
+  <h3>Stats</h3>
+
   </div>
 </div>
 {% endblock %}

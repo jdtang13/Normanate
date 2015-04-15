@@ -7,10 +7,12 @@
 <p class="lead">A boilerplate for Node.js web applications. WRITE AN ESSAY YO</p>
 <hr/>
 
-
-<input id='title' type='text' class='essay-title form-control' placeholder='Title of Essay'/>
-<textarea id='content' class='essay-content form-control expanding' placeholder='Type the content of your essay here'></textarea>
-  <a id="create-essay-button" data-csrf="{{_csrf}}" role="button" class="btn btn-lg btn-default">Create an Essay</a>
+<div class='essay-container'>
+<textarea id='title' type='text' class='essay-title form-control expanding' placeholder='Title of Essay'></textarea>
+<textarea id='content' class='essay-content essay-content-truncated form-control expanding' placeholder='Type the content of your essay here'></textarea>
+  
+</div>
+<a id="create-essay-button" data-csrf="{{_csrf}}" role="button" class="btn btn-lg btn-default">Create an Essay</a>
 </div>
 </div>
 {% endblock %}

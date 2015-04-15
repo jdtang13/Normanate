@@ -1,18 +1,56 @@
 {% extends '../layouts/layout.html' %}
 {% block content %}
 <div class="page-header">
-  
+  <div class='pull-left'>
+  <h1>Welcome, {{user.profile.name || user.email || user.id}}</h1>
+  </div>
+  <div class='pull-right'>
+    <a data-toggle="collapse" href="#new-essay-collapse" aria-expanded="false" aria-controls="new-essay-collapse" class='btn btn-default'>Add an Essay</a>
+  </div>
+  <div style='clear:both'></div>
 </div>
 <div class='row'>
-  <div class='col-sm-6'>
-    <h3>List of Essays</h3>
-    {% for essay in essays %}
-    <h1><a href='/essays/{{essay.id}}'>{{essay.title}}</a></h1>
-    <p>{{essay.content}}</p>
-    <hr>
-    {% endfor %}
+<div class='col-sm-8 col-sm-offset-2'>
+<div class="collapse" id="new-essay-collapse">
+  <div class='essay-container'>
+<textarea id='title' type='text' class='essay-title form-control expanding' placeholder='Title of Essay'></textarea>
+<textarea id='content' class='essay-content essay-content-truncated form-control expanding' placeholder='Type the content of your essay here'></textarea>
+  
+</div>
+<a id="create-essay-button" data-csrf="{{_csrf}}" role="button" class="btn btn-lg btn-default">Create an Essay</a>
+</div>
+</div>
+</div>
+<div class='row'>
+  <div class='col-sm-8'>
+
+               <div class="widget">
+                    <div class="widget-title">
+                        Essays
+                    </div>
+                    <div class="widget-body no-padding">
+                        <div class="table-responsive">
+                            <table id='essay-table' class="table table-hover">
+                                <tbody>
+                                {% for essay in essays %}
+
+                                <tr id='{{essay.id}}-page' data-essay='{{essay.id}}'>
+                                <td class='essay-clicker'>{{essay.title}}</td>
+                                <td class='essay-clicker'>{{essay.modified|date('Y-m-d')}}</td>
+                                <td class='essay-clicker'>{{essay.words}}</td>
+                                <td><a id="delete-button-id" data-page='{{essay.id}}' data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash-o"></i></a></td>
+                                </tr>
+
+                                {% endfor %}
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    
   </div>
-  <div class='col-sm-6'>
+  <div class='col-sm-4'>
     <h3>Stats</h3>
   </div>
 </div>

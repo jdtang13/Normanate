@@ -36,4 +36,7 @@ module.exports = function(app) {
         .get(essayController.hasAuthorization, essayController.getEssay)
         .put(essayController.hasAuthorization, essayController.updateEssay)
         .delete(essayController.hasAuthorization, essayController.deleteEssay);
+
+    app.route('/essays/:essay/edit')
+        .get(essayController.hasAuthorization, essayController.getEditEssay);
 };

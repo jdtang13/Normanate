@@ -18,6 +18,12 @@ exports.hasAuthorization = function(req, res, next) {
     next();
 };
 
+exports.getEditEssay = function(req, res) {
+    res.render('essays/edit', {
+        essay: req.essay
+    });
+};
+
 // GET an essay
 exports.getEssay = function(req, res) {
     res.render('essays/view', {

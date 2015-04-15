@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.4",
-    "expanding-textareas": "~0.2.0"
+    "expanding-textareas": "~0.2.0",
+    "tinyplate": "~0.0.3"
   }
 }

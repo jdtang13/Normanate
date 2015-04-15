@@ -1,10 +1,28 @@
+.essay-container {
+    background-color: #FFFFFF;
+    padding: 48px;
+    margin-bottom: 24px;
+    .form-control {
+        padding: 0;
+        &[readonly],
+      fieldset[disabled] & {
+        background-color: #FFFFFF;
+        cursor: default;
+        opacity: 1;
+      }
+  }
+}
+
 .essay-title {
     @essay-typography();
+    text-align: center;
     padding: none;
     border: none;
     box-shadow: none;
     font-size: 32px;
     font-weight: 700;
+
+    overflow: hidden!important;
 
     height: auto;
 
@@ -27,6 +45,11 @@
         box-shadow: none;
         border: none;
     }
+}
+
+.essay-content-truncated {
+    height: 320px;
+    max-height: 320px;
 }
 
 
