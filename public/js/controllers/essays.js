@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 module.exports = {
     createEssay: function(data, error) {
     // Create a piece, redirect to editing that piece
@@ -26,6 +28,18 @@ module.exports = {
             success: function(essay) {
                 window.location.replace('/essays/'+essay.id);
             },
+            error: error
+        });
+    },
+
+    deleteEssay: function(data, success, error) {
+        var extendedData = _.extend(data, {_method:'delete'});
+        console.log(extendedData);
+        $.ajax({
+            url:'/essays/' + data.id,
+            type: 'DELETE',
+            data: extendedData,
+            success: success,
             error: error
         });
     }
