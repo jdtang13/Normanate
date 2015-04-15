@@ -24,4 +24,21 @@ $(document).ready(function() {
     });
   });
 
+  $('#update-essay-button').click(function() {
+    if (!window.essay) {
+        return;
+    }
+    var essayTitle = $('#title').val();
+    if (! essayTitle || !essayTitle.length) {
+        essayTitle = 'Untitled';
+    }
+    essays.updateEssay({
+        title: essayTitle,
+        _csrf: $('#update-essay-button').data('csrf'),
+        content: $('#content').val()
+    }, function(err) {
+        console.log(err)
+    });
+  });
+
 });
