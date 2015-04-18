@@ -11,6 +11,9 @@ exports.objectiveHeuristics = function(text) {
 	var posTagger = new openNLP().posTagger;
 	var freqTable = {};
 	var lenArray = [];
+	var posArray = [];
+
+	/* calculate word frequencies */
 	tokenizer.tokenize(text, function(err, results)) {
 		for (var result in results) {
 			if (result in freqTable) {
@@ -21,17 +24,17 @@ exports.objectiveHeuristics = function(text) {
 			}
 		}
 	});
-
+	/* calculate sentence length variation */
 	sentenceDetector.sentDetect(text, function(err, results)) {
 		for (var result in results) {
 			lenArray.push(result.length);
 		}
 	}
 
+	/* get part of speech - use it to measure literary cadence */
 	posTagger.tag(sentence, function(err, results)) {
 		for (var result in results) {
-			/* do something with the part of speech */
-			
+			posArray.push(result);
 		}
 	}
 }
