@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Essay = mongoose.model('Essay');
 var _ = require('lodash');
+var process = require('../controllers/process');
 
 // controller for views related to individual essays
 var passportConf = require('../config/passport');
@@ -53,6 +54,8 @@ exports.postCreateEssay = function(req, res) {
         essay.author = req.user;
     }
 
+    //process.processText(essay);
+
     essay.save(function(err) {
         if (err) {
             console.log(err);
@@ -71,6 +74,8 @@ exports.updateEssay = function(req, res) {
     var essay = req.essay;
     essay = _.extend(essay, req.body);
     essay.updated = Date.now();
+
+    //process.processText(essay);
 
     essay.save(function(err) {
         if (err) {

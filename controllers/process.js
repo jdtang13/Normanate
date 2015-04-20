@@ -1,6 +1,9 @@
 var openNLP = require("opennlp");
-var training = require("training");
-var chi = require("chi-squared");
+var training = require("../controllers/training");
+
+// TODO: does chi-squared exist?
+//var chi = require("chi-squared");
+
 var expectedHeuristics = training.expectedHeuristics();
 
 exports.processText = function(text) {
@@ -9,15 +12,17 @@ exports.processText = function(text) {
 
 /* calculate objective heuristics */
 exports.objectiveHeuristics = function(text) {
+
 	var tokenizer = new openNLP().tokenizer;
 	var sentenceDetector = new openNLP().sentenceDetector;
 	var posTagger = new openNLP().posTagger;
+
 	var freqTable = {};
 	var lenArray = [];
 	var posArray = [];
 
 	/* calculate word frequencies */
-	tokenizer.tokenize(text, function(err, results)) {
+	tokenizer.tokenize(text, function(err, results) {
 		for (var result in results) {
 			if (result in freqTable) {
 				freqTable[result]++;
@@ -28,17 +33,19 @@ exports.objectiveHeuristics = function(text) {
 		}
 	});
 	/* calculate sentence length variation */
-	sentenceDetector.sentDetect(text, function(err, results)) {
+	sentenceDetector.sentDetect(text, function(err, results) {
 		for (var result in results) {
 			lenArray.push(result.length);
 		}
-	}
+	});
+
 	/* get part of speech - use it to measure literary cadence */
-	posTagger.tag(sentence, function(err, results)) {
+	posTagger.tag(sentence, function(err, results) {
 		for (var result in results) {
 			posArray.push(result);
 		}
-	}
+	});
+
 }
 
 /* Wordnik: http://videlais.com/2015/03/25/starting-with-the-wordnik-api-in-node-js/ */
@@ -62,9 +69,11 @@ exports.subjectiveHeuristics = function(text, callback) {
 	//var prob = calculatePOSMatch(text);
 });
 
+}
+
 
 // helper function to calculate the degree of POS match in the text
-function calculatePOSMatch(text, callback) {
+exports.calculatePOSMatch = function (text, callback) {
 	//1) first store frequencies in a hash table, mapping from one POS -> next POS
 	var posTagger = new openNLP().posTagger;
 	var posPairDict = new Object(); //2-d dict
@@ -72,7 +81,8 @@ function calculatePOSMatch(text, callback) {
 	var chiSquaredDict = new Object();
 	var totalWords = 0;
 	var finalChiSquared = 0.0;
-	posTagger.tag(text, function(err, results)) {
+
+	posTagger.tag(text, function(err, results) {
 		for(var i = 0; i < results.length - 1; i++) {
 			if (posPairDict[results[i]] == null) {
 				posPairDict[results[i]] = new Object();
@@ -109,7 +119,12 @@ function calculatePOSMatch(text, callback) {
 		}
 
 		// 5) Now that we have the final chi-squared static, calculate the probability
-		var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
+		
+		// TODO: does chi-squared exist?
+		//var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
+		var prob = 1337;
+
 		callback(prob);
-	}
+	});
+
 }
