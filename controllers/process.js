@@ -9,6 +9,53 @@ exports.processText = function(text) {
 	/* do text processing and calculate heuristics */
 }
 
+exports.prestigeOf = function(etymology) {
+
+    var etymologies = ["Abnaki", "Afrikaans", "Akkadian", "Algonquian", "American English", 
+    "American Spanish", "Anglican", "Anglo-French", "Anglo-Latin", "Anglo-Norm", "Arabic", "Aramaic", "Arawakan", "Armenian", "Assyrian",
+    "Attic", "Basque", "Breton", "Cantonese", "Carib", "Catalan", "Cherokee", "Chinook", "Church Latin", "Coptic", "Cornish",
+    "Croatian", "Czech", "Danish", "Dravidian", "Dutch", "Ecclesiastical Greek", "East Frisian", "Egypt", "English", "Estonian", "Etruscan",
+    "Finnish", "Flemish", "Frankish", "French", "Frisian", "Fulani", "Gallo-Romance", "Gaelic", "Gaulish", "German", "Gothic", "Greek", "Germanic",
+    "Guarani", "Hawaiian", "Hebrew", "Hung", "Ibo", "Indo-European", "Irish", "Iran", "Iroquoian", "Italian", "Kentish", "Japanese", "Kurdish", "Kwa",
+    "Latin", "Lithuanian", "Late Latin", "Low German", "Malay", "Mandarin", "Mandingo", "Middle Dutch", "Middle English", "Mercian", "Mexican Spanish",
+    "Micmac", "Middle French", "Middle High German", "Middle Irish", "Medieval Latin", "Middle Low German", "Mod.Eng.", "Modern Greek", "Modern Latin", 
+    "Muskogean", "Nahuatl", "N.E", "North Germanic", "North Sea Germanic", "Northumbrian", "O.Celt.", "O.Fr.", "Ojibwa", "Old Church Slavonic",
+    "Old Danish", "Old Dutch", "Old English", "Old Frisian", "Old High German", "Old Irish", "Old Italian", "Old Low German", "Old Norse", 
+    "Old North French", "Old Persian", "Old Provencal", "Old Prussian", "Old Saxon", "O.Slav.", "O.Sp.", "Old Swedish", "Pashto", "Pennsylvania Dutch",
+    "Persian", "P.Gmc.", "Phoenician", "Phrygian", "Piman", "Polish", "Portuguese", "Proto-Italic", "Provencal", "Quechua", "Russian", "Sanskrit", "Scand",
+    "Scot.", "Serbo-Croatian", "Semitic", "Serb.", "Sinhalese", "Siouan", "Slav.", "Slovak", "Spanish","Sumerican", "Swedish", "Tamil","Telugu",
+    "Thai", "Tibetan", "Tupi", "Turk", "Turkic", "Twi", "Ukrainian", "Urdu", "Uto-Aztecan", "Vulgar Latin", "W.Afr.", "West Frisian", "West Germanic",
+    "Wolof", "West Saxon", "Xhosa", "Yoruba", "none"];
+
+    // 1 is high prestige, 0 is low prestige
+    // if a word has multiple prestige values, just use the highest one
+    // general rules:
+    // high prestige -- latin, french
+    // mid prestige -- greek, semitic languages, spanish, slavic, scandinavian germanic, other exotic languages
+    // low prestige -- germanic, celtic, native american languages, siberian/mongol/uralic languages
+    var prestige = [ 0, 0, 0.5, 0, 0,
+    0.5, 0, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5,
+    0.5, 0.5, 0, 0, 0, 1, 0, 0, 1, 0.5, 0,
+    0.5, 0.5, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0.5,
+    0, 0, 0, 1, 0, 0.5, 1, 0, 1, 0, 0, 0.5, 0,
+    0.5, 0.5, 0.5, 0.5, 0.5, 0, 0, 0.5, 0, 1, 0, 0.5, 0.5, 0.5,
+    1, 0.5, 1, 0, 0.5, 0.5, 0.5, 0, 0, 0.5, 0,
+    0, 1, 0, 0, 1, 0, 0, 0.5, 1, 
+    0.5, 0.5, 0.5, 0, 0, 0, 0, 1, 0.5, 0.5,
+    0, 0, 0, 0, 0, 0, 1, 0, 0, 
+    1, 0.5, 1, 0, 0, 0.5, 1, 0, 0.5, 0,
+    0.5, 0, 0.5, 0.5, 0.5, 0.5, 1, 1, 1, 0, 0.5, 0.5, 0,
+    0, 0.5, 0.5, 0.5, 0, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 0.5, 0.5,
+    0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0, 0,
+    0.5, 0, 0.5, 0.5, 0.5];
+
+    var index = etymologies.indexOf(etymology);
+    if (index == -1) return 0.5;
+
+    return prestige[index];
+
+}
+
 /* calculate objective heuristics */
 exports.objectiveHeuristics = function(text) {
 

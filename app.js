@@ -125,3 +125,26 @@ app.listen(app.get('port'), function() {
 });
 
 module.exports = app;
+
+var WordModel = require('mongoose').model('Word');
+
+var seedCount = 0;
+var calculated = 0;
+console.log('Calculating seedcount...');
+WordModel.count({}, function( err, count){
+    console.log('Seedcount is ' + count);
+    seedCount = count;
+    calculated = 1;
+});
+
+//  seed the etymology data if not done already
+if (seedCount == 0 && calculated == 1) {
+  var fs = require('fs');
+  var array = fs.readFileSync('etymologies.txt').toString().split("\n");
+
+  for(i in array) {
+      wordData = i.split(",")
+      WordModel.create({ content: wordData[0], etymology: wordData[1] });
+  }
+
+}

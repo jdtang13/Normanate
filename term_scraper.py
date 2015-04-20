@@ -18,7 +18,7 @@ etymologies = ["Abnaki", "Afrikaans", "Akkadian", "Algonquian", "American Englis
 "Persian", "P.Gmc.", "Phoenician", "Phrygian", "Piman", "Polish", "Portuguese", "Proto-Italic", "Provencal", "Quechua", "Russian", "Sanskrit", "Scand",
 "Scot.", "Serbo-Croatian", "Semitic", "Serb.", "Sinhalese", "Siouan", "Slav.", "Slovak", "Spanish","Sumerican", "Swedish", "Tamil","Telugu",
 "Thai", "Tibetan", "Tupi", "Turk", "Turkic", "Twi", "Ukrainian", "Urdu", "Uto-Aztecan", "Vulgar Latin", "W.Afr.", "West Frisian", "West Germanic",
-"Wolof", "West Saxon", "Xhosa", "Yoruba"]
+"Wolof", "West Saxon", "Xhosa", "Yoruba", "none"]
 
 # 1 is high prestige, 0 is low prestige
 # if a word has multiple prestige values, just use the highest one
@@ -40,7 +40,7 @@ prestige = [ 0, 0, 0.5, 0, 0,
 0.5, 0, 0.5, 0.5, 0.5, 0.5, 1, 1, 1, 0, 0.5, 0.5, 0,
 0, 0.5, 0.5, 0.5, 0, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 0.5, 0.5,
 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0, 0,
-0.5, 0, 0.5, 0.5]
+0.5, 0, 0.5, 0.5, 0.5]
 
 pages = [60, 53, 84, 46,38, 42,34,36,37,10,9,31,56,20,22,81,6,46,108,46,24,15,22,1,4,3]
 

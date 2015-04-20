@@ -8,6 +8,10 @@ var heuristicSchema = new mongoose.Schema(
     values: [Number] //  values associated with particular words
 } 
 );
+// Ensure virtual fields are serialised.
+heuristicSchema.set('toJSON', {
+    virtuals: true
+});
 
 var essaySchema = new mongoose.Schema({
   created: {
@@ -43,4 +47,5 @@ essaySchema.set('toJSON', {
 });
 
 
+module.exports = mongoose.model('Heuristic', heuristicSchema);
 module.exports = mongoose.model('Essay', essaySchema);

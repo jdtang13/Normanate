@@ -61,6 +61,37 @@ exports.postCreateEssay = function(req, res) {
     //h = process.processText(essay);
     //essay.heuristics[0] = h;
 
+    //  temporary heuristic -- the prestige of the essay's title
+    var essayTitle = (essay.title).toLowerCase();
+    var WordModel = require('mongoose').model('Word');
+
+    var titleOrigin = "none";
+
+    //  look up the title's etymology
+    WordModel.findOne({ 'content': essay.title }, function (err, word) {
+        if (word != null) {
+            titleOrigin = word.etymology;
+        }
+    });
+
+    var HeuristicModel = require('mongoose').model('Heuristic');
+
+    //  check that etymology's origin
+    var prestige = process.prestigeOf(titleOrigin);
+
+    var h = new HeuristicModel({ values: [prestige] });
+    h.save(function (err) {
+      if (err) return handleError(err);
+      // saved!
+    });
+
+    if (essay.heuristics.length == 0) {
+        essay.heuristics.push(h);
+    }
+    else {
+        essay.heuristics[0] = h;
+    }
+
     essay.save(function(err) {
         if (err) {
             console.log(err);
