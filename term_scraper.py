@@ -20,6 +20,28 @@ etymologies = ["Abnaki", "Afrikaans", "Akkadian", "Algonquian", "American Englis
 "Thai", "Tibetan", "Tupi", "Turk", "Turkic", "Twi", "Ukrainian", "Urdu", "Uto-Aztecan", "Vulgar Latin", "W.Afr.", "West Frisian", "West Germanic",
 "Wolof", "West Saxon", "Xhosa", "Yoruba"]
 
+# 1 is high prestige, 0 is low prestige
+# if a word has multiple prestige values, just use the highest one
+# general rules:
+# high prestige -- latin, french
+# mid prestige -- greek, semitic languages, spanish, slavic, scandinavian germanic, other exotic languages
+# low prestige -- germanic, celtic, native american languages, siberian/mongol/uralic languages
+prestige = [ 0, 0, 0.5, 0, 0,
+0.5, 0, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5,
+0.5, 0.5, 0, 0, 0, 1, 0, 0, 1, 0.5, 0,
+0.5, 0.5, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0.5,
+0, 0, 0, 1, 0, 0.5, 1, 0, 1, 0, 0, 0.5, 0,
+0.5, 0.5, 0.5, 0.5, 0.5, 0, 0, 0.5, 0, 1, 0, 0.5, 0.5, 0.5,
+1, 0.5, 1, 0, 0.5, 0.5, 0.5, 0, 0, 0.5, 0,
+0, 1, 0, 0, 1, 0, 0, 0.5, 1, 
+0.5, 0.5, 0.5, 0, 0, 0, 0, 1, 0.5, 0.5,
+0, 0, 0, 0, 0, 0, 1, 0, 0, 
+1, 0.5, 1, 0, 0, 0.5, 1, 0, 0.5, 0,
+0.5, 0, 0.5, 0.5, 0.5, 0.5, 1, 1, 1, 0, 0.5, 0.5, 0,
+0, 0.5, 0.5, 0.5, 0, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 0.5, 0.5,
+0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0, 0,
+0.5, 0, 0.5, 0.5]
+
 pages = [60, 53, 84, 46,38, 42,34,36,37,10,9,31,56,20,22,81,6,46,108,46,24,15,22,1,4,3]
 
 class MyHTMLParser(HTMLParser):
