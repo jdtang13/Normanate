@@ -5,8 +5,7 @@ var mongoose = require('mongoose');
 // http://mongoosejs.com/docs/subdocs.html
 var heuristicSchema = new mongoose.Schema( 
 {
-    words: [String],
-    ratings: [Number]
+    values: [Number] //  values associated with particular words
 } 
 );
 
@@ -27,8 +26,7 @@ var essaySchema = new mongoose.Schema({
   },
 
   //  use the subdocument
-  //  should i use brackets? i'm thinking i don't need an array here
-  //  error:  Did you try nesting Schemas? You can only nest using refs or arrays.
+  //  allow for multiple heuristic schema -- perhaps heuristics[0] is a certain heuristic, heuristics[1], etc.?
   heuristics: [heuristicSchema]
 
 });

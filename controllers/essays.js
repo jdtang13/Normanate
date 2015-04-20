@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Essay = mongoose.model('Essay');
 var _ = require('lodash');
+
+//  require the process.js file
 var process = require('../controllers/process');
 
 // controller for views related to individual essays
@@ -54,7 +56,10 @@ exports.postCreateEssay = function(req, res) {
         essay.author = req.user;
     }
 
-    //process.processText(essay);
+    //  generate heuristic data and save it
+
+    //h = process.processText(essay);
+    //essay.heuristics[0] = h;
 
     essay.save(function(err) {
         if (err) {
