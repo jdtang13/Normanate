@@ -1,8 +1,7 @@
 var openNLP = require("opennlp");
 var training = require("../controllers/training");
 
-// TODO: does chi-squared exist?
-//var chi = require("chi-squared");
+var chi = require("chi-squared");
 
 var expectedHeuristics = training.expectedHeuristics();
 
@@ -120,9 +119,7 @@ exports.calculatePOSMatch = function (text, callback) {
 
 		// 5) Now that we have the final chi-squared static, calculate the probability
 		
-		// TODO: does chi-squared exist?
-		//var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
-		var prob = 1337;
+		var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
 
 		callback(prob);
 	});
