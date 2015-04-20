@@ -50,7 +50,9 @@ exports.prestigeOf = function(etymology) {
     0.5, 0, 0.5, 0.5, 0.5];
 
     var index = etymologies.indexOf(etymology);
-    if (index == -1) return 0.5;
+    if (index == -1) { 
+    	return 0.5;
+	}
 
     return prestige[index];
 

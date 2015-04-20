@@ -142,9 +142,10 @@ if (seedCount == 0 && calculated == 1) {
   var fs = require('fs');
   var array = fs.readFileSync('etymologies.txt').toString().split("\n");
 
-  for(i in array) {
-      wordData = i.split(",")
+  for(i = 0; i < array.length; i++) {
+      wordData = array[i].split(",")
       WordModel.create({ content: wordData[0], etymology: wordData[1] });
+      console.log('Added ' + wordData[0] + ' with origin ' + wordData[1]);
   }
 
 }

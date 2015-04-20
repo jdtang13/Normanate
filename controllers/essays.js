@@ -68,9 +68,13 @@ exports.postCreateEssay = function(req, res) {
     var titleOrigin = "none";
 
     //  look up the title's etymology
-    WordModel.findOne({ 'content': essay.title }, function (err, word) {
+    console.log("looking up word: " + essayTitle);
+    var queryWord = WordModel.findOne({ 'content': essayTitle });
+
+    queryWord.exec(function (err, word) {
         if (word != null) {
             titleOrigin = word.etymology;
+            console.log("word found! origin is " + titleOrigin);
         }
     });
 
@@ -78,6 +82,7 @@ exports.postCreateEssay = function(req, res) {
 
     //  check that etymology's origin
     var prestige = process.prestigeOf(titleOrigin);
+    console.log("prestige of origin is " + prestige);
 
     var h = new HeuristicModel({ values: [prestige] });
     h.save(function (err) {
