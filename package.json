@@ -7,7 +7,8 @@
     "url": "https://github.com/jdtang13/Normanate.git"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "0.12.x",
+    "npm" : "2.7.x"
   },
   "private": true,
   "scripts": {
