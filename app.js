@@ -133,23 +133,24 @@ var hasBeenReset = 0;
 // TODO: Danger! resetting and reseeding the word db! Remove this block when you don't need it!
 if (hasBeenReset == 0) {
   WordModel.remove({}, function(err) { 
-     console.log('collection Word removed');
+     console.log("NOTICE: deleted all Words to reset the database -- remove this line if you don't want this");
      hasBeenReset = 1;
 
     //  seed the etymology data if not done already
       var fs = require('fs');
       var array = fs.readFileSync('etymologies.txt').toString().split("\n");
 
-      console.log("Begin seeding database");
+      console.log("Seeding database with existing words");
 
       //  word textfile format: "name,etymology" --> split the string by comma
       for(i = 0; i < array.length; i++) {
           
-          console.log("looking at line: " + array[i]);
+          //console.log("looking at line: " + array[i]);
           var wordData = array[i].split(",");
           var queryWord = WordModel.findOne({ 'content': wordData[0] });  
 
           //  TODO: add callback that passes down wordData array
+          (function(wordData) {
           queryWord.exec(function (err, word) { 
             if (word != null) {            
               var origin = word.etymologies[0]; 
@@ -162,15 +163,19 @@ if (hasBeenReset == 0) {
                 console.log('Added ' + wordData[0] + ' with origin ' + wordData[1]);
               }
             });
+          })(wordData);
+
       }
+
+      console.log("Seeding complete (probably).");
 
   });
 }
 
 var seedCount = 0;
-console.log('Calculating seedcount...');
+console.log('Calculating number of words in database...');
 WordModel.count({}, function( err, count){
-    console.log('Seedcount is ' + count);
+    console.log('Number of existing words is ' + count);
     seedCount = count;
 });
 
