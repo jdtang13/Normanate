@@ -105,7 +105,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 	var posArray = [];
 	var resultDict = {};
 
-	int counter = 3;
+	var counter = 3;
 
 	// FETCH FROM DATABASE HERE
 
@@ -135,7 +135,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		resultDict["overused_words"] = [];
 		var n = Math.min(5, results.length);
 		for(var i = 0; i < n; i++) {
-			resultDict.push(result[i]);
+			resultDict["overused_words"].push(result[i]);
 		}
 
 		counter = checkCallback(counter, callback, resultDict);
@@ -165,7 +165,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 
 	// get num paragraphs - TO DO
 
-	posTagger.tag(sentence, function(err, results)) {
+	posTagger.tag(text, function(err, results) {
 		var adjectiveCount = 0;
 		var adverbCount = 0;
 		var nounCount = 0;
@@ -196,7 +196,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		resultDict["pos_info"]["noun_count"] = nounCount;
 		resultDict["pos_info"]["verb_count"] = verbCount;
 		counter = checkCallback(counter, callback, resultDict);
-	}
+	});
 	// get part of speech statistics 
 	// posTagger.tag(sentence, function(err, results) {
 	// 	for (var result in results) {
@@ -227,12 +227,13 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 	var tokenizer = new OpenNLP().tokenizer;
 	tokenizer.tokenize(text, function(err, results) {
 		// need some way to fetch from database 
+		// get the etymology associated with the word
+		// calculate prestige value
 
-		
 	});
 
 	// calculate POS distribution match 
-	//var prob = calculatePOSMatch(text);
+	// var prob = calculatePOSMatch(text);
 });
 
 }
