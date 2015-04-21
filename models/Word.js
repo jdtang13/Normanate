@@ -7,7 +7,7 @@ var wordSchema = new mongoose.Schema({
       default: Date.now
   },
   content: String,
-  etymology: String
+  etymologies: [String]
 
 });
 

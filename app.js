@@ -128,24 +128,52 @@ module.exports = app;
 
 var WordModel = require('mongoose').model('Word');
 
+var hasBeenReset = 0;
+
+// TODO: Danger! resetting the word db! Remove this line when you don't need it!
+/*
+if (hasBeenReset == 0) {
+  WordModel.remove({}, function(err) { 
+     console.log('collection Word removed');
+     hasBeenReset = 1;
+  });
+}*/
+
 var seedCount = 0;
-var calculated = 0;
 console.log('Calculating seedcount...');
 WordModel.count({}, function( err, count){
     console.log('Seedcount is ' + count);
     seedCount = count;
-    calculated = 1;
+
+    if (seedCount == 0) {
+    //  seed the etymology data if not done already
+      var fs = require('fs');
+      var array = fs.readFileSync('etymologies.txt').toString().split("\n");
+
+      console.log("Begin seeding database");
+
+      //  word textfile format: "name,etymology" --> split the string by comma
+      for(i = 0; i < array.length; i++) {
+          wordData = array[i].split(",");
+
+          var queryWord = WordModel.findOne({ 'content': wordData[0] });  
+          queryWord.exec(function (err, word) { 
+            if (word != null) {            
+              var origin = word.etymologies[0]; 
+              console.log("word already exists, origin is " + origin + ", adding new origin " + wordData[1]);
+              word.etymologies.push(wordData[1]);
+
+              }
+              else {
+                WordModel.create({ content: wordData[0], etymologies: [wordData[1]] });
+                console.log('Added ' + wordData[0] + ' with origin ' + wordData[1]);
+              }
+            });
+      }
+    }
+
 });
 
-//  seed the etymology data if not done already
-if (seedCount == 0 && calculated == 1) {
-  var fs = require('fs');
-  var array = fs.readFileSync('etymologies.txt').toString().split("\n");
 
-  for(i = 0; i < array.length; i++) {
-      wordData = array[i].split(",")
-      WordModel.create({ content: wordData[0], etymology: wordData[1] });
-      console.log('Added ' + wordData[0] + ' with origin ' + wordData[1]);
-  }
 
-}
+

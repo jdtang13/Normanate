@@ -73,7 +73,7 @@ exports.postCreateEssay = function(req, res) {
 
     queryWord.exec(function (err, word) {
         if (word != null) {
-            titleOrigin = word.etymology;
+            titleOrigin = word.etymologies[0];
             console.log("word found! origin is " + titleOrigin);
         }
     });
