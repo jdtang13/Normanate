@@ -147,9 +147,9 @@ if (hasBeenReset == 0) {
           
           console.log("looking at line: " + array[i]);
           var wordData = array[i].split(",");
-          //console.log("produced " + wordData[0] + " and " + wordData[1]);
-
           var queryWord = WordModel.findOne({ 'content': wordData[0] });  
+
+          //  TODO: add callback that passes down wordData array
           queryWord.exec(function (err, word) { 
             if (word != null) {            
               var origin = word.etymologies[0]; 
