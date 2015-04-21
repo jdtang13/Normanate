@@ -130,22 +130,12 @@ var WordModel = require('mongoose').model('Word');
 
 var hasBeenReset = 0;
 
-// TODO: Danger! resetting the word db! Remove this line when you don't need it!
-/*
+// TODO: Danger! resetting and reseeding the word db! Remove this block when you don't need it!
 if (hasBeenReset == 0) {
   WordModel.remove({}, function(err) { 
      console.log('collection Word removed');
      hasBeenReset = 1;
-  });
-}*/
 
-var seedCount = 0;
-console.log('Calculating seedcount...');
-WordModel.count({}, function( err, count){
-    console.log('Seedcount is ' + count);
-    seedCount = count;
-
-    if (seedCount == 0) {
     //  seed the etymology data if not done already
       var fs = require('fs');
       var array = fs.readFileSync('etymologies.txt').toString().split("\n");
@@ -154,7 +144,10 @@ WordModel.count({}, function( err, count){
 
       //  word textfile format: "name,etymology" --> split the string by comma
       for(i = 0; i < array.length; i++) {
-          wordData = array[i].split(",");
+          
+          console.log("looking at line: " + array[i]);
+          var wordData = array[i].split(",");
+          //console.log("produced " + wordData[0] + " and " + wordData[1]);
 
           var queryWord = WordModel.findOne({ 'content': wordData[0] });  
           queryWord.exec(function (err, word) { 
@@ -170,8 +163,15 @@ WordModel.count({}, function( err, count){
               }
             });
       }
-    }
 
+  });
+}
+
+var seedCount = 0;
+console.log('Calculating seedcount...');
+WordModel.count({}, function( err, count){
+    console.log('Seedcount is ' + count);
+    seedCount = count;
 });
 
 
