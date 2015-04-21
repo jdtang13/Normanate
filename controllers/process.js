@@ -59,7 +59,42 @@ exports.prestigeOf = function(etymology) {
 }
 
 /* calculate objective heuristics */
-exports.objectiveHeuristics = function(text) {
+
+/* 
+Ideal schema:
+
+
+*/
+
+function checkCallback(counter, callback, resultDict) {
+	counter--;
+	if (counter == 0) {
+		callback(resultDict);
+	}
+	return counter;
+}
+
+// basic structure of a result object. This should apply to both objective and subjective heuristics.
+	// {
+	//  id:
+	//	num_words:
+	// 	num_chars:
+	// 	overused_words:
+	//		word:
+	//	sentence_info:
+	// 		mean:
+	//		var:
+	//		num:
+	// 	pos_info:
+	// 		adj_count:
+	//		adv_count:
+	// 		noun_count:
+	//		verb_count:
+	//		goodness_of_fit: (subjective)
+	//	
+	// }
+
+exports.objectiveHeuristics = function(id, text, callback) {
 
 	var tokenizer = new openNLP().tokenizer;
 	var sentenceDetector = new openNLP().sentenceDetector;
@@ -68,10 +103,17 @@ exports.objectiveHeuristics = function(text) {
 	var freqTable = {};
 	var lenArray = [];
 	var posArray = [];
+	var resultDict = {};
 
-	/* calculate word frequencies */
+	int counter = 3;
+
+	// FETCH FROM DATABASE HERE
+
+	// calculate word statistics
 	tokenizer.tokenize(text, function(err, results) {
+		var charCount = 0;
 		for (var result in results) {
+			charCount += result.length;
 			if (result in freqTable) {
 				freqTable[result]++;
 			}
@@ -79,28 +121,96 @@ exports.objectiveHeuristics = function(text) {
 				freqTable[result] = 1;
 			}
 		}
+		results.sort(function(a,b) {
+			return freqTable[b] - freqTable[a];
+		});
+
+		//calculate linking verbs - TO DO
+
+		// store number of words, characters, and also
+		// top 5 most used words
+		resultDict["num_words"] = results.length;
+		resultDict["num_chars"] = charCount;
+
+		resultDict["overused_words"] = [];
+		var n = Math.min(5, results.length);
+		for(var i = 0; i < n; i++) {
+			resultDict.push(result[i]);
+		}
+
+		counter = checkCallback(counter, callback, resultDict);
 	});
-	/* calculate sentence length variation */
+	// calculate sentence length variation 
 	sentenceDetector.sentDetect(text, function(err, results) {
+		var mean = 0;
+		var variance = 0;
 		for (var result in results) {
+			mean += result.length;
 			lenArray.push(result.length);
 		}
+		mean /= results.length;
+
+		for (var result in results) {
+			variance += Math.pow(mean - result.length,2);
+		}
+		variance /= results.length;
+
+		resultDict["sentence_info"] = {};
+		resultDict["sentence_info"]["mean"] = mean;
+		resultDict["sentence_info"]["var"] = variance;
+		resultDict["sentence_info"]["num"] = results.length;
+
+		counter = checkCallback(counter, callback, resultDict);
 	});
 
-	/* get part of speech - use it to measure literary cadence */
-	posTagger.tag(sentence, function(err, results) {
-		for (var result in results) {
-			posArray.push(result);
+	// get num paragraphs - TO DO
+
+	posTagger.tag(sentence, function(err, results)) {
+		var adjectiveCount = 0;
+		var adverbCount = 0;
+		var nounCount = 0;
+		var verbCount = 0;
+		for(var result in results) {
+			if (result == "JJ" || result == "JJR" || result == "JJS") {
+				adjectiveCount++;
+			}
+			else if (result == "RB" || result == "RBR" 
+				|| result == "RBS" || result == "WRB") {
+				adverbCount++;
+			}
+			else if (result == "NN" || result == "NNS" || 
+				result == "NNP" || result == "NNPS" || 
+				result == "PRP" || result == "PRP$" || 
+				result == "WP" || result == "WP$") {
+				nounCount++;
+			}
+			else if (result == "VB" || result == "VBD" ||
+				result == "VBG" || result == "VBN" || 
+				result == "VBP" || result == "VBZ") {
+				verbCount++;
+			}
 		}
-	});
+		resultDict["pos_info"] = {};
+		resultDict["pos_info"]["adj_count"] = adjectiveCount;
+		resultDict["pos_info"]["adv_count"] = adverbCount;
+		resultDict["pos_info"]["noun_count"] = nounCount;
+		resultDict["pos_info"]["verb_count"] = verbCount;
+		counter = checkCallback(counter, callback, resultDict);
+	}
+	// get part of speech statistics 
+	// posTagger.tag(sentence, function(err, results) {
+	// 	for (var result in results) {
+	// 		posArray.push(result);
+	// 	}
+	// 	counter = checkCallback(counter, callback, resultDict);
+	// });
 
 }
 
 /* Wordnik: http://videlais.com/2015/03/25/starting-with-the-wordnik-api-in-node-js/ */
 /* API Key: 8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27 */
 
-
-exports.subjectiveHeuristics = function(text, callback) {
+exports.subjectiveHeuristics = function(id, text, callback) {
 
 	var APIKEY = '8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27';
 	var Wordnik = require('wordnik-bb').init(APIKEY);
@@ -112,6 +222,14 @@ exports.subjectiveHeuristics = function(text, callback) {
 	);
 	randomWordPromise.done(function(wordModel) {
 	  console.log("Random word: ", wordModel.attributes.word);
+
+	//calculate the prestige values of text
+	var tokenizer = new OpenNLP().tokenizer;
+	tokenizer.tokenize(text, function(err, results) {
+		// need some way to fetch from database 
+
+		
+	});
 
 	// calculate POS distribution match 
 	//var prob = calculatePOSMatch(text);
