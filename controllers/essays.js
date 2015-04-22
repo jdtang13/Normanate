@@ -2,6 +2,9 @@ var mongoose = require('mongoose');
 var Essay = mongoose.model('Essay');
 var _ = require('lodash');
 
+//  require the process.js file
+var process = require('../controllers/process');
+
 // controller for views related to individual essays
 var passportConf = require('../config/passport');
 
@@ -52,6 +55,47 @@ exports.postCreateEssay = function(req, res) {
         essay.author = req.user;
     }
 
+    //  generate heuristic data and save it
+
+    //h = process.processText(essay);
+    //essay.heuristics[0] = h;
+
+    //  temporary heuristic -- the prestige of the essay's title
+    var essayTitle = (essay.title).toLowerCase();
+    var WordModel = require('mongoose').model('Word');
+
+    var titleOrigin = "none";
+
+    //  look up the title's etymology
+    console.log("looking up word: " + essayTitle);
+    var queryWord = WordModel.findOne({ 'content': essayTitle });
+
+    queryWord.exec(function (err, word) {
+        if (word != null) {
+            titleOrigin = word.etymologies[0];
+            console.log("word found! origin is " + titleOrigin);
+        }
+    });
+
+    var HeuristicModel = require('mongoose').model('Heuristic');
+
+    //  check that etymology's origin
+    var prestige = process.prestigeOf(titleOrigin);
+    console.log("prestige of origin is " + prestige);
+
+    var h = new HeuristicModel({ values: [prestige] });
+    h.save(function (err) {
+      if (err) return handleError(err);
+      // saved!
+    });
+
+    if (essay.heuristics.length == 0) {
+        essay.heuristics.push(h);
+    }
+    else {
+        essay.heuristics[0] = h;
+    }
+
     essay.save(function(err) {
         if (err) {
             console.log(err);
@@ -70,6 +114,8 @@ exports.updateEssay = function(req, res) {
     var essay = req.essay;
     essay = _.extend(essay, req.body);
     essay.updated = Date.now();
+
+    //process.processText(essay);
 
     essay.save(function(err) {
         if (err) {

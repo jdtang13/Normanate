@@ -11,6 +11,8 @@ var contactController = require('../controllers/contact');
 
 module.exports = function(app) {
     app.get('/', homeController.index);
+    //app.get('/about', );
+
     app.get('/login', userController.getLogin);
     app.post('/login', userController.postLogin);
     app.get('/logout', userController.logout);
