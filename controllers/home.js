@@ -42,6 +42,9 @@ exports.index = function(req, res) {
 	//     });
 	// });
 
+	if (req.isAuthenticated()) {
+		return res.redirect('/essays');
+	}
 	
 
   res.render('home', {
