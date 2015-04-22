@@ -59,6 +59,22 @@ exports.prestigeOf = function(etymology) {
 
 }
 
+function blacklistedWord(word) {
+	if (!word.match(/^[A-Za-z0-9]+$/)) {
+		console.log("not alphanumeric " + word);
+		return true;
+	}
+	var hash = {'the':true,'be':true,'and':true, 'of':true, 'a':true, 'an':true, 'in':true, 'to':true, 
+	'have':true,'it':true,'I':true,'that':true,'for':true,'you':true,'he':true,'with':true,'on':true,'do':true,
+	'say':true,'this':true,'they':true,'at':true,'but':true,'we':true,'his':true,'from':true,'not':true,'by':true,
+	'she':true,'or':true,'as':true,'what':true,'go':true,'their':true,'can':true,'who':true,'get':true,'if':true,
+	'would':true,'her':true,'all':true,'my':true};
+	if (hash[word] != null) {
+		return true;
+	}
+	return false;
+}
+
 /* calculate objective heuristics */
 
 /* 
@@ -70,7 +86,7 @@ Ideal schema:
 function checkCallback(counter, callback, resultDict) {
 	counter--;
 	if (counter == 0) {
-		callback(resultDict);
+		callback(0, resultDict);
 	}
 	return counter;
 }
@@ -103,7 +119,6 @@ exports.objectiveHeuristics = function(id, text, callback) {
 	var posTagger = new openNLP().posTagger;
 
 	var freqTable = {};
-	var lenArray = [];
 	var posArray = [];
 	var resultDict = {};
 
@@ -114,7 +129,8 @@ exports.objectiveHeuristics = function(id, text, callback) {
 	// calculate word statistics
 	tokenizer.tokenize(text, function(err, results) {
 		var charCount = 0;
-		for (var result in results) {
+		for (var i in results) {
+			var result = results[i];
 			charCount += result.length;
 			if (result in freqTable) {
 				freqTable[result]++;
@@ -123,9 +139,19 @@ exports.objectiveHeuristics = function(id, text, callback) {
 				freqTable[result] = 1;
 			}
 		}
-		results.sort(function(a,b) {
+
+		var keys = Object.keys(freqTable);
+		keys.sort(function(a,b) {
+			if (blacklistedWord(a) && !blacklistedWord(b)) {
+				return 1;
+			}
+			else if (!blacklistedWord(a) && blacklistedWord(b)) {
+				return -1;
+			}
 			return freqTable[b] - freqTable[a];
 		});
+
+		console.log(keys);
 
 		//calculate linking verbs - TO DO
 
@@ -135,9 +161,9 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		resultDict["num_chars"] = charCount;
 
 		resultDict["overused_words"] = [];
-		var n = Math.min(5, results.length);
+		var n = Math.min(5, keys.length);
 		for(var i = 0; i < n; i++) {
-			resultDict["overused_words"].push(result[i]);
+			resultDict["overused_words"].push(keys[i]);
 		}
 
 		counter = checkCallback(counter, callback, resultDict);
@@ -146,14 +172,19 @@ exports.objectiveHeuristics = function(id, text, callback) {
 	sentenceDetector.sentDetect(text, function(err, results) {
 		var mean = 0;
 		var variance = 0;
-		for (var result in results) {
-			mean += result.length;
-			lenArray.push(result.length);
+		for (var i in results) {
+			var result = results[i];
+			console.log(result);
+			var numWords = result.split(" ").length;
+			console.log(numWords);
+			mean += numWords;
 		}
 		mean /= results.length;
 
-		for (var result in results) {
-			variance += Math.pow(mean - result.length,2);
+		for (var i in results) {
+			var result = results[i];
+			var numWords = result.split(" ").length;
+			variance += Math.pow(mean - numWords,2);
 		}
 		variance /= results.length;
 
@@ -172,7 +203,8 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		var adverbCount = 0;
 		var nounCount = 0;
 		var verbCount = 0;
-		for(var result in results) {
+		for(var i in results) {
+			var result = results[i];
 			if (result == "JJ" || result == "JJR" || result == "JJS") {
 				adjectiveCount++;
 			}
@@ -250,7 +282,8 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 				counter = checkCallback(counter, callback, resultDict);
 			}
 		}
-		for(var result in results) {
+		for(var i in results) {
+			var result = results[i];
 			var queryWord = WordModel.findOne({'content':result});
 			queryWord.exec(function(err, word) {
 				if (word != null) {
