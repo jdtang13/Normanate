@@ -18,6 +18,12 @@ Then clone the repository, and run
 
 to install all the dependencies. `npm` for server-side dependencies, and `bower` for client-side dependencies.
 
+To install the etymology database, run
+
+    $ node seed
+
+in the base folder. This only has to be done once, and if you want to rewrite the database for whatever reason.
+
 ### Running the program
 
 The app is built using a weird Frankenstein hybrid of LESS and SASS at the moment for CSS, and Browserify for Javascript. A lot of it is handled in-app, but we use grunt to deal with any and all preprocessing.
@@ -31,4 +37,11 @@ to run the app. And
     grunt test --force
 
 to run the linter and all of our mocha tests. The linter will yell at us, so the force is needed to keep going.
+
+Anytime you pull from the github repository, you'll probably have to run
+    
+    $ npm install
+    $ bower install
+
+again to update dependencies.
 
