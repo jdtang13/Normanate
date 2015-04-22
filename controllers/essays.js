@@ -56,11 +56,6 @@ exports.postCreateEssay = function(req, res) {
         essay.author = req.user;
     }
 
-    //  generate heuristic data and save it
-
-    //h = process.processText(essay);
-    //essay.heuristics[0] = h;
-
     //  temporary heuristic -- the prestige of the essay's title
     var essayTitle = (essay.title).toLowerCase();
     var WordModel = require('mongoose').model('Word');
@@ -79,23 +74,60 @@ exports.postCreateEssay = function(req, res) {
     });
 
     var HeuristicModel = require('mongoose').model('Heuristic');
+    var ObjectiveModel = require('mongoose').model('ObjectiveHeuristic');
 
     //  check that etymology's origin
     var prestige = process.prestigeOf(titleOrigin);
     console.log("prestige of origin is " + prestige);
 
-    var h = new HeuristicModel({ values: [prestige] });
+    var h = new HeuristicModel({ 
+        values: [prestige]
+        });
     h.save(function (err) {
       if (err) return handleError(err);
+      else {
+        if (essay.heuristics.length == 0) {
+            essay.heuristics.push(h);
+        }
+        else {
+            essay.heuristics[0] = h;
+        }
+      }
       // saved!
     });
 
-    if (essay.heuristics.length == 0) {
-        essay.heuristics.push(h);
+    //  generate heuristic data and save it
+    //  TODO -- is this correct? probably not
+    var dict;
+    process.objectiveHeuristics(-1, essay.content, 
+        function (err, resultDict) {
+        if (!err) {
+            console.log("successfully calculated objective heuristics!");
+            dict = resultDict;
+        }
     }
-    else {
-        essay.heuristics[0] = h;
+    );
+
+    var oh = new ObjectiveModel( {
+        num_words: resultDict["num_words"],
+        num_chars: resultDict["num_chars"],
+        overused_words: resultDict["overused_words"],
+        sentence_mean: resultDict["sentence_info"]["mean"],
+        sentence_var: resultDict["sentence_info"]["var"],
+        sentence_num: resultDict["sentence_info"]["num"],
+        adj_count: resultDict["pos_info"]["adj_count"],
+        adv_count: resultDict["pos_info"]["adv_count"],
+        noun_count: resultDict["pos_info"]["noun_count"],
+        verb_count: resultDict["pos_info"]["verb_count"]
     }
+        );
+    oh.save(function (err) {
+      if (err) return handleError(err);
+      else {
+        essay.objectives.push(oh);
+      }
+      // saved!
+    });
 
     essay.save(function(err) {
         if (err) {

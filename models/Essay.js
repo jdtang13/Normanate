@@ -2,12 +2,56 @@
 var mongoose = require('mongoose');
 
 //  heuristics subdocument
-// http://mongoosejs.com/docs/subdocs.html
+
+// var wordSchema = require('mongoose').model('Word');
+
+//  CURRENT as of 4/21 -- please update this if things change
+// basic structure of a result object. This should apply to both objective and subjective heuristics.
+  // {
+  //  id:
+  //  num_words:
+  //  num_chars:
+  //  overused_words:
+  //    word:
+  //  sentence_info:
+  //    mean:
+  //    var:
+  //    num:
+  //  pos_info:
+  //    adj_count:
+  //    adv_count:
+  //    noun_count:
+  //    verb_count:
+  //    goodness_of_fit: (subjective)
+  // }
+
+var objectiveHeuristicSchema = new mongoose.Schema( 
+{
+    num_words: Number,
+    num_chars: Number,
+    //overused_words: [wordSchema],
+    overused_words: [String],
+    sentence_mean: Number,
+    sentence_var: Number,
+    sentence_num: Number,
+    adj_count: Number,
+    adv_count: Number,
+    noun_count: Number,
+    verb_count: Number,
+    goodness_of_fit: Number
+});
+
+// Ensure virtual fields are serialised.
+objectiveHeuristicSchema.set('toJSON', {
+    virtuals: true
+});
+
+// TODO -- remove heuristicSchema if it's unnecessary
 var heuristicSchema = new mongoose.Schema( 
 {
     values: [Number] //  values associated with particular words
-} 
-);
+});
+
 // Ensure virtual fields are serialised.
 heuristicSchema.set('toJSON', {
     virtuals: true
@@ -29,9 +73,13 @@ var essaySchema = new mongoose.Schema({
     ref: 'User'
   },
 
+  objectives: [objectiveHeuristicSchema], /// objective heuristics
+
   //  use the subdocument
   //  allow for multiple heuristic schema -- perhaps heuristics[0] is a certain heuristic, heuristics[1], etc.?
-  heuristics: [heuristicSchema]
+  heuristics: [heuristicSchema],
+
+  miscValues: [Number] //  use this for random values that you want to use as output
 
 });
 
@@ -40,12 +88,11 @@ essaySchema.virtual('id').get(function(){
     return this._id.toHexString();
 });
 
-
 // Ensure virtual fields are serialised.
 essaySchema.set('toJSON', {
     virtuals: true
 });
 
-
+module.exports = mongoose.model('ObjectiveHeuristic', objectiveHeuristicSchema);
 module.exports = mongoose.model('Heuristic', heuristicSchema);
 module.exports = mongoose.model('Essay', essaySchema);

@@ -205,6 +205,9 @@ exports.objectiveHeuristics = function(id, text, callback) {
 	// 	counter = checkCallback(counter, callback, resultDict);
 	// });
 
+	//  return the output dictionary
+	return resultDict;
+
 }
 
 /* Wordnik: http://videlais.com/2015/03/25/starting-with-the-wordnik-api-in-node-js/ */
