@@ -1,5 +1,7 @@
 var openNLP = require("opennlp");
 var training = require("../controllers/training");
+var mongoose = require("mongoose");
+var WordModel = mongoose.model('Word');
 
 var chi = require("chi-squared");
 
@@ -28,8 +30,7 @@ exports.prestigeOf = function(etymology) {
     "Wolof", "West Saxon", "Xhosa", "Yoruba", "none"];
 
     // 1 is high prestige, 0 is low prestige
-    // if a word has multiple prestige values, just use the highest one
-    // general rules:
+	   // general rules:
     // high prestige -- latin, french
     // mid prestige -- greek, semitic languages, spanish, slavic, scandinavian germanic, other exotic languages
     // low prestige -- germanic, celtic, native american languages, siberian/mongol/uralic languages
@@ -79,6 +80,7 @@ function checkCallback(counter, callback, resultDict) {
 	//  id:
 	//	num_words:
 	// 	num_chars:
+	// 	etymology_score: 
 	// 	overused_words:
 	//		word:
 	//	sentence_info:
@@ -160,7 +162,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		resultDict["sentence_info"]["var"] = variance;
 		resultDict["sentence_info"]["num"] = results.length;
 
-		counter = checkCallback(counter, callback, resultDict);
+		counter = checkCallback(counter, callback, resultDict);	
 	});
 
 	// get num paragraphs - TO DO
@@ -223,15 +225,42 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 	randomWordPromise.done(function(wordModel) {
 	  console.log("Random word: ", wordModel.attributes.word);
 
+
+	resultDict = {};
+	var counter = 2;
+
 	//calculate the prestige values of text
 	var tokenizer = new OpenNLP().tokenizer;
 	tokenizer.tokenize(text, function(err, results) {
 		// need some way to fetch from database 
 		// get the etymology associated with the word
 		// calculate prestige value
+		var avg = 0;
+		var count = 0;
+		// take a running average of all words
+		calculatePrestige = function(prestige) {
+			avg += prestige;
+			count++;
+			if (count == results.length) {
+				avg /= results.length;
+				resultDict["etymology_score"] = avg;
+				counter = checkCallback(counter, callback, resultDict);
+			}
+		}
+		for(var result in results) {
+			var queryWord = WordModel.findOne({'content':result});
+			queryWord.exec(function(err, word) {
+				if (word != null) {
+					var titleOrigin = word.etymology;
+					if (titleOrigin != "none") {
+						var prestige = self.prestigeOf(titleOrigin);
+						calculatePrestige(prestige);
+					}
+				}
+			});
+		}
 
 	});
-
 	// calculate POS distribution match 
 	// var prob = calculatePOSMatch(text);
 });
