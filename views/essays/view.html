@@ -16,7 +16,9 @@
   <h3>Stats</h3>
   <div>
     <p>Essay Title: {{ essay.title }}</p>
+    {% if essay.heuristics.length > 0 %}
     <p>Title Prestige: {{ essay.heuristics[0].values[0] }}</p>
+    {% endif %}
   </div>
 
   </div>

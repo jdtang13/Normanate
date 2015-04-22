@@ -1,7 +1,13 @@
 {% extends '../layouts/layout.html' %}
 {% block content %}
 <div class="page-header">
+<div class='pull-left'>
   <h1>Editor</h1>
+  </div>
+  <div class='pull-right'>
+    <a id='update-essay-button' data-csrf="{{_csrf}}" class='btn btn-default'>Update Essay</a>
+  </div>
+  <div style='clear:both'></div>
 </div>
 <div class='row'>
   <div class='col-sm-8 col-sm-offset-2'>
@@ -12,4 +18,10 @@
   </div>
   
 </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+window.essay = {{essay|json|safe}};
+</script>
 {% endblock %}

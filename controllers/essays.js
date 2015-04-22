@@ -11,7 +11,6 @@ var passportConf = require('../config/passport');
 // Ensure that user is authorized to view this essay
 // if the essay has an author, the logged in user needs to be the author
 exports.hasAuthorization = function(req, res, next) {
-    console.log(req.essay);
     if (req.essay.author && !req.user) {
         return next('route');
     }
