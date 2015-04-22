@@ -227,7 +227,7 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 
 
 	resultDict = {};
-	var counter = 2;
+	var counter = 1;
 
 	//calculate the prestige values of text
 	var tokenizer = new OpenNLP().tokenizer;

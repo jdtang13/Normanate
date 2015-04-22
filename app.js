@@ -128,7 +128,7 @@ module.exports = app;
 
 var WordModel = require('mongoose').model('Word');
 
-var hasBeenReset = 0;
+var hasBeenReset = 1;
 
 // TODO: Danger! resetting and reseeding the word db! Remove this block when you don't need it!
 if (hasBeenReset == 0) {
