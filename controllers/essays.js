@@ -104,6 +104,7 @@ exports.postCreateEssay = function(req, res) {
         if (!err) {
             console.log("successfully calculated objective heuristics!");
             dict = resultDict;
+            
         }
     }
     );

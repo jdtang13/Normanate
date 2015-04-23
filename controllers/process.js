@@ -5,7 +5,7 @@ var WordModel = mongoose.model('Word');
 
 var chi = require("chi-squared");
 
-var expectedHeuristics = training.expectedHeuristics();
+var expectedHeuristics = training.getExpectedHeuristics();
 
 exports.processText = function(text) {
 	/* do text processing and calculate heuristics */
@@ -60,8 +60,7 @@ exports.prestigeOf = function(etymology) {
 }
 
 function blacklistedWord(word) {
-	if (!word.match(/^[A-Za-z0-9]+$/)) {
-		console.log("not alphanumeric " + word);
+	if (!word.match(/^([A-Za-z0-9]|[-])+$/)) {
 		return true;
 	}
 	var hash = {'the':true,'be':true,'and':true, 'of':true, 'a':true, 'an':true, 'in':true, 'to':true, 
@@ -69,7 +68,18 @@ function blacklistedWord(word) {
 	'say':true,'this':true,'they':true,'at':true,'but':true,'we':true,'his':true,'from':true,'not':true,'by':true,
 	'she':true,'or':true,'as':true,'what':true,'go':true,'their':true,'can':true,'who':true,'get':true,'if':true,
 	'would':true,'her':true,'all':true,'my':true};
-	if (hash[word] != null) {
+	if (hash[word.toLowerCase()] != null) {
+		return true;
+	}
+	return false;
+}
+
+function linkingVerb(word) {
+	var hash = {'be':true,'is':true,
+	'are':true,'were':true,'was':true,'veen':true,'appear':true,'appears':true,'appeared':true,
+	'seem':true,'seems':true,'seemed':true,'am':true,'look':true,'looks':true,'looked':true,
+	'feel':true,'felt':true,'feels':true };
+	if (hash[word.toLowerCase()] != null) {
 		return true;
 	}
 	return false;
@@ -108,7 +118,10 @@ function checkCallback(counter, callback, resultDict) {
 	//		adv_count:
 	// 		noun_count:
 	//		verb_count:
-	//		goodness_of_fit: (subjective)
+	//	pos_match_info:
+	// 		pairFreqs: (2-d table)
+	// 		totalFreqs (1-d table)
+	//		
 	//	
 	// }
 
@@ -148,12 +161,27 @@ exports.objectiveHeuristics = function(id, text, callback) {
 			else if (!blacklistedWord(a) && blacklistedWord(b)) {
 				return -1;
 			}
+			if (linkingVerb(a) && !linkingVerb(b)) {
+				return 1;
+			}
+			else if (!linkingVerb(a) && linkingVerb(b)) {
+				return -1;
+			}
 			return freqTable[b] - freqTable[a];
 		});
 
-		console.log(keys);
-
 		//calculate linking verbs - TO DO
+		var linkingVerbs = 0;
+		for(var i in results) {
+			var result = results[i];
+			if (linkingVerb(result)) {
+				linkingVerbs++;
+			}
+		}
+		if (resultDict['pos_info'] == null) {
+			resultDict['pos_info'] = {};
+		}
+		resultDict['pos_info']['linking_verbs'] = linkingVerbs;
 
 		// store number of words, characters, and also
 		// top 5 most used words
@@ -161,7 +189,13 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		resultDict["num_chars"] = charCount;
 
 		resultDict["overused_words"] = [];
-		var n = Math.min(5, keys.length);
+		var n = 5;
+		var i = 0;
+		while(i < n) {
+			resultDict["overused_words"].push(keys[i]);
+			console.log(keys[i] + " " + freqTable[keys[i]]);
+			i++;
+		}
 		for(var i = 0; i < n; i++) {
 			resultDict["overused_words"].push(keys[i]);
 		}
@@ -224,23 +258,15 @@ exports.objectiveHeuristics = function(id, text, callback) {
 				verbCount++;
 			}
 		}
-		resultDict["pos_info"] = {};
+		if (resultDict['pos_info'] == null) {
+			resultDict['pos_info'] = {};
+		}
 		resultDict["pos_info"]["adj_count"] = adjectiveCount;
 		resultDict["pos_info"]["adv_count"] = adverbCount;
 		resultDict["pos_info"]["noun_count"] = nounCount;
 		resultDict["pos_info"]["verb_count"] = verbCount;
 		counter = checkCallback(counter, callback, resultDict);
 	});
-	// get part of speech statistics 
-	// posTagger.tag(sentence, function(err, results) {
-	// 	for (var result in results) {
-	// 		posArray.push(result);
-	// 	}
-	// 	counter = checkCallback(counter, callback, resultDict);
-	// });
-
-	//  return the output dictionary
-	return resultDict;
 
 }
 
@@ -260,9 +286,8 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 	randomWordPromise.done(function(wordModel) {
 	  console.log("Random word: ", wordModel.attributes.word);
 
-
 	resultDict = {};
-	var counter = 1;
+	var counter = 2;
 
 	//calculate the prestige values of text
 	var tokenizer = new OpenNLP().tokenizer;
@@ -297,22 +322,24 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 		}
 
 	});
-	// calculate POS distribution match 
-	// var prob = calculatePOSMatch(text);
-});
-
+	// calculate POS frequencies
+	calculatePOSFreqs(text, function(err, posPairDict, 
+		posTotalFreqs, totalWords) {
+		resultDict["pos_match_info"] = {};
+		resultDict["pos_match_info"]["pairFreqs"] = posPairDict;
+		resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
+		counter = checkCallback(counter, callback, resultDict);
+	}) 
 }
 
 
-// helper function to calculate the degree of POS match in the text
-exports.calculatePOSMatch = function (text, callback) {
-	//1) first store frequencies in a hash table, mapping from one POS -> next POS
+// helper function to calculate the frequency table for the POS match 
+// callback parameters: err, posPairDict, posTotalFreqs, totalWords
+function calculatePOSFreqs(text, callback) {
+	// store frequencies in a hash table, mapping from one POS -> next POS
 	var posTagger = new openNLP().posTagger;
 	var posPairDict = new Object(); //2-d dict
 	var posTotalFreqs = new Object();
-	var chiSquaredDict = new Object();
-	var totalWords = 0;
-	var finalChiSquared = 0.0;
 
 	posTagger.tag(text, function(err, results) {
 		for(var i = 0; i < results.length - 1; i++) {
@@ -327,6 +354,17 @@ exports.calculatePOSMatch = function (text, callback) {
 			posTotalFreqs[results[i]] += 1;
 			totalWords++;
 		}
+		callback(0, posPairDict, posTotalFreqs, totalWords);
+	});
+}
+
+// calculate POS match - DON'T USE FOR TRAINING DATA, shouldn't really be in process.js
+// callback: pass prob as the parameter
+function calculatePOSMatch(text, callback) {
+	var chiSquaredDict = new Object();
+	var finalChiSquared = 0.0;
+	// 1) first return the frequencies in a hash table
+	calculatePOSFreqs(text, function(err, posPairDict, posTotalFreqs, totalWords) {
 		// 2) then compute expected frequencies 
 		var expectedPairDict = expectedHeuristics["pos_distr"];
 		for (var key in expectedPairDict) {
@@ -335,7 +373,6 @@ exports.calculatePOSMatch = function (text, callback) {
 				expectedPairDict[key][key2] *= posFreqs[key];
 			}
 		}
-
 		// 3) using observed and expected frequencies, run a chi-squared test (for each POS) 
 		// 4) We can weight each chi-squared test by the frequency of each POS
 		for (var key in expectedPairDict) {
@@ -351,10 +388,7 @@ exports.calculatePOSMatch = function (text, callback) {
 		}
 
 		// 5) Now that we have the final chi-squared static, calculate the probability
-		
 		var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
-
-		callback(prob);
+		callback(0, prob);
 	});
-
 }
