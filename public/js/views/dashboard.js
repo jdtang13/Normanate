@@ -1,3 +1,5 @@
+var essays = require('../controllers/essays');
+
 module.exports = function() {
     $('#essay-table').on('click', 'tbody tr', function(event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
@@ -22,7 +24,10 @@ module.exports = function() {
     });
 
     $('#confirm-delete-essay').click(function() {
-        essays.deleteEssay(window.essay, function() {
+        essays.deleteEssay({
+            id: window.essay,
+            _csrf: $('#confirm-delete-essay').data('csrf')
+        }, function() {
             // success
 
             $('#' + window.essay + '-essay').remove();
