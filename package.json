@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node node_modules/grunt-cli/bin/grunt serve",
     "test": "node node_modules/grunt-cli/bin/grunt test --force",
-    "postinstall": "node node_modules/bower/bin/bower install && node node_modules/grunt-cli/bin/grunt build"
+    "postinstall": "bash ./deploy.sh"
   },
   "dependencies": {
     "async": "^0.9.0",
