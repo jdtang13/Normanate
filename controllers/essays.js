@@ -144,7 +144,6 @@ exports.postCreateEssay = function(req, res) {
                   }
                   // saved!
                 });
-
         }
     }
     );
