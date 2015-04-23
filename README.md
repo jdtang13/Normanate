@@ -18,11 +18,22 @@ Then clone the repository, and run
 
 to install all the dependencies. `npm` for server-side dependencies, and `bower` for client-side dependencies.
 
+### Seeding the database
+
 To install the etymology database, run
 
     $ node seed
 
 in the base folder. This only has to be done once, and if you want to rewrite the database for whatever reason.
+
+The seed script now also works with the production database! It takes the following command line arguments:
+    --mongo: the URI of the mongo instance to seed. Defaults to the localhost test database
+    -f: flag to read the --mongo information from a file
+
+Example:
+
+    $ node seed --mongo mongodb://localhost:27017/test
+    $ node seed --mongo -f mongodata.txt
 
 ### Running the program
 
