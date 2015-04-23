@@ -97,7 +97,6 @@ exports.postCreateEssay = function(req, res) {
     });
 
     //  generate heuristic data and save it
-    //  TODO -- is this correct? probably not
     var dict;
     process.objectiveHeuristics(-1, essay.content, 
         function (err, resultDict) {
@@ -145,7 +144,6 @@ exports.postCreateEssay = function(req, res) {
                   }
                   // saved!
                 });
-
         }
     }
     );
