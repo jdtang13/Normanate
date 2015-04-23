@@ -19,6 +19,9 @@
     {% if essay.heuristics.length > 0 %}
     <p>Title Prestige: {{ essay.heuristics[0].values[0] }}</p>
     {% endif %}
+    {% if essay.objectives.length > 0 %}
+    <p>Number of Words: {{ essay.objectives[0].num_words }}</p>
+    {% endif %}
   </div>
 
   </div>

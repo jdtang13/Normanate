@@ -76,6 +76,7 @@ exports.postCreateEssay = function(req, res) {
     var ObjectiveModel = require('mongoose').model('ObjectiveHeuristic');
 
     //  check that etymology's origin
+    //  TODO: this needs to be made async
     var prestige = process.prestigeOf(titleOrigin);
     console.log("prestige of origin is " + prestige);
 
@@ -103,42 +104,53 @@ exports.postCreateEssay = function(req, res) {
         if (!err) {
             console.log("successfully calculated objective heuristics!");
             dict = resultDict;
+            console.log("content of dict is: %j", dict);
+
+              var oh = new ObjectiveModel( 
+                {
+                    num_words: resultDict["num_words"],
+                    num_chars: resultDict["num_chars"],
+                    overused_words: [resultDict["overused_words"]],
+                    sentence_mean: resultDict["sentence_info"]["mean"],
+                    sentence_var: resultDict["sentence_info"]["var"],
+                    sentence_num: resultDict["sentence_info"]["num"],
+                    adj_count: resultDict["pos_info"]["adj_count"],
+                    adv_count: resultDict["pos_info"]["adv_count"],
+                    noun_count: resultDict["pos_info"]["noun_count"],
+                    verb_count: resultDict["pos_info"]["verb_count"]
+                }
+                );
+                oh.save(function (err) {
+                  if (err) {
+                    console.log("error while saving oh!");
+                    return handleError(err);
+                }
+                  else {
+                    essay.objectives.push(oh);
+                    console.log("successfully saved the objective heuristics!");
+
+                        essay.save(function(err) {
+                            if (err) {
+                                console.log(err);
+                                return res.send('users/signup', {
+                                    errors: err.errors,
+                                    piece: piece
+                                });
+                            } else {
+                                console.log("essay saved!");
+                                return res.json(essay);
+                            }
+                        });
+
+                  }
+                  // saved!
+                });
+
         }
     }
     );
 
-    var oh = new ObjectiveModel( {
-        num_words: resultDict["num_words"],
-        num_chars: resultDict["num_chars"],
-        overused_words: resultDict["overused_words"],
-        sentence_mean: resultDict["sentence_info"]["mean"],
-        sentence_var: resultDict["sentence_info"]["var"],
-        sentence_num: resultDict["sentence_info"]["num"],
-        adj_count: resultDict["pos_info"]["adj_count"],
-        adv_count: resultDict["pos_info"]["adv_count"],
-        noun_count: resultDict["pos_info"]["noun_count"],
-        verb_count: resultDict["pos_info"]["verb_count"]
-    }
-        );
-    oh.save(function (err) {
-      if (err) return handleError(err);
-      else {
-        essay.objectives.push(oh);
-      }
-      // saved!
-    });
 
-    essay.save(function(err) {
-        if (err) {
-            console.log(err);
-            return res.send('users/signup', {
-                errors: err.errors,
-                piece: piece
-            });
-        } else {
-            return res.json(essay);
-        }
-    });
 };
 
 // update an essay
