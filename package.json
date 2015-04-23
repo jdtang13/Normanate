@@ -86,7 +86,6 @@
     "passport-oauth": "^1.0.0",
     "passport-twitter": "^1.0.3",
     "paypal-rest-sdk": "^1.5.1",
-    "pm2": "^0.12.12",
     "request": "^2.53.0",
     "stripe": "^3.3.2",
     "supertest": "^0.15.0",
