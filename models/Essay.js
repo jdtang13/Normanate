@@ -27,6 +27,9 @@ var mongoose = require('mongoose');
 
 var objectiveHeuristicSchema = new mongoose.Schema( 
 {
+
+    is_master: { type: Boolean, required: true, default: false}, //  is this the master set derived from training data?
+
     num_words: Number,
     num_chars: Number,
     //overused_words: [wordSchema],
