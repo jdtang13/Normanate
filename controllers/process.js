@@ -284,7 +284,7 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 	  }
 	);
 	randomWordPromise.done(function(wordModel) {
-	  console.log("Random word: ", wordModel.attributes.word);
+	  console.log("Random word: ", wordModel.attributes.word); });
 
 	resultDict = {};
 	var counter = 2;
@@ -322,6 +322,9 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 		}
 
 	});
+
+	/* TODO -- uncomment and debug
+
 	// calculate POS frequencies
 	calculatePOSFreqs(text, function(err, posPairDict, 
 		posTotalFreqs, totalWords) {
@@ -330,8 +333,10 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 		resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
 		counter = checkCallback(counter, callback, resultDict);
 	}) 
+*/
 }
 
+/* todo -- uncomment and debug
 
 // helper function to calculate the frequency table for the POS match 
 // callback parameters: err, posPairDict, posTotalFreqs, totalWords
@@ -391,4 +396,4 @@ function calculatePOSMatch(text, callback) {
 		var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
 		callback(0, prob);
 	});
-}
+} */

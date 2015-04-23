@@ -25,9 +25,6 @@ var mongoose = require('mongoose');
  */
 var secrets = require('./config/secrets');
 
-//  require the process.js file
-var process = require('../controllers/process');
-
 /**
  * Connect to MongoDB.
  */
@@ -40,6 +37,9 @@ walk(modelsPath, '', function(path) {
   require(path);
 });
 
+//  require the process.js file
+var process = require('./controllers/process');
+
 var WordModel = mongoose.model('Word');
 var ObjectiveModel = require('mongoose').model('ObjectiveHeuristic');
 
@@ -51,14 +51,26 @@ async.waterfall([
     var dir = './train/';
     var fs = require('fs');
 
-    var averageDict;
-    var numFiles = 0;
-
     fs.readdir(dir, function(err, files) {
 
         if (err) throw err;
 
         var trainCount = 0;
+        var averageDict = {};
+
+        averageDict["num_words"] = 0;
+        averageDict["num_chars"] = 0;
+        averageDict["sentence_mean"] = 0;
+        averageDict["sentence_var"] = 0;
+        averageDict["sentence_num"] = 0;
+        averageDict["adj_count"] = 0;
+        averageDict["adv_count"] = 0;
+        averageDict["noun_count"] = 0;
+        averageDict["verb_count"] = 0;
+        //  NOTE! counting overused_words num rather than the words themselves
+        averageDict["overused_words_num"] = 0;
+
+        var numFiles = 0;
 
         files.forEach(function(file) {
 
@@ -79,85 +91,74 @@ async.waterfall([
                 //  process the training set
                 //  generate heuristic data and save it
                 var dict;
-                process.objectiveHeuristics(-1, essay.content, 
+                process.objectiveHeuristics(-1, trainingData, 
                     function (err, resultDict) {
                     if (!err) {
                         console.log("successfully calculated objective heuristics from training set!");
                         dict = resultDict;
                         console.log("content of training dict is: %j", dict);
 
-                        //  TODO -- add dict results to an ongoing average
-                        //  TODO -- pass in the variable through callback
+                        //  add dict results to an ongoing average
+                        averageDict["num_words"] += resultDict["num_words"];
+                        averageDict["num_chars"] += resultDict["num_chars"];
+                        averageDict["overused_words_num"] += resultDict["overused_words"].length;
+                        averageDict["sentence_mean"] += resultDict["sentence_info"]["mean"];
+                        averageDict["sentence_var"] += resultDict["sentence_info"]["var"];
+                        averageDict["sentence_num"] += resultDict["sentence_info"]["num"];
+                        averageDict["adj_count"] += resultDict["pos_info"]["adj_count"];
+                        averageDict["adv_count"] += resultDict["pos_info"]["adv_count"];
+                        averageDict["noun_count"] += resultDict["pos_info"]["noun_count"];
+                        averageDict["verb_count"] += resultDict["pos_info"]["verb_count"];
+
+                        console.log("content of updated averagedict is: %j", averageDict);
 
                     }
+                });
+
+                if (0 == --trainCount) {
+                    console.log("finished reading all training data"); 
+
+                //  save the averaged data into the objective model
+
+                var MasterObjectiveModel = require('mongoose').model('MasterObjectiveHeuristic');
+
+                var oh = new MasterObjectiveModel( 
+                { 
+                    num_words: averageDict["num_words"],
+                    num_chars: averageDict["num_chars"],
+                    overused_words_num: averageDict["overused_words_num"],
+                    sentence_mean: averageDict["mean"],
+                    sentence_var: averageDict["var"],
+                    sentence_num: averageDict["num"],
+                    adj_count: averageDict["adj_count"],
+                    adv_count: averageDict["adv_count"],
+                    noun_count: averageDict["noun_count"],
+                    verb_count: averageDict["verb_count"]
+                }
+                );
+                oh.save(function (err) {
+                  if (err) {
+                    console.log("error while saving oh!");
+                    return handleError(err);
+                }
+                  else {
+
+                    console.log("successfully saved the master of the objective heuristics!");
+
+                  }
+                  // saved!
+                });
+
                 }
 
-                if (0 === --trainCount) {
-                    console.log("finished reading all training data"); 
-                }
+
 
             });
         });
 
     });
 
-  },
-  function(err){
-        // if any of the file processing produced an error, err would equal that error
-        if( err ) {
-          // One of the iterations produced an error.
-          // All processing will now stop.
-          console.log('A word failed to process');
-          outerCB(err);
-        } else {
-          console.log('All words processed successfully');
-
-          //  TODO -- save the averaged data into the objective model
-
-          var oh = new ObjectiveModel( 
-          { 
-              is_master: true, // IMPORTANT! designates this model as the One True Heuristic set
-
-              num_words: resultDict["num_words"],
-              num_chars: resultDict["num_chars"],
-              overused_words: [resultDict["overused_words"]],
-              sentence_mean: resultDict["sentence_info"]["mean"],
-              sentence_var: resultDict["sentence_info"]["var"],
-              sentence_num: resultDict["sentence_info"]["num"],
-              adj_count: resultDict["pos_info"]["adj_count"],
-              adv_count: resultDict["pos_info"]["adv_count"],
-              noun_count: resultDict["pos_info"]["noun_count"],
-              verb_count: resultDict["pos_info"]["verb_count"]
-          }
-          );
-          oh.save(function (err) {
-            if (err) {
-              console.log("error while saving oh!");
-              return handleError(err);
-          }
-            else {
-              essay.objectives.push(oh);
-              console.log("successfully saved the objective heuristics!");
-
-                  essay.save(function(err) {
-                      if (err) {
-                          console.log(err);
-                          return res.send('users/signup', {
-                              errors: err.errors,
-                              piece: piece
-                          });
-                      } else {
-                          console.log("essay saved!");
-                          return res.json(essay);
-                      }
-                  });
-
-            }
-            // saved!
-          });
-
-        }
-    });
+  }
   
 ],
 // optional callback
