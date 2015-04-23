@@ -115,38 +115,44 @@ async.waterfall([
                     }
                 });
 
+                // TODO: this isn't actually working...
+                // TODO: use averages to calculate the thing
                 if (0 == --trainCount) {
                     console.log("finished reading all training data"); 
 
                 //  save the averaged data into the objective model
-
                 var MasterObjectiveModel = require('mongoose').model('MasterObjectiveHeuristic');
+                MasterObjectiveModel.remove({}, function(err) { 
+                 
+                  console.log("NOTICE: deleted MasterObjective to reset the database -- remove this line if you don't want this");
 
-                var oh = new MasterObjectiveModel( 
-                { 
-                    num_words: averageDict["num_words"],
-                    num_chars: averageDict["num_chars"],
-                    overused_words_num: averageDict["overused_words_num"],
-                    sentence_mean: averageDict["mean"],
-                    sentence_var: averageDict["var"],
-                    sentence_num: averageDict["num"],
-                    adj_count: averageDict["adj_count"],
-                    adv_count: averageDict["adv_count"],
-                    noun_count: averageDict["noun_count"],
-                    verb_count: averageDict["verb_count"]
-                }
-                );
-                oh.save(function (err) {
-                  if (err) {
-                    console.log("error while saving oh!");
-                    return handleError(err);
-                }
-                  else {
-
-                    console.log("successfully saved the master of the objective heuristics!");
-
+                  var oh = new MasterObjectiveModel( 
+                  { 
+                      num_words: averageDict["num_words"],
+                      num_chars: averageDict["num_chars"],
+                      overused_words_num: averageDict["overused_words_num"],
+                      sentence_mean: averageDict["mean"],
+                      sentence_var: averageDict["var"],
+                      sentence_num: averageDict["num"],
+                      adj_count: averageDict["adj_count"],
+                      adv_count: averageDict["adv_count"],
+                      noun_count: averageDict["noun_count"],
+                      verb_count: averageDict["verb_count"]
                   }
-                  // saved!
+                  );
+                  oh.save(function (err) {
+                    if (err) {
+                      console.log("error while saving oh!");
+                      return handleError(err);
+                  }
+                    else {
+
+                      console.log("successfully saved the master of the objective heuristics!");
+
+                    }
+                    // saved!
+                  });
+
                 });
 
                 }
