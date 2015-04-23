@@ -21,6 +21,10 @@
     {% endif %}
     {% if essay.objectives.length > 0 %}
     <p>Number of Words: {{ essay.objectives[0].num_words }}</p>
+    <p>Overused Words: {{ essay.objectives[0].overused_words }}</p>
+    <p>Sentence Mean: {{ essay.objectives[0].sentence_mean }}</p>
+    <p>Number of Nouns: {{ essay.objectives[0].noun_count }}</p>
+    <p>Number of Verbs: {{ essay.objectives[0].verb_count }}</p>
     {% endif %}
   </div>
 
