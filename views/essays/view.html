@@ -23,9 +23,18 @@
     <p>Number of Words: {{ essay.objectives[0].num_words }}</p>
     <p>Overused Words: {{ essay.objectives[0].overused_words }}</p>
     <p>Sentence Mean: {{ essay.objectives[0].sentence_mean }}</p>
-    <p>Number of Nouns: {{ essay.objectives[0].noun_count }}</p>
-    <p>Number of Verbs: {{ essay.objectives[0].verb_count }}</p>
+    <p>Noun Ratio: {{ essay.objectives[0].noun_count / (essay.objectives[0].num_words) }}</p>
+    <p>Verb Ratio: {{ essay.objectives[0].verb_count / (essay.objectives[0].num_words) }}</p>
     {% endif %}
+
+    {% if masterObjective != null %}
+    <p>Master Sentence Mean: {{ masterObjective.sentence_mean }}</p>
+    <p>Master Sentence Var: {{ masterObjective.sentence_var }}</p>
+    <p>Master Sentence Num: {{ masterObjective.sentence_num }}</p>
+    <p>Master Adjective Ratio: {{ masterObjective.adj_ratio }}</p>
+    <p>Master Verb Ratio: {{ masterObjective.verb_ratio }}</p>
+    {% endif %}
+
   </div>
 
   </div>
