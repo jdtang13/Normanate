@@ -1,0 +1,9 @@
+changed schema in Essay.js - renamed to heuristicSchema (using your existing dummy Schema)
+	- exported name is kept the same
+
+changed essays.js controller - unified resultDict from both objective and subjective heuristics
+instead of keeping two separate dictionaries.
+	- also added functionality to calculate normals
+	- 
+
+changed process.js - objective and subjective heuristics should be usable (subjective might not work yet..)

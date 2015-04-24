@@ -106,6 +106,7 @@ function checkCallback(counter, callback, resultDict) {
 	//  id:
 	//	num_words:
 	// 	num_chars:
+	// 	linking_verbs:
 	// 	etymology_score: 
 	// 	overused_words:
 	//		word:
