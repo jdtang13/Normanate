@@ -22,6 +22,8 @@
 
     <p>Overused Words: {{ essay.objectives[0].overused_words }} ({{ essay.objectives[0].overused_words.length }}) | {{ masterObjective.overused_words_count }} </p>
     <p>Sentence Mean: {{ truncateNumber(essay.objectives[0].sentence_mean, 3) }} | {{ truncateNumber(masterObjective.sentence_mean, 3) }} (Master)  </p>
+    <p>Sentence Var: {{ truncateNumber(essay.objectives[0].sentence_var, 3) }} | {{ truncateNumber(masterObjective.sentence_var, 3) }} (Master)  </p>
+    <p>Sentence Num: {{ truncateNumber(essay.objectives[0].sentence_num, 3) }} | {{ truncateNumber(masterObjective.sentence_num, 3) }} (Master)  </p>
     <p>Adjective Ratio: {{ percentage(essay.objectives[0].adj_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.adj_ratio, 3) }} (Master) </p>
     <p>Adverb Ratio: {{ percentage(essay.objectives[0].adv_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.adv_ratio, 3) }} (Master) </p>
     <p>Noun Ratio: {{ percentage(essay.objectives[0].noun_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.noun_ratio, 3) }} (Master) </p>
