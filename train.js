@@ -55,7 +55,6 @@ async.waterfall([
 
         if (err) throw err;
 
-        var trainCount = 0;
         var averageDict = {};
 
         averageDict["num_words"] = 0;
@@ -70,14 +69,12 @@ async.waterfall([
         //  NOTE! counting overused_words num rather than the words themselves
         averageDict["overused_words_num"] = 0;
 
-        var numFiles = 0;
+        var numFiles = 4;   ///  NOTE: HARD CODED
+        var trainCount = numFiles;
 
-        files.forEach(function(file) {
+          async.each(files, function(file) {
 
-            trainCount++;
-            numFiles++;
-
-            fs.readFile(dir + file, 'utf-8', function(err, html){
+            fs.readFile(dir + file, 'utf-8', function(err, html) {
 
                 if (err) throw err;
                 //  data[file] = html;
@@ -95,8 +92,13 @@ async.waterfall([
                     function (err, resultDict) {
                     if (!err) {
                         console.log("successfully calculated objective heuristics from training set!");
+                        trainCount--;
+                        console.log("train count is now " + trainCount);
+
                         dict = resultDict;
                         console.log("content of training dict is: %j", dict);
+
+                        var num_words = resultDict["num_words"];
 
                         //  add dict results to an ongoing average
                         averageDict["num_words"] += resultDict["num_words"];
@@ -112,59 +114,70 @@ async.waterfall([
 
                         console.log("content of updated averagedict is: %j", averageDict);
 
+                  if (0 == trainCount) {
+
+                    console.log("trainCount is zero; attempting to invoke callback with averageDict = %j",averageDict);
+
+                     callback(null, averageDict, numFiles);
+
+                  }
+
                     }
                 });
-
-                // TODO: this isn't actually working...
-                // TODO: use averages to calculate the thing
-                if (0 == --trainCount) {
-                    console.log("finished reading all training data"); 
-
-                //  save the averaged data into the objective model
-                var MasterObjectiveModel = require('mongoose').model('MasterObjectiveHeuristic');
-                MasterObjectiveModel.remove({}, function(err) { 
-                 
-                  console.log("NOTICE: deleted MasterObjective to reset the database -- remove this line if you don't want this");
-
-                  var oh = new MasterObjectiveModel( 
-                  { 
-                      num_words: averageDict["num_words"],
-                      num_chars: averageDict["num_chars"],
-                      overused_words_num: averageDict["overused_words_num"],
-                      sentence_mean: averageDict["mean"],
-                      sentence_var: averageDict["var"],
-                      sentence_num: averageDict["num"],
-                      adj_count: averageDict["adj_count"],
-                      adv_count: averageDict["adv_count"],
-                      noun_count: averageDict["noun_count"],
-                      verb_count: averageDict["verb_count"]
-                  }
-                  );
-                  oh.save(function (err) {
-                    if (err) {
-                      console.log("error while saving oh!");
-                      return handleError(err);
-                  }
-                    else {
-
-                      console.log("successfully saved the master of the objective heuristics!");
-
-                    }
-                    // saved!
-                  });
-
-                });
-
-                }
-
-
 
             });
-        });
+        }
+
+        );
 
     });
 
-  }
+
+  },
+
+
+  function(averageDict, numFiles) {
+  //  save the averaged data into the objective model
+  var MasterObjectiveModel = require('mongoose').model('MasterObjectiveHeuristic');
+  MasterObjectiveModel.remove({}, function(err) { 
+   
+    console.log("NOTICE: deleted MasterObjective to reset the database -- remove this line if you don't want this");
+
+    console.log("invoking final function with averageDict = %j", averageDict);
+    console.log("number of files =  " + numFiles);
+
+    var oh = new MasterObjectiveModel( 
+    { 
+        num_words: averageDict["num_words"],
+        num_chars: averageDict["num_chars"],
+        overused_words_num: averageDict["overused_words_num"],
+        sentence_mean: averageDict["mean"],
+        sentence_var: averageDict["var"],
+        sentence_num: averageDict["num"],
+        adj_count: averageDict["adj_count"],
+        adv_count: averageDict["adv_count"],
+        noun_count: averageDict["noun_count"],
+        verb_count: averageDict["verb_count"]
+    }
+    );
+    oh.save(function (err) {
+      if (err) {
+        console.log("error while saving oh!");
+        return handleError(err);
+    }
+      else {
+
+        console.log("successfully saved the master of the objective heuristics!");
+        console.log("master content is %j", oh);
+
+      }
+      // saved!
+    });
+
+  });
+
+}
+
   
 ],
 // optional callback
