@@ -59,13 +59,16 @@ var objectiveHeuristicSchema = new mongoose.Schema(
     num_chars: Number,
     //overused_words: [wordSchema],
     overused_words: [String],
+
     sentence_mean: Number,
     sentence_var: Number,
     sentence_num: Number,
+
     adj_count: Number,
     adv_count: Number,
     noun_count: Number,
     verb_count: Number,
+    
     goodness_of_fit: Number
 });
 
