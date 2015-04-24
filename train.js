@@ -2,15 +2,6 @@
 // Train the application using files in the train/ directory
 // run using "node train.js"
 
-
-//  TODO -- for each file in the train/ directory, open it up and start training using process.js existing code
-//  TODO -- output an averaged heuristic object and save that somewhere
-
-//  TODO -- train on unpunctuated, non-capitalized words (does process.js already handle this?)
-
-//  TODO -- never train if training data already exists in mongo
-//  TODO -- use some sort of namespace or global variable in mongo to store the One True Heuristic Set
-
 //  TODO -- display errors relative to heuristics graphically (and highlight the words individually?)
 
 var walk = require('./utils/walk');
@@ -83,7 +74,6 @@ async.waterfall([
 
                 //  TODO -- current as of 4/22 -- update this based on essay.js
                 //  TODO -- watch out for numerical overflow from large data sets
-                //  TODO -- training data should be weighted according to the number of words? or number of sentences?
 
                 //  process the training set
                 //  generate heuristic data and save it
@@ -146,18 +136,43 @@ async.waterfall([
     console.log("invoking final function with averageDict = %j", averageDict);
     console.log("number of files =  " + numFiles);
 
+    var num_words = averageDict["num_words"];
+    var num_chars = averageDict["num_chars"];
+
+    console.log("num_words = " + num_words);
+
+    var avg_overused_words_num = (averageDict["overused_words_num"] / numFiles);
+
+    var avg_sentence_mean = (averageDict["sentence_mean"] / numFiles);
+    var avg_sentence_var = (averageDict["sentence_var"] / numFiles);
+    var avg_sentence_num = (averageDict["sentence_num"] / numFiles);
+
+    var avg_adj_count = averageDict["adj_count"] / num_words;
+    var avg_adv_count = averageDict["adv_count"] / num_words;
+    var avg_noun_count = averageDict["noun_count"] / num_words;
+    var avg_verb_count = averageDict["verb_count"] / num_words;
+
+    console.log("avg_overused_words_num = " + avg_overused_words_num);
+
+    console.log("avg_sentence_mean = " + avg_sentence_mean);
+    console.log("avg_sentence_var = " + avg_sentence_var);
+    console.log("avg_sentence_num = " + avg_sentence_num);
+
+    console.log("avg_verb_count = " + avg_verb_count);
+
     var oh = new MasterObjectiveModel( 
     { 
-        num_words: averageDict["num_words"],
-        num_chars: averageDict["num_chars"],
-        overused_words_num: averageDict["overused_words_num"],
-        sentence_mean: averageDict["mean"],
-        sentence_var: averageDict["var"],
-        sentence_num: averageDict["num"],
-        adj_count: averageDict["adj_count"],
-        adv_count: averageDict["adv_count"],
-        noun_count: averageDict["noun_count"],
-        verb_count: averageDict["verb_count"]
+        //  divide all by num_words to get an averge
+        overused_words_num: avg_overused_words_num,
+
+        sentence_mean: avg_sentence_mean,
+        sentence_var: avg_sentence_var,
+        sentence_num: avg_sentence_num,
+
+        adj_ratio: avg_adj_count,
+        adv_ratio: avg_adv_count,
+        noun_ratio: avg_noun_count,
+        verb_ratio: avg_verb_count
     }
     );
     oh.save(function (err) {

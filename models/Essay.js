@@ -8,17 +8,20 @@ var mongoose = require('mongoose');
 ///  the central master data that the training data feeds into
 var masterObjectiveSchema = new mongoose.Schema( 
 {
-    num_words: Number,
-    num_chars: Number,
+
+  //  ALL OF THESE ARE AVERAGES
+
     //overused_words: [wordSchema],
     overused_words_num: Number,
     sentence_mean: Number,
     sentence_var: Number,
     sentence_num: Number,
-    adj_count: Number,
-    adv_count: Number,
-    noun_count: Number,
-    verb_count: Number,
+
+    adj_ratio: Number,
+    adv_ratio: Number,
+    noun_ratio: Number,
+    verb_ratio: Number,
+
     goodness_of_fit: Number
 });
 
