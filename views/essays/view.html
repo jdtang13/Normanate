@@ -16,16 +16,20 @@
   <h3>Stats</h3>
   <div>
     <p>Essay Title: {{ essay.title }}</p>
-    {% if essay.heuristics.length > 0 %}
-    <p>Title Prestige: {{ essay.heuristics[0].values[0] }}</p>
-    {% endif %}
-    {% if essay.objectives.length > 0 %}
+
+    {% if essay.objectives.length > 0 && masterObjective != null %}
     <p>Number of Words: {{ essay.objectives[0].num_words }}</p>
-    <p>Overused Words: {{ essay.objectives[0].overused_words }}</p>
-    <p>Sentence Mean: {{ essay.objectives[0].sentence_mean }}</p>
-    <p>Number of Nouns: {{ essay.objectives[0].noun_count }}</p>
-    <p>Number of Verbs: {{ essay.objectives[0].verb_count }}</p>
+
+    <p>Overused Words: {{ essay.objectives[0].overused_words }} ({{ essay.objectives[0].overused_words.length }}) | {{ masterObjective.overused_words_count }} </p>
+    <p>Sentence Mean: {{ truncateNumber(essay.objectives[0].sentence_mean, 3) }} | {{ truncateNumber(masterObjective.sentence_mean, 3) }} (Master)  </p>
+    <p>Sentence Var: {{ truncateNumber(essay.objectives[0].sentence_var, 3) }} | {{ truncateNumber(masterObjective.sentence_var, 3) }} (Master)  </p>
+    <p>Sentence Num: {{ truncateNumber(essay.objectives[0].sentence_num, 3) }} | {{ truncateNumber(masterObjective.sentence_num, 3) }} (Master)  </p>
+    <p>Adjective Ratio: {{ percentage(essay.objectives[0].adj_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.adj_ratio, 3) }} (Master) </p>
+    <p>Adverb Ratio: {{ percentage(essay.objectives[0].adv_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.adv_ratio, 3) }} (Master) </p>
+    <p>Noun Ratio: {{ percentage(essay.objectives[0].noun_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.noun_ratio, 3) }} (Master) </p>
+    <p>Verb Ratio: {{ percentage(essay.objectives[0].verb_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.verb_ratio, 3) }} (Master) </p>
     {% endif %}
+
   </div>
 
   </div>

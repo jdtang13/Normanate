@@ -31,9 +31,29 @@ exports.getEditEssay = function(req, res) {
 
 // GET an essay
 exports.getEssay = function(req, res) {
-    res.render('essays/view', {
-        essay: req.essay
+
+    var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
+    var query = MasterObjective.findOne({ });
+    query.exec(function (err, masterObjective) {
+        if (masterObjective != null) {
+            console.log("master objective found!");
+
+        res.render('essays/view', {
+            essay: req.essay,
+            masterObjective: masterObjective
+        });
+
+        }
+        else {
+            console.log(" ERROR : master objective not found, please run 'node train' and try again.");
+
+        res.render('essays/view', {
+            essay: req.essay
+        });
+
+        }
     });
+
 };
 
 exports.getEssays = function(req, res) {
@@ -105,7 +125,6 @@ exports.postCreateEssay = function(req, res) {
     });
 
     //  generate heuristic data and save it
-    //  TODO -- is this correct? probably not
     var dict;
     process.objectiveHeuristics(-1, essay.content, 
         function (err, resultDict) {

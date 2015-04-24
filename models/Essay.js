@@ -5,7 +5,36 @@ var mongoose = require('mongoose');
 
 // var wordSchema = require('mongoose').model('Word');
 
+<<<<<<< HEAD
 //  DEPRECATED, was current as of 4/21 -- please update this if things change
+=======
+///  the central master data that the training data feeds into
+var masterObjectiveSchema = new mongoose.Schema( 
+{
+
+  //  ALL OF THESE ARE AVERAGES
+
+    //overused_words: [wordSchema],
+    overused_words_num: Number,
+    sentence_mean: Number,
+    sentence_var: Number,
+    sentence_num: Number,
+
+    adj_ratio: Number,
+    adv_ratio: Number,
+    noun_ratio: Number,
+    verb_ratio: Number,
+
+    goodness_of_fit: Number
+});
+
+// Ensure virtual fields are serialised.
+masterObjectiveSchema.set('toJSON', {
+    virtuals: true
+});
+
+//  CURRENT as of 4/21 -- please update this if things change
+>>>>>>> 73c5eabccecde9fe303db454793a7773266faf93
 // basic structure of a result object. This should apply to both objective and subjective heuristics.
   // {
   //  id:
@@ -25,6 +54,7 @@ var mongoose = require('mongoose');
   //    goodness_of_fit: (subjective)
   // }
 
+<<<<<<< HEAD
 // CURRENT as of 4/22 
 // basic structure of a result object. This should apply to both objective and subjective heuristics.
   // {
@@ -71,6 +101,29 @@ var mongoose = require('mongoose');
 //     pos_match_pairFreqs:
 
 // });
+=======
+var objectiveHeuristicSchema = new mongoose.Schema( 
+{
+
+    //is_master: { type: Boolean, required: true, default: false}, //  is this the master set derived from training data?
+
+    num_words: Number,
+    num_chars: Number,
+    //overused_words: [wordSchema],
+    overused_words: [String],
+
+    sentence_mean: Number,
+    sentence_var: Number,
+    sentence_num: Number,
+
+    adj_count: Number,
+    adv_count: Number,
+    noun_count: Number,
+    verb_count: Number,
+    
+    goodness_of_fit: Number
+});
+>>>>>>> 73c5eabccecde9fe303db454793a7773266faf93
 
 // Ensure virtual fields are serialised.
 // objectiveHeuristicSchema.set('toJSON', {
@@ -141,6 +194,7 @@ essaySchema.set('toJSON', {
     virtuals: true
 });
 
+module.exports = mongoose.model('MasterObjectiveHeuristic', masterObjectiveSchema);
 module.exports = mongoose.model('ObjectiveHeuristic', objectiveHeuristicSchema);
 module.exports = mongoose.model('Heuristic', heuristicSchema);
 module.exports = mongoose.model('Essay', essaySchema);

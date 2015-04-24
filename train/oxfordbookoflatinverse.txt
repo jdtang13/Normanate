@@ -1,0 +1,992 @@
+﻿PREFACE
+
+The plan of this book excludes epic and the drama, and in general so
+much of Roman poetry as could be included only by a licence of excerpt
+mostly dangerous and in poetry of any architectonic pretensions
+intolerable. If any one remarks as inconsistent with this plan the
+inclusion of the more considerable fragments of Ennius and the early
+tragedians, I will only say that I have not thought it worth while to be
+wiser here than Time and Fate, which have of their own act given us
+these poets in lamentable excerpt. A more real inconsistency may be
+found in my treatment of the didactic poets. It seemed a pity that
+Didactic Poetry--in some ways the most characteristic product of the
+Roman genius--should, in such a Collection as this, be wholly
+unrepresented. It seemed a pity: and it seemed also on the whole
+unnecessary. It seemed unnecessary, for the reason that many of the
+great passages of Lucretius, Vergil, and Manilius hang so loosely to
+their contexts that the poets themselves seem to invite the gentle
+violence of the excerptor. These passages are 'golden branches' set in
+an alien stock--_non sua seminat arbos_. The hand that would pluck them
+must be at once courageous and circumspect. But they attend the fated
+despoiler:
+
+    Ergo alte uestiga oculis et rite repertum
+    carpe manu, namque ipse uolens facilisque sequetur
+    si te fata uocant.
+
+Even outside Didactic Poetry I have allowed myself an occasional
+disloyalty to my own rule against excerpts. I have, for example,
+detached one or two lyrics from the Tragedies of Seneca. And, again,
+from the long and sometimes tedious _Itinerarium_ of Rutilius I have
+detached the splendid apostrophe to Rome which stands in the forefront
+of that poem. These are pieces without which no anthology of Latin
+poetry would be anything but grotesquely incomplete. And after all we
+should be the masters and not the slaves of our own rules.
+
+Satire finds no place in this book. Horace is represented only by his
+lyrics. Juvenal and Persius are not represented at all. The _Satires_
+and _Epistles_ of Horace are books of deep and wide influence. They have
+taught lessons in school which have been remembered in the world. They
+have made an appeal to natures which teaching more profound and
+spiritual leaves untouched. By their large temper and by their complete
+freedom from cant they have achieved a place in the regard of men from
+which they are not likely to be dislodged by any changes of literary
+fashion or any fury of the enemies of humane studies. I am content to
+leave them in this secure position, and not to intrude them into a
+Collection where Horace himself would have known them to be out of
+place. Indeed, he has himself said upon this subject all that needs to
+be said.[1] Persius similarly, in the Prologue to his _Satires_,
+excludes himself from the company of the great poets. Nor can I believe
+that Juvenal has any place among them. In the rhetoric of rancour he is
+a distinguished practitioner. But he wants two qualities essential to
+great poetry--truth and humanity. I say this because there are critics
+who speak of Juvenal as though he were Isaiah.
+
+My Selection begins with fragments of the Saliar hymns, and ends with
+the invocation of Phocas to 'Clio, reverend wardress of Antiquity.' If I
+am challenged to justify these _termini_, I will say of the first of
+them that I could not begin earlier, and that it is commonly better to
+take the beginnings offered to us than to make beginnings for ourselves.
+The lower _terminus_ is not so simple a matter. I set myself here two
+rules. First, I resolved to include no verse which, tried by what we
+call 'classical' standards, was metrically faulty. Secondly, I judged it
+wiser to exclude any poetry definitely Christian in character--a rule
+which, as will be seen, does not necessarily exclude all the work of
+Christian poets. Within these limits, I was content to go on so long as
+I could find verse instinct with any genuine poetic feeling. The author
+whose exclusion I most regret is Prudentius. If any one asks me, Where
+is Merobaudes? where Sedulius? where Dracontius? I answer that they are
+where they have always been--out of account. Interesting, no doubt, in
+other ways, for the student of poetry they do not count. Prudentius
+counts. He has his place. But it is not in this Collection. It is among
+other memories, traditions, and aspirations, by the threshold of a world
+where Vergil takes solemn and fated leave of those whom he has guided
+and inspired:
+
+    Non aspettar mio dir più nè mio cenno.
+
+I have spent a good deal of labour on the revision of texts: and I hope
+that of some poems, particularly the less known poems, this book may be
+found to offer a purer recension than is available elsewhere. I owe it
+to myself, however, to say that I have sometimes preferred the
+convenience of the reader to the dictates of a rigorous criticism. I
+have thought it, for example, not humane to variegate the text of an
+Anthology with despairing _obeli_: and occasionally I have covered up an
+indubitable lacuna by artifices which I trust may pass undetected by the
+general reader and unreproved by the charitable critic.
+
+  H.W.G.
+
+  _Oxford, Sept. 2, 1912._
+
+
+
+
+INTRODUCTION
+
+
+I
+
+Latin poetry begins where almost all poetry begins--in the rude
+ceremonial of a primitive people placating an unknown and dreaded
+spiritual world. The earliest fragments are priestly incantations. In
+one of these fragments the Salii placate Leucesius, the god of
+lightning. In another the Arval Brethren placate Mars or Marmar, the god
+of pestilence and blight (_lues rues_). The gods are most dreaded at the
+seasons most important to a primitive people, seed-time, for example,
+and harvest. The Salii celebrated Mars at seed-time--in the month which
+bears his name, _mensis Martius_. The name of the Arval Brethren betrays
+their relation to the gods who watch the sown fields. The aim of this
+primitive priestly poetry is to get a particular deity into the power of
+the worshipper. To do this it is necessary to know his name and to use
+it. In the Arval hymn the name of the god is reiterated--it is a spell.
+Even so Jacob wished to know--and to use--the name of the god with whom
+he wrestled. These priestly litanies are accompanied by wild dances--the
+Salii are, etymologically, 'the Dancing men'--and by the clashing of
+shields. They are cast in a metre not unsuited to the dance by which
+they are accompanied. This is the famous Saturnian metre, which remained
+the metre of all Latin poetry until the coming of the Greeks. Each verse
+falls into two halves corresponding to the forward swing and the recoil
+of the dance. Each half-verse exhibits three rhythmical beats answering
+to the beat of a three-step dance. The verse is in the main accentual.
+But the accent is hieratic. The hieratic accent is discovered chiefly in
+the first half of the verse: where the natural accent of a disyllabic
+word is neglected and the stress falls constantly on the final
+syllable.[2] This hieratic accent in primitive Latin poetry is
+important, since it was their familiar use of it which made it easy for
+the Romans to adapt the metres of Greece.
+
+The first poets, then, are the priests. But behind the priests are the
+people--moved by the same religious beliefs and fears, but inclined, as
+happens everywhere, to make of their 'holy day' a 'holiday'. And hence a
+different species of poetry, known to us chiefly in connexion with the
+harvest-home and with marriage ceremonial--the so-called Fescennine
+poetry. This poetry is dictated by much the same needs as that of the
+priests. It is a charm against _fascinum_, 'the evil eye': and hence the
+name Fescennine. The principal constituent element in this Fescennine
+poetry was obscene mockery. This obscenity was magical. But just as it
+takes two to make a quarrel, so the obscene mockery of the Fescennine
+verses required two principals. And here, in the improvisations of the
+harvest-home, we must seek the origins of two important species of Latin
+poetry--drama and satire.
+
+There was magic in the house as well as in the fields. Disease and Death
+demanded, in every household, incantations. We still possess fragments
+of Saturnian verse which were employed as charms against disease. Magic
+dirges (_neniae_) were chanted before the house where a dead man lay.
+They were chanted by a _praefica_, a professional 'wise woman', who
+placated the dead man by reiterated praise of him. These chants probably
+mingled traditional formulae with improvisation appropriate to
+particular circumstances. The office of the _praefica_ survived into a
+late period. But with the growth of Rationalism it very early came into
+disrepute and contempt. Shorter lived but more in honour was an
+institution known to us only from casually preserved references to it in
+Cato and Varro. This was the _Song in Praise of Famous Men_ which was
+sung at banquets. Originally it was sung by a choir of carefully
+selected boys (_pueri modesti_), and no doubt its purpose was to
+propitiate the shades of the dead. At a later period the boy choristers
+disappear, and the _Song_ is sung by individual banqueters. The ceremony
+becomes less religious in character, and exists to minister to the
+vanity of great families and to foster patriotism. In Cato's time the
+tradition of it survived only as a memory from a very distant past. Its
+early extinction must be explained by the wider use among the Romans of
+written memorials. Of these literary records nothing has survived to us:
+even of epitaphs preserved to us in inscriptions none is earlier than
+the age of Cato. So far as our knowledge of Latin literature extends we
+pass at a leap from what may be called the poetry of primitive magic[3]
+to Livius Andronicus' translation of the _Odyssey_. Yet between the
+work of Livius and this magical poetry there must lie a considerable
+literary development of which we know nothing. Two circumstances may
+serve to bring this home to us. The first is that stage plays are known
+to have been performed in Rome as early as the middle of the fourth
+century. The second is that there existed in Rome in the time of Livius
+a school of poets and actors who were sufficiently numerous and
+important to be permitted to form a Guild or College.
+
+The position of Livius is not always clearly understood. We can be sure
+that he was not the first Roman poet. Nor is it credible that he was the
+first Greek teacher to find his way to Rome from Southern Italy. To what
+does he owe his pre-eminence? He owes it, in the first place, to what
+may be called a mere accident. He was a schoolmaster: and in his
+_Odyssey_ he had the good fortune to produce for the schools precisely
+the kind of text-book which they needed: a text-book which was still
+used in the time of Horace. Secondly, Livius Andronicus saved Roman
+literature from being destroyed by Greek literature. We commonly regard
+him as the pioneer of Hellenism. This view needs correcting. We shall
+probably be nearer the truth if we suppose that Livius represents the
+reaction against an already dominant Hellenism. The real peril was that
+the Romans might become not too little but too much Hellenized, that
+they might lose their nationality as completely as the Macedonians had
+done, that they might employ the Greek language rather than their own
+for both poetry and history. From this peril Livius--and the patriotic
+nobles whose ideals he represented--saved Rome. It is significant that
+in his translation of the _Odyssey_ he employs the old Saturnian
+measure. Naevius, a little later, retained the same metre for his epic
+upon the Punic Wars. In the epitaph which he composed for himself
+Naevius says that 'the Camenae', the native Italian muses, might well
+mourn his death, 'for at Rome men have forgotten to speak in Latin
+phrase'. He is thinking of Ennius, or the school which Ennius
+represents. Ennius' answer has been preserved to us in the lines in
+which he alludes scornfully to the _Punica_ of Naevius as written 'in
+verses such as the Fauns and Bards chanted of old', the verses, that is,
+of the old poetry of magic. Ennius abandons the Saturnian for the
+hexameter. Livius and Naevius had used in drama some of the simpler
+Greek metres. It is possible that some of these had been long since
+naturalized in Rome--perhaps under Etrurian influence. But the
+abandonment of the Saturnian was the abandonment of a tradition five
+centuries old. The aims of Ennius were not essentially different from
+those of Livius and Naevius. But the peril of a Roman literature in the
+Greek language was past; and Ennius could afford to go further in his
+concessions to Hellenism. It had been made clear that both the Latin
+language and the Latin temper could hold their own. And when this was
+made clear the anti-Hellenic reaction collapsed. Cato was almost exactly
+contemporary with Ennius: and he had been the foremost representative of
+the reaction. But in his old age he cried 'Peccavi', and set himself to
+learn Greek.
+
+Ennius said that he had three hearts, for he spoke three tongues--the
+Greek, the Oscan, and the Latin. And Roman poetry has, as it were, three
+hearts. All through the Republican era we may distinguish in it three
+elements. There is the Greek, or aesthetic, element: all that gives to
+it form or technique. There is the primitive Italian element to which it
+owes what it has of fire, sensibility, romance. And finally there is
+Rome itself, sombre, puissant, and both in language and ideals
+conquering by mass. The effort of Roman poetry is to adjust these three
+elements. And this effort yields, under the Republic, three periods of
+development. The first covers the second century and the latter half of
+the third. In this the Hellenism is that of the classical era of Greece.
+The Italian force is that of Southern and Central Italy. The Roman force
+is the inspiration of the Punic Wars. The typical name in it is that of
+Ennius. The Roman and Italian elements are not yet sufficiently subdued
+to the Hellenic. And the result is a poetry of some moral power, not
+wanting in fire and life, but in the main clumsy and disordered. The
+second period covers the first half of the first century. The Hellenism
+is Alexandrian. The Italian influence is from the North of Italy--the
+period might, indeed, be called the Transpadane period of Roman poetry.
+The Roman influence is that of the Rome of the Civil Wars. The typical
+name in it is that of Catullus--for Lucretius is, as it were, a last
+outpost of the period before: he stands with Ennius, and the Alexandrine
+movement has touched him hardly at all. In this period the Italian
+(perhaps largely Celtic) genius is allied with Alexandrianism in revolt
+against Rome: and in it Latin poetry may be said to attain formal
+perfection. The third period is the Augustan. In it we have the final
+conciliation of the Greek, the Italian, and the Roman influences. The
+typical name in it is that of Vergil, who was born outside the Roman
+_ciuitas_, who looks back to Ennius through Catullus, to Homer through
+Apollonius.
+
+It is significant here that it is with the final unification of Italy
+(which was accomplished by the enfranchisement of Transpadane Gaul) that
+Roman poetry reaches its culmination--and at the same time begins to
+decline. Of the makers of Roman poetry very few indeed are Roman. Livius
+and Ennius were 'semi-Graeci' from Calabria, Naevius and Lucilius were
+natives of Campania. Accius and Plautus--and, later, Propertius--were
+Umbrian. Caecilius was an Insubrian Gaul. Catullus, Bibaculus, Ticidas,
+Cinna, Vergil were Transpadanes. Asinius Gallus came from Gallia
+Narbonensis, Horace from Apulia. So long as there was in the Italian
+_municipia_ new blood upon which it could draw, Roman poetry grew in
+strength. But as soon as the fresh Italian blood failed Roman poetry
+failed--or at any rate it fell away from its own greatness, it ceased to
+be a living and quickening force. It became for the first time what it
+was not before--imitative; that is to say it now for the first time
+reproduced without transmuting. Vergil, of course, 'imitates' Homer. But
+observe the nature of this 'imitation'. If I may parody a famous saying,
+there is nothing in Vergil which was not previously in Homer--_save
+Vergil himself_. But the post-Vergilian poetry is, taken in the mass,
+without individuality. There is, of course, after Vergil much in Roman
+poetry that is interesting or striking, much that is brilliant,
+graceful, or noble. But even so it is notable that much of the best work
+seems due to the infusion of a foreign strain. Of the considerable poets
+of the Empire, Lucan, Seneca, Martial are of Spanish birth: and a
+Spanish origin has been--perhaps hastily--conjectured for Silius.
+Claudian is an Alexandrian, Ausonius a Gaul.[4] Rome's rôle in the world
+is the absorption of outlying genius. In poetry as in everything else
+_urbem fecit quod prius orbis erat_.
+
+If we are to understand the character, then, of Roman poetry in its best
+period, in the period, that is, which ends with the death of Augustus,
+we must figure to ourselves a great and prosaic people, with a great and
+prosaic language, directing and controlling to their own ends spiritual
+forces deeper and more subtle than themselves. Of these forces one is
+the Greek, the other may for convenience be called the Italian. In the
+Italian we must allow for a considerable intermixture of races: and we
+must remember that large tracts at least of Northern Italy, notably
+Transpadane Gaul and Umbria, have been penetrated by Celtic influence.
+No one can study Roman poetry at all deeply or sympathetically without
+feeling how un-Roman much of it really is: and again--despite its
+Hellenic forms and its constant study of Hellenism--how un-Greek. It is
+not Greek and not Roman, and we may call it Italian for want of a better
+name. The effects of this Italian quality in Roman poetry are both
+profound and elusive; and it is not easy to specify them in words. But
+it is important to seize them: for unless we do so we shall miss that
+aspect of Roman poetry which gives it its most real title to be called
+poetry at all. Apart from it it is in danger of passing at its best for
+rhetoric, at its worst for prose.
+
+Ennius is a poet in whom the Roman, as distinct from the Italian,
+temperament has asserted itself strongly. It has asserted itself most
+powerfully, of course, in the _Annals_. Even in the _Annals_, however,
+there is a great deal that is neither Greek nor Roman. There is an
+Italian vividness. The coloured phraseology is Italian. And a good deal
+more. But it is in the tragedies--closely as they follow Greek
+models--that the Italian element is most pronounced. Take this from the
+_Alexander_:
+
+    adest, adest fax obuoluta sanguine atque incendio:
+    multos annos latuit, ciues, ferte opem et restinguite.
+    iamque mari magno classis cita
+    texitur, exitium examen rapit:
+    adueniet, fera ueliuolantibus
+    navibus complebit manus litora.
+
+Mr. Sellar has called attention to the 'prophetic fury' of these lines,
+their 'wild agitated tones'. They seem, indeed, wrought in fire. Nor do
+they stand alone in Ennius. Nor is their fire and swiftness Roman. They
+are preserved to us in a passage of Cicero's treatise _De Diuinatione_:
+and in the same passage Cicero applies to another fragment of Ennius
+notable epithets. He speaks of it as _poema tenerum et moratum et
+molle_. The element of _moratum_, the deep moral earnestness, is Roman.
+The other two epithets carry us outside the typically Roman
+temperament. Everybody remembers Horace's characterization of Vergil:
+
+                        molle atque facetum
+    Vergilio annuerunt gaudentes rure Camenae.
+
+Horace is speaking there of the Vergil of the Transpadane period: the
+reference is to the _Eclogues_. The Romans had _hard_ minds. And in the
+_Eclogues_ they marvelled primarily at the revelation of temperament
+which Horace denotes by the word _molle_. Propertius, in whose Umbrian
+blood there was, it has been conjectured, probably some admixture of the
+Celtic, speaks of himself as _mollis in omnes_. The _ingenium molle_,
+whether in passion, as with Propertius, or, as with Vergil, in
+reflection, is that deep and tender sensibility which is the least Roman
+thing in the world, and which, in its subtlest manifestations, is
+perhaps the peculiar possession of the Celt. The subtle and moving
+effects, in the _Eclogues_, of this _molle ingenium_, are well
+characterized by Mr. Mackail, when he speaks of the 'note of brooding
+pity' which pierces the 'immature and tremulous cadences' of Vergil's
+earliest period. This _molle ingenium_, that here quivers beneath the
+half-divined 'pain-of-the-world', is the same temperament as that which
+in Catullus gives to the pain of the individual immortally poignant
+expression. It is the same temperament, again, which created Dido.
+Macrobius tells us that Vergil's Dido is just the Medea of Apollonius
+over again. And some debt Vergil no doubt has to Apollonius. To the
+Attic drama his debt is far deeper; and he no doubt intended to invest
+the story of Dido with the same kind of interest as that which attaches
+to, say, the Phaedra of Euripides. Yet observe. Vergil has not
+_hardness_ enough. He has not the unbending righteousness of the tragic
+manner. The rather hard moral grandeur of the great Attic dramatists,
+their fine spiritual steel, has submitted to a strange softening
+process. Something melting and subduing, something neither Greek nor
+Roman, has come in. We are passed out of classicism: we are moving into
+what we call romanticism. Aeneas was a brute. There is nobody who does
+not feel that. Yet nobody was meant to feel that. We were meant to feel
+that Aeneas was what Vergil so often calls him, _pius_. But the Celtic
+spirit--for that is what it is--is over-mastering. It is its
+characteristic that it constantly girds a man--or a poet--and carries
+him whither he would not. The fourth _Aeneid_ is the triumph of an
+unconscionable Celticism over the whole moral plan of Vergil's epic.
+
+I will not mention Lesbia by the side of Dido. The Celtic spirit too
+often descends into hell. But I will take from Catullus in a different
+mood two other examples of the Italic romanticism. Consider these three
+lines:
+
+    usque dum tremulum mouens
+    cana tempus anilitas
+    omnia omnibus annuit,
+
+--'till that day when gray old age shaking its palsied head nods in all
+things to all assent.' That is not Greek nor Roman. It is the
+unelaborate magic of the Celtic temperament. Keats, I have often
+thought, would have 'owed his eyes' to be able to write those three
+lines. He hits sometimes a like matchless felicity:
+
+    She dwells with Beauty, Beauty that must die,
+    And Joy, whose hand is ever at his lips
+    Bidding adieu.
+
+But into the effects which Catullus just happens upon by a luck of
+temperament Keats puts more of his life-blood than a man can well spare.
+
+Take, again, this from the _Letter to Hortalus_. Think not, says
+Catullus, that your words have passed from my heart,
+
+    ut missum sponsi furtiuo munere malum
+      procurrit casto uirginis e gremio,
+    quod miserae oblitae molli sub ueste locatum,
+      dum aduentu matris prosilit, excutitur;
+    atque illud prono praeceps agitur decursu,
+      huic manat tristi conscius ore rubor,
+
+--'as an apple, sent by some lover, a secret gift, falls from a maid's
+chaste bosom. She placed it, poor lass, in the soft folds of her robe
+and forgot it. And when her mother came towards her out it fell; fell
+and rolled in headlong course. And vexed and red and wet with tears are
+her guilty cheeks!'
+
+That owes something, no doubt, to Alexandria. But in its exquisite
+sensibility, its supreme delicacy and tenderness, it belongs rather to
+the romantic than to the classical literatures.
+
+_Molle atque facetum_: the deep and keen fire of mind, the quick glow of
+sensibility--that is what redeems literature and life alike from
+dullness. The Roman, the typical Roman, was what we call a 'dull man'.
+But the Italian has this fire. And it is this that so often redeems
+Roman literature from itself. We are accustomed to associate the word
+_facetus_ with the idea of 'wit'. It is to be connected, it would seem,
+etymologically with _fax_, 'a torch'. Its primitive meaning is
+'brightness', 'brilliance': and if we wish to understand what Horace
+means when he speaks of the element of '_facetum_' in Vergil, perhaps
+'glow' or 'fire' will serve us better than 'wit'. _Facetus_, _facetiae_,
+_infacetus_, _infacetiae_ are favourite words with Catullus. With
+_lepidus_, _illepidus_, _uenustus_, _inuenustus_ they are his usual
+terms of literary praise and dispraise. These words hit, of course,
+often very superficial effects. Yet with Catullus and his friends they
+stand for a literary ideal deeper than the contexts in which they occur:
+and an ideal which, while it no doubt derives from the enthusiasm of
+Alexandrian study, yet assumes a distinctively Italian character. Poetry
+must be _facetus_: it must glow and dance. It must have _lepor_: it must
+be clean and bright. There must be nothing slipshod, no tarnish. 'Bright
+is the ring of words when the right man rings them.' It must have
+_uenustas_, 'charm', a certain melting quality. This ideal Roman poetry
+never realizes perhaps in its fullness save in Catullus himself. In the
+lighter poets it passes too easily into an ideal of mere cleverness:
+until with Ovid (and in a less degree Martial) _lepor_ is the whole man.
+In the deeper poets it is oppressed by more Roman ideals.
+
+The _facetum ingenium_, as it manifests itself in satire and invective,
+does not properly here concern us: it belongs to another order of
+poetry. Yet I may be allowed to illustrate from this species of
+composition the manner in which the Italian spirit in Roman poetry
+asserts for itself a dominating and individual place. _Satura quidem
+tota nostra est_, says Quintilian. We know now that this is not so: that
+Quintilian was wrong, or perhaps rather that he has expressed himself in
+a misleading fashion. Roman Satire, like the rest of Roman literature,
+looks back to the Greek world. It stands in close relation to
+Alexandrian Satire--a literature of which we have hitherto been hardly
+aware. Horace, when he asserted the dependence of Lucilius on the old
+Attic Comedy, was nearer the truth than Quintilian. But the influence of
+Attic Comedy comes to Lucilius (and to Horace and to Juvenal and to
+Persius) by way of the Alexandrian satirists. From the Alexandrians come
+many of the stock themes of Roman Satire, many of its stock characters,
+much of its moral sentiment. The _captator_, the μεμψίμοιρος,
+the _auarus_ are not the creation of Horace and Juvenal. The seventh
+satire of Juvenal is not the first 'Plaint of the Impoverished
+Schoolmaster' in literature. Nor is Horace _Sat._ II. viii the earliest
+'Dinner with a Nouveau-Riche'. In all this, and in much else in Roman
+Satire, we must recognize Alexandrian influence. Yet even so we can
+distinguish clearly--much more clearly, indeed, than in other
+departments of Latin poetry--the Roman and the primitive Italian
+elements. 'Ecquid is homo habet aceti in pectore?' asks Pseudolus in
+Plautus. And Horace, in a well-known phrase, speaks of _Italum acetum_,
+which the scholiast renders by 'Romana mordacitas'. This 'vinegar' is
+the coarse and biting wit of the Italian countryside. It has its origin
+in the casual ribaldry of the _uindemiatores_: in the rudely improvized
+dramatic contests of the harvest-home. Transported to the city it
+becomes a permanent part of Roman Satire. Roman Satire has always one
+hero--the average _paterfamilias_. Often he is wise and mild and
+friendly. But as often as not he is merely the _uindemiator_, thinly
+disguised, pert and ready and unscrupulous, 'slinging vinegar' not only
+at what is morally wrong but at anything which he happens either to
+dislike or not to understand. The vices of his--often
+imaginary--antagonist are recounted with evident relish and with parade
+of detail.
+
+It is not only in Satire that we meet this _Italum acetum_. We meet it
+also in the poetry of personal invective. This department of Roman
+poetry would hardly perhaps reward study--and it might very well revolt
+the student--if it were not that Catullus has here achieved some of his
+most memorable effects. In no writer is the _Italum acetum_ found in so
+undiluted a sort. And he stands in this perhaps not so much for himself
+as for a Transpadane school. The lampoons of his compatriot Furius
+Bibaculus were as famous as his own. Vergil himself--if, as seems
+likely, the _Catalepton_ be a genuine work of Vergil--did not escape the
+Transpadane fashion. In fact the Italian aptitude for invective seems in
+North Italy, allied with the study of Archilochus, to have created a new
+type in Latin literature--a type which Horace essays not very
+successfully in the _Epodes_ and some of the _Odes_. The invective of
+Catullus has no humbug of moral purpose. It has its motive in mere hate.
+Yet Catullus knew better than any one how subtle and complex an emotion
+is hate. Two poems will illustrate better than anything I could say his
+power here: and will at the same time make clear what I mean when I
+distinguish the Italian from the Roman temperament in Latin poetry.
+
+Let any one take up the eleventh poem of Catullus:
+
+    cum suis uiuat ualeatque moechis,
+    quos simul complexa tenet trecentos,
+    nullam amans uere sed identidem omnium
+      ilia rumpens.
+
+There is invective. There is the lash with a vengeance. Yet the very
+stanza that follows ends in a sob:
+
+    nec meum respectet, ut ante, amorem,
+    qui illius culpa cecidit uelut prati
+    ultimi flos, praetereunte postquam
+      tactus aratrost.
+
+Turn now for an inverse effect to the fifty-eighth poem:
+
+    Caeli, Lesbia nostra, Lesbia illa,
+    illa Lesbia, quam Catullus unam
+    plus quam se atque suos amauit omnes ...
+
+Note the dragging cadences, the pathetic iteration, the scarce-concealed
+agony of longing. Yet this five-line poem ends in a couplet of
+intolerable obscenity.
+
+There once more you have the unpredictable Celtic temperament--obscenity
+of wrath dissolving in the tenderness of unbidden tears, fond regret
+stung suddenly to a rage foul and unscrupulous.
+
+But let me here guard against a misapprehension. The more closely we
+study Roman poetry the more clearly do we become aware of the presence
+in it of a non-Roman element: and the more does it seem as though this
+non-Roman element were the originative force, as though it were to this
+that Roman poetry owes most of that in it which we regard as essentially
+poetical. The quickening force in the best Roman poetry is the Italian
+blood. Yet we speak of this poetry as Roman: and it is not without
+reason that we do so. If it was to a great extent made by Italians, it
+was made by Italians who were already Romanized. Indeed the Italian and
+the Roman elements are never so separate or so disparate in actuality as
+they appear in literary analysis. The Italian spirit worked always under
+the spell of Rome, and not under any merely external compulsion. And the
+spell of Rome is over the whole of Roman poetry. The Italians were only
+a nation _through Rome_: and a great poetry must have behind it a great
+life: it must express a great people, their deeds and their ideals.
+Roman poetry does, beyond almost any other poetry, bear the impress of a
+great nation. And after all the _language_ of this poetry is the
+language of the Romans. It is said of it, of course, that it is an
+unpoetical language. And it is true that it has not the dance and
+brightness of Greek: that it is wanting in fineness and subtlety: that
+it is defective in vocabulary. All this is true. Yet the final test of
+the poetical character of a language is the poetry that is written in
+it. The mere sound of Roman poetry is the sound of a great nation. And
+here let us remember what we ought never to forget in reading Roman
+poetry. It was not made to be read. It was made to be spoken. The Roman
+for the most part did not read. He was read to. The difference is plain
+enough. Indeed it is common to hear the remark about this or that book,
+that 'It is the kind of book that ought to be read aloud'. Latin books
+_were_ read aloud. And this practice must have reacted, however
+obscurely, upon the writing of them. Some tinge of rhetoric was
+inevitable. And here I am led to a new theme.
+
+
+II
+
+Perhaps no poetry of equal power and range is so deeply infected with
+rhetoric as the Roman. A principal cause of this is, no doubt, the
+language. But there are other causes, and we shall most easily penetrate
+these if we consider what I may call the environment of Roman poetry.
+
+Two conditions in Rome helped to foster literary creation among a people
+by temperament unimaginative. Of these the first is an educational
+system deliberately and steadily directed towards the development of
+poetical talent. No nation ever believed in poetry so deeply as the
+Romans. They were not a people of whom we can say, as we can of the
+Greeks, that they were _born to_ art and literature. Those of them who
+attained to eminence in art and literature knew this perfectly well.
+They knew by how laborious a process they had themselves arrived at such
+talent as they achieved. The characteristic Roman triumphs are the
+triumphs of material civilization. But the Romans were well aware that a
+material civilization cannot be either organized or sustained without
+the aid of spiritual forces, and that among the most important of the
+spiritual forces that hold together the fabric of nationality are art
+and literature. With that large common sense of theirs which, as they
+grew in historical experience, became more and more spiritual, they
+perceived early, and they gauged profoundly, the importance of
+accomplishments not native to their genius. They knew what had happened
+to the 'valiant kings' who 'lived before Agamemnon'--and why. The same
+could easily happen to a great empire. That is partially, of course, a
+utilitarian consideration. But the Romans believed also, and deeply, in
+the power of literature--and particularly of poetry--to humanize, to
+moralize, to mould character, to inspire action. It was this faith
+which, as Cicero tells us, lay behind the great literary movement
+associated with the circle of Scipio Africanus. It was this faith which
+informed the Augustan literature. Horace was a man of the world--or he
+liked to think himself one. He was no dreamer. Yet when he speaks of the
+influence of high poetry upon the formation of character he speaks with
+a grave Puritanism worthy of Plato. These practical Romans had a
+practicality deeper than ours. The average Englishman, when he is told
+that 'the battle of Waterloo was won by the sonnets of Wordsworth', is
+puzzled and even offended. Nothing of Eton and its playing-fields?
+Nothing of Wellington and his Guards? What have sonnets in common with
+soldiering? But the Roman knew of himself that sonnets are a kind of
+soldiering. And much as he admired deeds, he knew that there is no deed
+greater than 'the song that nerves a nation's heart.'
+
+These are not mere words: and this was not, in the Roman, an idle faith.
+It was a practical faith; that is to say, he acted upon it. Upon this
+faith was based, at any rate in the early period of Roman history, the
+whole of the Roman system of education. The principal business of the
+Roman schoolmaster was to take the great poets and interpret them 'by
+reading and comment'. Education was practically synonymous with the
+study of the poets. The poets made a man brave, the poets made a man
+eloquent, the poets made him--if anything could make him--poetical. It
+is hardly possible to over-estimate the obscure benefit to the national
+life of a discipline in which the thought and language of the best
+poetry were the earliest formative influences.
+
+The second of the two conditions which favoured literary creation in
+Rome was a social system which afforded to a great and influential class
+the leisure for literary studies and the power to forward them. These
+two conditions are, roughly, synchronous in their development. Both take
+rise in the period of the Punic Wars. The Punic Wars not only quickened
+but they deepened and purified Roman patriotism. They put the history of
+the world in a new light to the educated Roman. The antagonism of Greek
+and Roman dropped away. The wars with Pyrrhus were forgotten. The issue
+was now no longer as between Greece and Rome, but as between East and
+West. The Roman saw in himself the last guardian of the ideals of
+Western civilization. He must hand on the torch of Hellenic culture.
+Hence, while in other countries Literature _happens_, as the sun and the
+air happen--as a part of the working of obscure natural forces--in Rome
+it is from the beginning a premeditated self-conscious organization.
+This organization has two instruments--the school of the _grammaticus_
+and the house of the great noble. Here stands Philocomus, here Scipio.
+
+In the period of the Punic Wars this organization is only rudimentary.
+By no means casual, it is none the less as yet uninfected by
+officialism. The transition from the age of Scipio to the age of
+Augustus introduced two almost insensible modifications:
+
+(1) In the earlier period the functions of the _grammaticus_ and the
+_rhetor_ were undifferentiated. The _grammaticus_, as he was known
+later, was called then _litteratus_ or _litterator_. He taught both
+poetry and rhetoric. But Suetonius tells us that the name denoted
+properly an 'interpres poetarum': and we may infer that in the early
+period instruction in rhetoric was only a very casual adjunct of the
+functions of the _litterator_. At what precise date the office of the
+_litterator_ became bifurcated into the two distinct professions of
+_grammaticus_ and _rhetor_ we cannot say. It seems likely that the
+undivided office was retained in the smaller Italian towns after it had
+disappeared from the educational system of Rome. The author of
+_Catelepton V_, who may very well be Vergil, appears to have frequented
+a school where poetry and rhetoric were taught in conjunction. Valerius
+Cato and Sulla, the former certainly, the latter probably, a
+Transpadane, were known as _litteratores_. But the _litterator_
+gradually everywhere gave place to the _grammaticus_: and behind the
+_grammaticus_, like Care behind the horseman, sits spectrally the
+_rhetor_.
+
+(2) The introduction of the _rhetor_ synchronizes with the transition
+from the private patron to the patron-as-government-official. And by an
+odd accident both changes worked in one and the same direction. That the
+system of literary patronage was in many of its effects injurious to the
+Augustan literature is a thesis which was once generally allowed. But it
+was a thesis which could easily take exaggerated expression. And against
+the view which it presents there has recently been a not unnatural
+reaction. A moderate representative of this reaction is the late
+Professor Nettleship. 'The intimacy', says Nettleship[5], 'which grew
+up between Octavianus and some of the great writers of his time did not
+imply more than the relation which ... often existed between a poor poet
+and his powerful friend. For as the men of nobler character among the
+Roman aristocracy were mostly ambitious of achieving literary success
+themselves, and were sometimes really successful in achieving it: as
+they had formed a high ideal of individual culture ... aiming at
+excellence in literature and philosophy as well as in politics and the
+art of war, so they looked with a kindly eye on the men of talent and
+genius who with less wealth and social resources than their own were
+engaged in the great work of improving the national literature.'
+
+There is much here which is truly and tellingly said. We ought never to
+forget that the system of patronage sprang from a very lofty notion of
+patriotism and of the national welfare. It implies a clear and fine
+recognition among the great men of affairs of the principle that a
+nation's greatness is not to be measured, and cannot be sustained, by
+purely material achievements. It is true, again, that the system of
+patronage did not originate with Augustus or the Augustans. Augustus was
+a patron of letters just as Scipio had been--because he possessed power
+and taste and a wide sense of patriotic obligation. So much is true, or
+fairly true. But if it is meant, as I think it is, that the literary
+patronage of the Princeps was the same in kind as, and different only in
+degree from, that exercised by the great men of the Republican
+period--if that is meant, then we have gone beyond what is either true
+or plausible.
+
+I am not concerned here, let me say, with the _moral_ effects of
+literary patronage. I am concerned only with its literary effects. Nor
+will I charge these to Augustus alone. He was but one patron--however
+powerful--among many. He did not create the literature which carries his
+name. Nevertheless it seems impossible to doubt that it was largely
+moulded under his personal influence, and that he has left upon it the
+impress of his own masterful and imperial temper. Suetonius in a few
+casual paragraphs gives us some insight into his literary tastes and
+methods. He represents him as from his youth up a genuine enthusiast for
+literature: 'Eloquentiam studiaque liberalia (i.e. _grammatice_ and
+rhetoric) ab aetate prima et cupide et laboriosissime exercuit.' Even
+upon active military service he made a point of reading, composing, and
+declaiming daily. He wrote a variety of prose works, and 'poetica
+summatim attigit', he dabbled in poetry. There were still extant in
+Suetonius' time two volumes of his poetry, the one a collection of
+_Epigrammata_, the other--more interesting and significant--a hexameter
+poem upon _Sicily_.[6] Moreover Augustus 'nursed in all ways the
+literary talent of his time'. He listened 'with charity and
+long-suffering' to endless recitations 'not only of poetry and of
+history but of orations and of dialogues'. We are somewhat apt, I fancy,
+to associate the practice of recitation too exclusively with the
+literary circles of the time of Nero, Domitian, and Trajan. Yet it is
+quite clear that already in the Augustan age this practice had attained
+system and elaboration. From the silence of Cicero in his Letters (the
+Epistles of Pliny furnish a notable contrast) we may reasonably infer
+that the custom was not known to him. It is no doubt natural in all ages
+that poets and orators should inflict their compositions upon their more
+intimate friends. No one of us in a literary society is safe even to-day
+from this midnight peril. But even of these informal recitations we hear
+little until the Augustan age. Catullus' friend Sestius perhaps recited
+his orations in this fashion: but the poem[7] admits a different
+interpretation. And it is significant that we are nowhere told that
+Cicero declaimed to his friends the speeches of the second action
+against Verres. Those speeches were not delivered in court. They were
+published after the flight of Verres. If custom had tolerated it we may
+be sure that Cicero would not have been slow to turn his friends into a
+jury.
+
+The formal recitation, recitation as a 'function', would seem to be the
+creation of the Principate. It was the product in part, no doubt, of the
+Hellenizing movement which dominated all departments of literary
+fashion. But we may plausibly place its origin not so much in the vanity
+of authors seeking applause, or in that absence of literary vanity which
+courts a frank criticism, as in the relations of the wealthy patron and
+his poor but ambitious client. The patron, in fact, did not subscribe
+for what he had not read--or heard. The endless recitations to which
+Augustus listened were hardly those merely of his personal friends. He
+listened, as Suetonius says, 'benigne et patienter'. But it was the
+'benignity and patience' not of a personal friend but of a government
+official--of a government official dispensing patronage. Suetonius
+allows us to divine something of the tastes of this all-powerful
+official. He was the particular enemy of 'that style which is easier
+admired than understood'--_quae mirentur potius homines quam
+intellegant_. It looks as though the clearness and good sense which mark
+so distinctively the best Augustan literature were developed to some
+extent under the direct influence of the Princeps.
+
+The Princeps and his coadjutors may perhaps be not unprofitably regarded
+as the heads of a great Educational Department. Beneath them are
+numberless _grammatici_ and _rhetores_. The work of these is directed
+towards the ideals of the supreme heads of the Department. How far this
+direction is due to accident and how far to some not very defined
+control it would be impossible to say. But obviously among the conscious
+aims of the schools of many of these _grammatici_ and _rhetores_ was the
+ambition of achieving some of the great prizes of the literary world.
+The goal of the pupil was government preferment, as we should call it.
+And we may perhaps be allowed, if we guard ourselves against the peril
+of mistaking a distant analogy for a real similarity of conditions, to
+see in the recitations before the Emperor and his ministers, an
+inspection, as it were, of schools and universities, an examination for
+literary honours and emoluments. And this being so, it is not to no
+purpose that the _rhetor_ in this age stands behind the _grammaticus_.
+For the final examination, the inspection-by-recitation, is bound to be,
+whatever the wishes of any of the parties concerned, an examination in
+rhetoric. The theme appointed may be history, it may be philosophy, it
+may be poetry. But the performance will be, and must be, rhetoric. The
+_Aeneid_ of Vergil may be read and re-read by posterity, and pondered
+word by word, line upon line. But it is going to be judged at a single
+recitation. For Vergil, it is true, there may be special terms. But this
+will be the lot of the many; and the many will develop, to suit it, a
+fashion of poetry the influence of which even Vergil himself will hardly
+altogether escape. Moreover, there will be, of course, other patrons
+than the Princeps, at once less patient and less intelligent.
+
+These effects of recitation we recognize, of course, easily enough in
+the case of such a poet as Lucan. But we must go back further. Vergil
+is, no doubt, as little like Lucan as he well could be. Yet he did not
+sit at the feet of Epidius for nothing: and he did not forget when he
+wrote the fourth book of the _Aeneid_ that he would one day read it to
+Augustus. We know that there are several kinds of oratory. But we are
+inclined, I think, to suppose that there is only one kind of
+rhetoric--that rhetoric is always the same thing. Yet there are at least
+two kinds of rhetoric. In the practical world there are two conquering
+forces--the iron hand and the velvet glove. Just so in rhetoric--which
+in the spiritual world is one of the greatest, and very often one of the
+noblest, of conquering forces--there is the iron manner and the velvet
+manner. Lucan goes home like a dagger thrust. His is the rhetoric that
+cuts and beats. The rhetoric of Vergil is soft and devious. He makes no
+attempt to astonish, to perplex, to horrify. He aims to move us in a
+wholly different manner. And yet, like Lucan, he aims to move us _once
+and for all_. He aims to be understood upon a first hearing. I know that
+this sounds like a paradox. I shall be told that Vergil is of all poets
+the most indirect. That is perfectly true. But _why_ is Vergil of all
+poets the most indirect? Just because he is always trying at all costs
+to make himself clear. Lucan says a thing once and is done with it.
+Vergil cannot. He begins all over again. He touches and retouches. He
+has no 'theme' not succeeded by a 'variation'.[8] In Lucan everything
+depends upon concentration, in Vergil upon amplification. Both are
+trying painfully to be understood on a first hearing--or, rather, to
+make, on a first hearing, the emotional or ethical effect at which they
+aim. Any page of Vergil will illustrate at once what I mean. I select at
+random the opening lines of the third _Aeneid_:
+
+    postquam res Asiae Priamique euertere gentem
+    immeritam uisum superis, ceciditque superbum
+    Ilium, et omnis humo fumat Neptunia Troia;
+    diuersa exsilia et desertas quaerere terras
+    auguriis agimur diuum, classemque sub ipsa
+    Antandro et Phrygiae molimur montibus Idae,
+    incerti quo fata ferant, ubi sistere detur.
+
+The first three lines might have been expressed by an ablative absolute
+in two words--_Troia euersa_. But observe. To _res Asiae_ in 1 Vergil
+adds the explanatory _Priami gentem_, amplifying in 2 with the new
+detail _immeritam_. _Euertere uisum_ (1-2) is caught up by _ceciditque
+Ilium_ (2-3), with the new detail _superbum_ added, and again echoed
+(3) by _humo fumat_--_fumat_ giving a fresh touch to the picture. In 4
+_diuersa exsilia_ is reinforced by _desertas terras_, _sub ipsa
+Antandro_ (5-6) by _montibus Idae_ (6). In 7 _ubi sistere detur_ echoes
+_quo fata ferant_. One has only to contrast the rapidity of Homer, in
+whom every line marks decisive advance. But Vergil diffuses himself. And
+this diffusion is in its origin and aim rhetorical.
+
+Yet he did not write, and I do not mean to suggest that he wrote, for an
+_auditorium_ and ἐς τὸ παραχρῆμα, and not for the scrupulous
+consideration of after ages. He wrote to be read and pondered. But he is
+haunted nevertheless by the thought of the _auditorium_. It distracts,
+and even divides, his literary consciousness. He writes, perhaps without
+knowing it, for two classes--for the members of his patron's salon and
+for the scholar in his study. We shall not judge his style truly if we
+allow ourselves wholly to forget the _auditorium_. And here let me add
+that we shall equally fail to understand the style of Lucan or that of
+Statius if we remember, as we are apt to do, only the _auditorium_. The
+_auditorium_ is a much more dominating force in their consciousness than
+it is in that of Vergil. But even they rarely allow themselves to forget
+the judgement of the scholar and of posterity. They did not choose and
+place their words with so meticulous a care merely for the audience of
+an afternoon. If we sometimes are offended by their evident subservience
+to the theatre, yet on the whole we have greater reason to admire the
+courage and conscience with which they strove nevertheless to keep
+before them the thought of a wider and more distant and true-judging
+audience.
+
+I have intentionally selected for notice that rhetorical feature in
+Vergil's style which is, I think, the least obvious. How much of the
+_Aeneid_ was written ultimately by Epidius I hardly like to inquire.
+Nowhere does Vergil completely succeed in concealing his rhetorical
+schooling. Even in his greatest moments he is still to a large extent a
+rhetorician. Indeed I am not sure that he ever writes pure
+poetry--poetry which is as purely poetry as that of Catullus. Take the
+fourth book of the _Aeneid_, which has so much passionate Italian
+quality. Even there Vergil does not forget the mere formal rules of
+rhetoric. Analyse any speech of Dido. Dido knows all the rules. You can
+christen out of Quintilian almost all the figures of rhetoric which she
+employs. Here is a theme which I have not leisure to develop. But it is
+interesting to remember in this connexion the immense and direct
+influence which Vergil has had upon British oratory. Burke went nowhere
+without a copy of Vergil in his pocket. Nor is it for nothing that the
+fashion of Vergilian quotation so long dominated our parliamentary
+eloquence. These quotations had a perfect appropriateness in a
+rhetorical context: for they are the language of a mind by nature and by
+education rhetorical.
+
+
+III
+
+Roman poetry continued for no less than five centuries after the death
+of Vergil--and by Roman poetry I mean a Latin poetry classical in form
+and sentiment. But of these five centuries only two count. The second
+and third centuries A.D. are a Dark Age dividing the silver twilight of
+the century succeeding the age of Horace from the brief but brilliant
+Renaissance of the fourth century: and in the fifth century we pass into
+a new darkness. The infection of the Augustan tradition is sufficiently
+powerful in the first century to give the impulse to poetic work of high
+and noble quality. And six considerable names adorn the period from Nero
+to Domitian. Of these the greatest are perhaps those of Seneca, Lucan,
+and Martial. All three are of Spanish origin: and it is perhaps to their
+foreign blood that they owe the genius which redeems their work from its
+very obvious faults. It is the fashion to decry Seneca and Lucan as mere
+rhetoricians. Yet in both there is something greater and deeper than
+mere rhetoric. They move by habit grandly among large ideas. Life is
+still deep and tremendous and sonorous. Their work has a certain Titanic
+quality. We judge their poetry too much by their biography, and their
+biography too little in relation to the terrible character of their
+times. Martial is a poet of a very different order. Yet in an inferior
+_genre_ he is supreme. No other poet in any language has the same
+never-failing grace and charm and brilliance, the same arresting
+ingenuity, an equal facility and finish. We speak of his faults, yet, if
+the truth must be told, his poetry is faultless--save for one fault: its
+utter want of moral character. The three other great names of the period
+are Statius, Silius, and Valerius. Poets of great talent but no genius,
+they 'adore the footsteps' of an unapproachable master. Religiously
+careful artists, they see the world through the eyes of others. Sensible
+to the effects of Greatness, they have never touched and handled it.
+They know it only from the poets whom they imitate. The four winds of
+life have never beat upon their decorous faces. We would gladly give the
+best that they offer us--and it is often of fine quality--for something
+much inferior in art but superior in the indefinable qualities of
+freshness and gusto. The exhaustion of the period is well seen in
+Juvenal--in the jaded relish of his descriptions of vice, in the
+complete unreality of his moral code, in a rhetoric which for ever just
+misses the fine effects which it laboriously calculates.
+
+The second century is barren. Yet we are dimly aware in the reign of
+Hadrian of an abortive Revival. We hear of a school of _neoterici_: and
+these _neoterici_ aimed at just what was needed--greater freshness and
+life. They experimented in metre, and they experimented in language.
+They tried to use in poetry the language of common speech, the language
+of Italy rather than that of Rome, and to bring into literature once
+again colour and motion. The most eminent of these _neoterici_ is Annius
+Florus, of whom we possess some notable fragments. But the movement
+failed; and Florus is the only name that arrests the attention of the
+student of Roman poetry between Martial and Nemesianus. Nemesianus is
+African, and his poems were not written in Rome. But his graceful genius
+perhaps owes something to the impulsion given to literary studies by
+Numerian--one of the few emperors of the period who exhibit any interest
+in the progress of literature. The fourth century is the period of
+Renaissance. We may see in Tiberianus the herald of this Renaissance.
+The four poems which can be certainly assigned to him are distinguished
+by great power and charm. It is a plausible view that he is also the
+author of the remarkable _Peruigilium Veneris_--that poem proceeds at
+any rate from the school to which Tiberianus belongs. The style of
+Tiberianus is formed in the academies of Africa, and so also perhaps his
+philosophy. The Platonic hymn to the Nameless God is a noble monument of
+the dying Paganism of the era. Tiberianus' political activities took him
+to Gaul: and Gaul is the true home of this fourth-century Renaissance.
+In Gaul around Ausonius there grew up at Bordeaux a numerous and
+accomplished and enthusiastic school of poets. To find a parallel to the
+brilliance and enthusiasm of this school we must go back to the school
+of poets which grew up around Valerius Cato in Transpadane Gaul in the
+first century B.C. The Bordeaux school is particularly interesting from
+its attitude to Christianity. Among Ausonius' friends was the austere
+Paulinus of Nola, and Ausonius himself was a convert to the Christian
+faith. But his Christianity is only skin-deep. His Bible is Vergil, his
+books of devotion are Horace and Ovid and Statius. The symbols of the
+Greek mythology are nearer and dearer to him than the symbolism of the
+Cross. The last enemy which Christianity had to overcome was, in fact,
+Literature. And strangely enough the conquest was to be achieved
+finally, not by the superior ethical quality of the new religion, but by
+the havoc wrought in Latin speech by the invasion of the Barbarians, by
+the decay of language and of linguistic study. To the period of
+Ausonius--and probably to Gaul--belong the rather obscure Asmenidae--the
+'sons', or pupils, of Asmenius. At least two of them, Palladius and
+Asclepiadius, exhibit genuine poetical accomplishment. But the schools
+both of Ausonius and of Asmenius show at least in one particular how
+relaxed had become the hold even upon its enthusiasts of the true
+classical tradition. All these poets have a passion for triviality, for
+every kind of _tour de force_, for conceits and mannerisms. At times they
+are not so much poets as the acrobats of poetry.
+
+The end of the century gives us Claudian, and a reaction against this
+triviality. 'Paganus peruicacissimus,' as Orosius calls him, Claudian
+presents the problem of a poet whose poetry treats with real power the
+circumstances of an age from which the poet himself is as detached as
+can be. Claudian's real world is a world which was never to be again, a
+world of great princes and exalted virtues, a world animated by a
+religion in which Rome herself, strong and serene, is the principal
+deity. Accident has thrown him into the midst of a political nightmare
+dominated by intriguing viziers and delivered to a superstition which
+made men at once weak and cruel. Yet this world, so unreal to him, he
+presents in a rhetorical colouring extraordinarily effective. Had he
+possessed a truer instinct for things as they are he might have been the
+greatest of the Roman satirists. He has a real mastery of the art of
+invective. But, while he is great where he condemns, where he blesses he
+is mostly contemptible. He has too many of the arts of the cringing
+Alexandrian. And they availed him nothing. Over every page may be heard
+the steady tramp of the feet of the barbarian invader.
+
+After Claudian we pass into the final darkness. The gloom is illuminated
+for a brief moment by the Gaul Rutilius. But Rutilius has really
+outlived Roman poetry and Rome itself. Nothing that he admires is any
+longer real save in his admiration of it. The things that he condemns
+most bitterly are the things which were destined to dominate the world
+for ten centuries. Christianity is 'a worse poison than witchcraft'. The
+monastic spirit is the 'fool-fury of a brain unhinged'. The monasteries
+are 'slave-dungeons'.
+
+It was these 'slave-dungeons' which were to keep safe through the long
+night of the Middle Ages all that Rutilius held dear. It was these
+'slave-dungeons' which were to afford a last miserable refuge to the
+works of that long line of poets of whom Rutilius is the late and
+forlorn descendant. Much indeed was to perish even within the fastnesses
+of these 'slave-dungeons': for the monasteries were not always secure
+from the shock of war, nor the precious memorials which they housed from
+the fury of fanaticism. Yet much was to survive and to emerge one day
+from the darkness and to renew the face of the world. Rutilius wrote his
+poem in 416 A.D. If he could have looked forward exactly a thousand
+years he would have beheld Poggio and the great Discoverers of the
+Italian Renaissance ransacking the 'slave-dungeons' of Italy, France,
+and Germany, and rejoicing over each recovered fragment of antiquity
+with a pure joy not unlike that which heavenly minds are said to feel
+over the salvation of souls. These men were, indeed, kindling into life
+again the soul of Europe. They were assisting at a New Birth. In this
+process of regeneration the deepest force was a Latin force, and of this
+Latin force the most impelling part was Latin poetry. We are apt
+to-day, perhaps, in our zeal of Hellenism, to forget, or to disparage,
+the part which Latin poetry has sustained in moulding the literatures of
+modern Europe. But if the test of great poetry is the length and breadth
+of its influence in the world, then Roman poetry has nothing to fear
+from the vagaries of modern fashion. For no other poetry has so deeply
+and so continuously influenced the thought and feeling of mankind. Its
+sway has been wider than that of Rome itself: and the Genius that broods
+over the Capitoline Hill might with some show of justice still claim, as
+his gaze sweeps over the immense field of modern poetry, that he beholds
+nothing which does not owe allegiance to Rome:
