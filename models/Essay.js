@@ -5,9 +5,7 @@ var mongoose = require('mongoose');
 
 // var wordSchema = require('mongoose').model('Word');
 
-<<<<<<< HEAD
-//  DEPRECATED, was current as of 4/21 -- please update this if things change
-=======
+
 ///  the central master data that the training data feeds into
 var masterObjectiveSchema = new mongoose.Schema( 
 {
@@ -19,6 +17,9 @@ var masterObjectiveSchema = new mongoose.Schema(
     sentence_mean: Number,
     sentence_var: Number,
     sentence_num: Number,
+
+    linking_verbs: Number, //added
+    etymology_score: Number, //added
 
     adj_ratio: Number,
     adv_ratio: Number,
@@ -33,8 +34,7 @@ masterObjectiveSchema.set('toJSON', {
     virtuals: true
 });
 
-//  CURRENT as of 4/21 -- please update this if things change
->>>>>>> 73c5eabccecde9fe303db454793a7773266faf93
+//  DEPRECATED, was current as of 4/21 -- please update this if things change
 // basic structure of a result object. This should apply to both objective and subjective heuristics.
   // {
   //  id:
@@ -54,7 +54,6 @@ masterObjectiveSchema.set('toJSON', {
   //    goodness_of_fit: (subjective)
   // }
 
-<<<<<<< HEAD
 // CURRENT as of 4/22 
 // basic structure of a result object. This should apply to both objective and subjective heuristics.
   // {
@@ -101,29 +100,6 @@ masterObjectiveSchema.set('toJSON', {
 //     pos_match_pairFreqs:
 
 // });
-=======
-var objectiveHeuristicSchema = new mongoose.Schema( 
-{
-
-    //is_master: { type: Boolean, required: true, default: false}, //  is this the master set derived from training data?
-
-    num_words: Number,
-    num_chars: Number,
-    //overused_words: [wordSchema],
-    overused_words: [String],
-
-    sentence_mean: Number,
-    sentence_var: Number,
-    sentence_num: Number,
-
-    adj_count: Number,
-    adv_count: Number,
-    noun_count: Number,
-    verb_count: Number,
-    
-    goodness_of_fit: Number
-});
->>>>>>> 73c5eabccecde9fe303db454793a7773266faf93
 
 // Ensure virtual fields are serialised.
 // objectiveHeuristicSchema.set('toJSON', {
@@ -174,7 +150,7 @@ var essaySchema = new mongoose.Schema({
   },
 
   //objectives: [objectiveHeuristicSchema], /// objective heuristics
-  objectives: heuristicsSchema
+  objectives: [heuristicSchema],
 
   //  use the subdocument
   //  allow for multiple heuristic schema -- perhaps heuristics[0] is a certain heuristic, heuristics[1], etc.?
@@ -195,6 +171,6 @@ essaySchema.set('toJSON', {
 });
 
 module.exports = mongoose.model('MasterObjectiveHeuristic', masterObjectiveSchema);
-module.exports = mongoose.model('ObjectiveHeuristic', objectiveHeuristicSchema);
+module.exports = mongoose.model('ObjectiveHeuristic', heuristicSchema);
 module.exports = mongoose.model('Heuristic', heuristicSchema);
 module.exports = mongoose.model('Essay', essaySchema);

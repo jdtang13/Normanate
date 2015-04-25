@@ -3,6 +3,7 @@ var Essay = mongoose.model('Essay');
 var _ = require('lodash');
 var training = require('./training');
 var gaussian = require('gaussian');
+var async = require('async');
 
 
 //  require the process.js file
@@ -36,21 +37,20 @@ exports.getEssay = function(req, res) {
     var query = MasterObjective.findOne({ });
     query.exec(function (err, masterObjective) {
         if (masterObjective != null) {
+            var normals = calculateNormals(req.essay, masterObjective);
+            console.log("normals: %j", normals)
             console.log("master objective found!");
-
-        res.render('essays/view', {
-            essay: req.essay,
-            masterObjective: masterObjective
-        });
-
+            res.render('essays/view', {
+                essay: req.essay,
+                masterObjective: masterObjective,
+                normals: normals
+            });
         }
         else {
             console.log(" ERROR : master objective not found, please run 'node train' and try again.");
-
-        res.render('essays/view', {
-            essay: req.essay
-        });
-
+            res.render('essays/view', {
+                essay: req.essay
+            });
         }
     });
 
@@ -71,9 +71,50 @@ exports.getEssays = function(req, res) {
     });
 };
 
-// calculate normal distribution
-function calculateNormals(resultDict) {
+// helper function calculate P value given a sample, mean, and variance
+function calculatePValue(sample, mean, variance) {
+    var distr = gaussian(mean, variance);
+    var result = 0;
+    if (sample < mean) {
+        result = 2 * distr.cdf(sample);
+    }
+    else if (sample > mean) {
+        result = 2 * (1 - distr.cdf(sample));
+    }
+    return result;
+}
 
+// calculate normal distribution given essay object and masterObjective object
+// return dictionary with the following format:
+// sentence_var:
+// sentence_mean:
+// linking_verbs:
+// etymology_score:
+function calculateNormals(essay, master) {
+
+    var s_sentenceVar = essay.heuristics[0].sentence_var;
+    calculatePValue(s_sentenceVar, e_sentenceVar);
+    var e_sentenceVar = master.sentence_var;
+    var p_sentenceVar = calculatePValue(s_sentenceVar, e_sentenceVar, 1);
+
+    var s_sentenceMean = essay.heuristics[0].sentence_mean;
+    var e_sentenceMean = master.sentence_mean;
+    var p_sentenceMean = calculatePValue(s_sentenceMean, e_sentenceMean, 1);
+
+    var s_linkingVerbs = essay.heuristics[0].linking_verbs;
+    var e_linkingVerbs = master.linking_verbs;
+    var p_linkingVerbs = calculatePValue(s_linkingVerbs, e_linkingVerbs, 1);
+
+    var s_etymologyScore = essay.heuristics[0].etymology_score;
+    var e_etymologyScore = master.etymology_score;
+    var p_etymologyScore = calculatePValue(s_etymologyScore, e_etymologyScore, 1);
+
+    var normalDict = {};
+    normalDict["sentence_var"] = p_sentenceVar;
+    normalDict["sentence_mean"] = p_sentenceMean;
+    normalDict["linking_verbs"] = p_linkingVerbs;
+    normalDict["etymology_score"] = p_etymologyScore;
+    return normalDict; 
 }
 
 // create an essay
@@ -125,62 +166,67 @@ exports.postCreateEssay = function(req, res) {
     });
 
     //  generate heuristic data and save it
-    var dict;
-    process.objectiveHeuristics(-1, essay.content, 
-        function (err, resultDict) {
-        if (!err) {
-            console.log("successfully calculated objective heuristics!");
-            for(var key in resultDict) {
-                dict[key] = resultDict[key];
-            }
-            //dict = resultDict;
-            console.log("content of dict is: %j", dict);
-
-              // var oh = new ObjectiveModel( 
-              //   {
-              //       num_words: resultDict["num_words"],
-              //       num_chars: resultDict["num_chars"],
-              //       linking_verbs: resultDict["linking_verbs"],
-              //       etmoloyg_score: resultDict["etymology_score"],
-              //       overused_words: [resultDict["overused_words"]],
-              //       sentence_mean: resultDict["sentence_info"]["mean"],
-              //       sentence_var: resultDict["sentence_info"]["var"],
-              //       sentence_num: resultDict["sentence_info"]["num"],
-              //       adj_count: resultDict["pos_info"]["adj_count"],
-              //       adv_count: resultDict["pos_info"]["adv_count"],
-              //       noun_count: resultDict["pos_info"]["noun_count"],
-              //       verb_count: resultDict["pos_info"]["verb_count"],
-              //   }
-              //   );
-              //   oh.save(function (err) {
-              //     if (err) {
-              //       console.log("error while saving oh!");
-              //       return handleError(err);
-              //   }
-              //     else {
-              //       essay.objectives.push(oh);
-              //       console.log("successfully saved the objective heuristics!");
-
-              //           essay.save(function(err) {
-              //               if (err) {
-              //                   console.log(err);
-              //                   return res.send('users/signup', {
-              //                       errors: err.errors,
-              //                       piece: piece
-              //                   });
-              //               } else {
-              //                   console.log("essay saved!");
-              //                   return res.json(essay);
-              //               }
-              //           });
-
-              //     }
-              //     // saved!
-              //   });
+    var dict = {};
+    console.log("testing");
+    async.series([
+        function(callback) {
+            console.log("hello world");
+            process.objectiveHeuristics(-1, essay.content, callback);
+        },
+        function(callback) {
+            console.log("hello world2");
+            process.subjectiveHeuristics(-1, essay.content, callback);
         }
-    }
-    );
+    ], function(err, results) {
+        console.log(results);
+        var resultDict = results[0];
+        var resultDict2 = results[1];
+        console.log("content of obj heuristics is: %j", resultDict);
+        console.log("content of subj heuristics is: %j", resultDict2);
+        //convert pos_match_info into 1-d arrays for 
+        //insertion into Mongo
+        // var posPairFreqs = dict["pos_match_info"]["pairFreqs"];
+        // var posTotalFreqs = dict["pos_match_info"]["totalFreqs"];
 
+        var oh = new ObjectiveModel( 
+        {
+            num_words: resultDict["num_words"],
+            num_chars: resultDict["num_chars"],
+            linking_verbs: resultDict["linking_verbs"],
+            etymology_score: resultDict2["etymology_score"],
+            overused_words: [resultDict["overused_words"]],
+            sentence_mean: resultDict["sentence_info"]["mean"],
+            sentence_var: resultDict["sentence_info"]["var"],
+            sentence_num: resultDict["sentence_info"]["num"],
+            adj_count: resultDict["pos_info"]["adj_count"],
+            adv_count: resultDict["pos_info"]["adv_count"],
+            noun_count: resultDict["pos_info"]["noun_count"],
+            verb_count: resultDict["pos_info"]["verb_count"],
+        });
+        oh.save(function (err) {
+            if (err) {
+                console.log("error while saving oh!");
+                return handleError(err);
+            }
+            else {
+                essay.objectives.push(oh);
+                console.log("successfully saved the objective heuristics!");
+                essay.save(function(err) {
+                    if (err) {
+                        console.log(err);
+                        return res.send('users/signup', {
+                            errors: err.errors,
+                            piece: piece
+                        });
+                    } else {
+                        console.log("essay saved!");
+                        return res.json(essay);
+                    }
+                });
+            }
+            // saved!
+        });
+    });
 };
 
 // update an essay

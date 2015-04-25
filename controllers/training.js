@@ -3,6 +3,7 @@
 //note: this is for training purposes
 exports.setExpectedHeuristics = function(text) {
 	// use process.js functions to calculate a resulting dictionary, and insert into database
+	
 }
 
 // return expected heuristics, stored in the database,

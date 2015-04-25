@@ -53,6 +53,8 @@ async.waterfall([
         averageDict["sentence_mean"] = 0;
         averageDict["sentence_var"] = 0;
         averageDict["sentence_num"] = 0;
+        averageDict["linking_verbs"] = 0;
+        averageDict["etymology_score"] = 0;
         averageDict["adj_count"] = 0;
         averageDict["adv_count"] = 0;
         averageDict["noun_count"] = 0;
@@ -77,9 +79,18 @@ async.waterfall([
 
                 //  process the training set
                 //  generate heuristic data and save it
-                var dict;
-                process.objectiveHeuristics(-1, trainingData, 
-                    function (err, resultDict) {
+
+                async.series([
+                    function(callback) {
+                        process.objectiveHeuristics(-1, trainingData, callback);  
+                    },
+                    function(callback) {
+                        process.subjectiveHeuristics(-1, trainingData, callback);
+                    }
+                ], function(err, results) {
+                    var resultDict = results[0];
+                    var resultDict2 = results[1];
+
                     if (!err) {
                         console.log("successfully calculated objective heuristics from training set!");
                         trainCount--;
@@ -97,6 +108,10 @@ async.waterfall([
                         averageDict["sentence_mean"] += resultDict["sentence_info"]["mean"];
                         averageDict["sentence_var"] += resultDict["sentence_info"]["var"];
                         averageDict["sentence_num"] += resultDict["sentence_info"]["num"];
+
+                        averageDict["linking_verbs"] += resultDict["linking_verbs"];
+                        averageDict["etymology_score"] += resultDict2["etymology_score"];
+
                         averageDict["adj_count"] += resultDict["pos_info"]["adj_count"];
                         averageDict["adv_count"] += resultDict["pos_info"]["adv_count"];
                         averageDict["noun_count"] += resultDict["pos_info"]["noun_count"];
@@ -104,14 +119,10 @@ async.waterfall([
 
                         console.log("content of updated averagedict is: %j", averageDict);
 
-                  if (0 == trainCount) {
-
-                    console.log("trainCount is zero; attempting to invoke callback with averageDict = %j",averageDict);
-
-                     callback(null, averageDict, numFiles);
-
-                  }
-
+                        if (0 == trainCount) {
+                            console.log("trainCount is zero; attempting to invoke callback with averageDict = %j",averageDict);
+                            callback(null, averageDict, numFiles);
+                        }
                     }
                 });
 
@@ -119,10 +130,7 @@ async.waterfall([
         }
 
         );
-
     });
-
-
   },
 
 
@@ -147,6 +155,9 @@ async.waterfall([
     var avg_sentence_var = (averageDict["sentence_var"] / numFiles);
     var avg_sentence_num = (averageDict["sentence_num"] / numFiles);
 
+    var avg_linking_verbs = (averageDict["linking_verbs"] / numFiles);
+    var avg_etymology_score = (averageDict["etymology_score"] / numFiles);
+
     var avg_adj_count = averageDict["adj_count"] / num_words;
     var avg_adv_count = averageDict["adv_count"] / num_words;
     var avg_noun_count = averageDict["noun_count"] / num_words;
@@ -168,6 +179,9 @@ async.waterfall([
         sentence_mean: avg_sentence_mean,
         sentence_var: avg_sentence_var,
         sentence_num: avg_sentence_num,
+
+        linking_verbs: avg_linking_verbs,
+        etymology_score: avg_etymology_score,
 
         adj_ratio: avg_adj_count,
         adv_ratio: avg_adv_count,

@@ -7,11 +7,7 @@ var chi = require("chi-squared");
 
 var expectedHeuristics = training.getExpectedHeuristics();
 
-exports.processText = function(text) {
-	/* do text processing and calculate heuristics */
-}
-
-exports.prestigeOf = function(etymology) {
+function prestigeOf(etymology) {
 
     var etymologies = ["Abnaki", "Afrikaans", "Akkadian", "Algonquian", "American English", 
     "American Spanish", "Anglican", "Anglo-French", "Anglo-Latin", "Anglo-Norm", "Arabic", "Aramaic", "Arawakan", "Armenian", "Assyrian",
@@ -126,7 +122,7 @@ function checkCallback(counter, callback, resultDict) {
 	//	
 	// }
 
-exports.objectiveHeuristics = function(id, text, callback) {
+function objectiveHeuristics(id, text, callback) {
 
 	var tokenizer = new openNLP().tokenizer;
 	var sentenceDetector = new openNLP().sentenceDetector;
@@ -182,7 +178,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		if (resultDict['pos_info'] == null) {
 			resultDict['pos_info'] = {};
 		}
-		resultDict['pos_info']['linking_verbs'] = linkingVerbs;
+		resultDict['linking_verbs'] = (linkingVerbs / results.length);
 
 		// store number of words, characters, and also
 		// top 5 most used words
@@ -274,7 +270,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 /* Wordnik: http://videlais.com/2015/03/25/starting-with-the-wordnik-api-in-node-js/ */
 /* API Key: 8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27 */
 
-exports.subjectiveHeuristics = function(id, text, callback) {
+function subjectiveHeuristics(id, text, callback) {
 
 	var APIKEY = '8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27';
 	var Wordnik = require('wordnik-bb').init(APIKEY);
@@ -288,10 +284,10 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });
 
 	resultDict = {};
-	var counter = 2;
+	var counter = 1;
 
 	//calculate the prestige values of text
-	var tokenizer = new OpenNLP().tokenizer;
+	var tokenizer = new openNLP().tokenizer;
 	tokenizer.tokenize(text, function(err, results) {
 		// need some way to fetch from database 
 		// get the etymology associated with the word
@@ -299,15 +295,6 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 		var avg = 0;
 		var count = 0;
 		// take a running average of all words
-		calculatePrestige = function(prestige) {
-			avg += prestige;
-			count++;
-			if (count == results.length) {
-				avg /= results.length;
-				resultDict["etymology_score"] = avg;
-				counter = checkCallback(counter, callback, resultDict);
-			}
-		}
 		for(var i in results) {
 			var result = results[i];
 			var queryWord = WordModel.findOne({'content':result});
@@ -315,9 +302,16 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 				if (word != null) {
 					var titleOrigin = word.etymology;
 					if (titleOrigin != "none") {
-						var prestige = self.prestigeOf(titleOrigin);
-						calculatePrestige(prestige);
+						var prestige = prestigeOf(titleOrigin);
+						avg += prestige;
+
 					}
+				}
+				count++;
+				if (count == results.length) {
+					avg /= results.length;
+					resultDict["etymology_score"] = avg;
+					counter = checkCallback(counter, callback, resultDict);
 				}
 			});
 		}
@@ -398,3 +392,24 @@ function calculatePOSMatch(text, callback) {
 		callback(0, prob);
 	});
 } */
+
+function deformatPairFreqs(pairFreqs) {
+
+}
+
+function deformatTotalFreqs(totalFreqs) {
+
+}
+
+function formatPairFreqs(pairFreqsArr) {
+
+}
+function formatTotalFreqs(totalFreqsArr) {
+
+}
+
+module.exports = {
+	prestigeOf: prestigeOf,
+	objectiveHeuristics: objectiveHeuristics,
+	subjectiveHeuristics: subjectiveHeuristics,
+}
