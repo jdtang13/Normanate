@@ -2,6 +2,8 @@ var openNLP = require("opennlp");
 var training = require("../controllers/training");
 var mongoose = require("mongoose");
 var WordModel = mongoose.model('Word');
+var indico = require('indico.io');
+indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 
 var chi = require("chi-squared");
 
@@ -178,7 +180,7 @@ function objectiveHeuristics(id, text, callback) {
 		if (resultDict['pos_info'] == null) {
 			resultDict['pos_info'] = {};
 		}
-		resultDict['linking_verbs'] = (linkingVerbs / results.length);
+		resultDict['linking_verbs'] = linkingVerbs;
 
 		// store number of words, characters, and also
 		// top 5 most used words
@@ -284,7 +286,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });
 
 	resultDict = {};
-	var counter = 1;
+	var counter = 2;
 
 	//calculate the prestige values of text
 	var tokenizer = new openNLP().tokenizer;
@@ -304,7 +306,6 @@ function subjectiveHeuristics(id, text, callback) {
 					if (titleOrigin != "none") {
 						var prestige = prestigeOf(titleOrigin);
 						avg += prestige;
-
 					}
 				}
 				count++;
@@ -315,8 +316,18 @@ function subjectiveHeuristics(id, text, callback) {
 				}
 			});
 		}
-
 	});
+
+	// calculate sentiment using Indico's API
+	indico.sentiment(text)
+	.then(function(res){
+		console.log("SENTIMENT: " + res);
+		resultDict["sentiment"] = res;
+		counter = checkCallback(counter, callback, resultDict);
+	})
+	.catch(function(err) {
+
+	})
 
 	/* TODO -- uncomment and debug
 

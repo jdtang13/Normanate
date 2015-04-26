@@ -101,8 +101,8 @@ function calculateNormals(essay, master) {
     var e_sentenceMean = master.sentence_mean;
     var p_sentenceMean = calculatePValue(s_sentenceMean, e_sentenceMean, 1);
 
-    var s_linkingVerbs = essay.heuristics[0].linking_verbs;
-    var e_linkingVerbs = master.linking_verbs;
+    var s_linkingVerbs = (essay.heuristics[0].linking_verbs / essay.heuristics[0].num_words);
+    var e_linkingVerbs = master.linking_verbs_ratio;
     var p_linkingVerbs = calculatePValue(s_linkingVerbs, e_linkingVerbs, 1);
 
     var s_etymologyScore = essay.heuristics[0].etymology_score;
@@ -145,7 +145,7 @@ exports.postCreateEssay = function(req, res) {
     var ObjectiveModel = require('mongoose').model('ObjectiveHeuristic');
 
     //  check that etymology's origin
-    //  TODO: this needs to be made async
+    //  TODO: this needs to be mae async
     var prestige = process.prestigeOf(titleOrigin);
     console.log("prestige of origin is " + prestige);
 
@@ -202,6 +202,7 @@ exports.postCreateEssay = function(req, res) {
             adv_count: resultDict["pos_info"]["adv_count"],
             noun_count: resultDict["pos_info"]["noun_count"],
             verb_count: resultDict["pos_info"]["verb_count"],
+            sentiment: resultDict["sentiment"]
         });
         oh.save(function (err) {
             if (err) {

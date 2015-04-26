@@ -59,6 +59,7 @@ async.waterfall([
         averageDict["adv_count"] = 0;
         averageDict["noun_count"] = 0;
         averageDict["verb_count"] = 0;
+        averageDict["sentiment"] = 0;
         //  NOTE! counting overused_words num rather than the words themselves
         averageDict["overused_words_num"] = 0;
 
@@ -117,6 +118,8 @@ async.waterfall([
                         averageDict["noun_count"] += resultDict["pos_info"]["noun_count"];
                         averageDict["verb_count"] += resultDict["pos_info"]["verb_count"];
 
+                        averageDict["sentiment"] += resultDict["sentiment"];
+
                         console.log("content of updated averagedict is: %j", averageDict);
 
                         if (0 == trainCount) {
@@ -155,13 +158,15 @@ async.waterfall([
     var avg_sentence_var = (averageDict["sentence_var"] / numFiles);
     var avg_sentence_num = (averageDict["sentence_num"] / numFiles);
 
-    var avg_linking_verbs = (averageDict["linking_verbs"] / numFiles);
     var avg_etymology_score = (averageDict["etymology_score"] / numFiles);
 
     var avg_adj_count = averageDict["adj_count"] / num_words;
     var avg_adv_count = averageDict["adv_count"] / num_words;
     var avg_noun_count = averageDict["noun_count"] / num_words;
     var avg_verb_count = averageDict["verb_count"] / num_words;
+    var avg_lv_ratio = averageDict["linking_verbs"] / num_words;
+
+    var avg_sentiment = (averageDict["sentiment"] / numFiles);
 
     console.log("avg_overused_words_num = " + avg_overused_words_num);
 
@@ -170,6 +175,8 @@ async.waterfall([
     console.log("avg_sentence_num = " + avg_sentence_num);
 
     console.log("avg_verb_count = " + avg_verb_count);
+
+    console.log("avg_sentiment = " + avg_sentiment);
 
     var oh = new MasterObjectiveModel( 
     { 
@@ -180,13 +187,15 @@ async.waterfall([
         sentence_var: avg_sentence_var,
         sentence_num: avg_sentence_num,
 
-        linking_verbs: avg_linking_verbs,
         etymology_score: avg_etymology_score,
 
         adj_ratio: avg_adj_count,
         adv_ratio: avg_adv_count,
         noun_ratio: avg_noun_count,
-        verb_ratio: avg_verb_count
+        verb_ratio: avg_verb_count,
+        linking_verbs_ratio: avg_lv_ratio,
+
+        sentiment: avg_sentiment,
     }
     );
     oh.save(function (err) {

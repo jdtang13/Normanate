@@ -18,13 +18,15 @@ var masterObjectiveSchema = new mongoose.Schema(
     sentence_var: Number,
     sentence_num: Number,
 
-    linking_verbs: Number, //added
     etymology_score: Number, //added
 
     adj_ratio: Number,
     adv_ratio: Number,
     noun_ratio: Number,
     verb_ratio: Number,
+    linking_verbs_ratio: Number, //added
+
+    sentiment: Number,
 
     goodness_of_fit: Number
 });
@@ -123,6 +125,7 @@ var heuristicSchema = new mongoose.Schema(
   adv_count: Number,
   noun_count: Number,
   verb_count: Number,
+  sentiment: Number,
   //goodness_of_fit: Number (deprecated)
   pos_match_pairFreqs: [Number],
   pos_match_totalFreqs: [Number],
