@@ -207,9 +207,7 @@ function objectiveHeuristics(id, text, callback) {
 		var variance = 0;
 		for (var i in results) {
 			var result = results[i];
-			console.log(result);
 			var numWords = result.split(" ").length;
-			console.log(numWords);
 			mean += numWords;
 		}
 		mean /= results.length;

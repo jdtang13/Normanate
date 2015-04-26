@@ -109,11 +109,16 @@ function calculateNormals(essay, master) {
     var e_etymologyScore = master.etymology_score;
     var p_etymologyScore = calculatePValue(s_etymologyScore, e_etymologyScore, 1);
 
+    var s_sentiment = essay.heuristics[0].sentiment;
+    var e_sentiment = master.sentiment;
+    var p_sentiment = calculatePValue(s_sentiment, e_sentiment, 1);
+
     var normalDict = {};
     normalDict["sentence_var"] = p_sentenceVar;
     normalDict["sentence_mean"] = p_sentenceMean;
     normalDict["linking_verbs"] = p_linkingVerbs;
     normalDict["etymology_score"] = p_etymologyScore;
+    normalDict["sentiment"] = p_sentiment; 
     return normalDict; 
 }
 
@@ -178,11 +183,9 @@ exports.postCreateEssay = function(req, res) {
             process.subjectiveHeuristics(-1, essay.content, callback);
         }
     ], function(err, results) {
-        console.log(results);
+        console.log("RESULTS: " + results);
         var resultDict = results[0];
         var resultDict2 = results[1];
-        console.log("content of obj heuristics is: %j", resultDict);
-        console.log("content of subj heuristics is: %j", resultDict2);
         //convert pos_match_info into 1-d arrays for 
         //insertion into Mongo
         // var posPairFreqs = dict["pos_match_info"]["pairFreqs"];
