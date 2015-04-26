@@ -326,7 +326,7 @@ function subjectiveHeuristics(id, text, callback) {
 		counter = checkCallback(counter, callback, resultDict);
 	})
 	.catch(function(err) {
-
+		console.log("Indico error -- suppressed");
 	})
 
 	/* TODO -- uncomment and debug
