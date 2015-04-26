@@ -1,3 +1,5 @@
+4/22 - jerry:
+
 changed schema in Essay.js - renamed to heuristicSchema (using your existing dummy Schema)
 	- exported name is kept the same
 
