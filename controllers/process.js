@@ -275,7 +275,7 @@ function objectiveHeuristics(id, text, callback) {
 function subjectiveHeuristics(id, text, callback) {
 
 	var APIKEY = '8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27';
-	var Wordnik = require('wordnik-bb').init(APIKEY);
+	/*var Wordnik = require('wordnik-bb').init(APIKEY);
 	 
 	var randomWordPromise = Wordnik.getRandomWordModel({
 	    includePartOfSpeech: "verb-transitive",
@@ -283,7 +283,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  }
 	);
 	randomWordPromise.done(function(wordModel) {
-	  console.log("Random word: ", wordModel.attributes.word); });
+	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
 	var counter = 2;
