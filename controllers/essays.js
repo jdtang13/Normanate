@@ -183,7 +183,7 @@ exports.postCreateEssay = function(req, res) {
             process.subjectiveHeuristics(-1, essay.content, callback);
         }
     ], function(err, results) {
-        console.log("RESULTS: " + results);
+        console.log("RESULTS: %j", results);
         var resultDict = results[0];
         var resultDict2 = results[1];
         //convert pos_match_info into 1-d arrays for 

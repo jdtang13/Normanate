@@ -137,9 +137,9 @@ function objectiveHeuristics(id, text, callback) {
 	var counter = 3;
 
 	// FETCH FROM DATABASE HERE
-
 	// calculate word statistics
 	tokenizer.tokenize(text, function(err, results) {
+		console.log(results);
 		var charCount = 0;
 		for (var i in results) {
 			var result = results[i];
@@ -191,12 +191,12 @@ function objectiveHeuristics(id, text, callback) {
 		var n = 5;
 		var i = 0;
 		while(i < n) {
+			if (freqTable[keys[i]] / results.length < 0.02) {
+				break;
+			}
 			resultDict["overused_words"].push(keys[i]);
 			console.log(keys[i] + " " + freqTable[keys[i]]);
 			i++;
-		}
-		for(var i = 0; i < n; i++) {
-			resultDict["overused_words"].push(keys[i]);
 		}
 
 		counter = checkCallback(counter, callback, resultDict);
@@ -292,6 +292,10 @@ function subjectiveHeuristics(id, text, callback) {
 		// need some way to fetch from database 
 		// get the etymology associated with the word
 		// calculate prestige value
+		console.log("results: " + results);
+		if (results.length == 0) {
+			counter = checkCallback(counter, callback, resultDict);
+		}
 		var avg = 0;
 		var count = 0;
 		// take a running average of all words
