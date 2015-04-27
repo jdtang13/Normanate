@@ -118,7 +118,7 @@ async.waterfall([
                         averageDict["noun_count"] += resultDict["pos_info"]["noun_count"];
                         averageDict["verb_count"] += resultDict["pos_info"]["verb_count"];
 
-                        averageDict["sentiment"] += resultDict["sentiment"];
+                        averageDict["sentiment"] += resultDict2["sentiment"];
 
                         console.log("content of updated averagedict is: %j", averageDict);
 
