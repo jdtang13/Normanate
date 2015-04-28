@@ -5,6 +5,7 @@ require('bootstrap');
 var loader = require('./utils/load');
 var essays = require('./controllers/essays');
 
+
 $(document).ready(function() {
 
     $(".expanding").expanding();
