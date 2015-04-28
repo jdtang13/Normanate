@@ -2,15 +2,6 @@
 // Train the application using files in the train/ directory
 // run using "node train.js"
 
-
-//  TODO -- for each file in the train/ directory, open it up and start training using process.js existing code
-//  TODO -- output an averaged heuristic object and save that somewhere
-
-//  TODO -- train on unpunctuated, non-capitalized words (does process.js already handle this?)
-
-//  TODO -- never train if training data already exists in mongo
-//  TODO -- use some sort of namespace or global variable in mongo to store the One True Heuristic Set
-
 //  TODO -- display errors relative to heuristics graphically (and highlight the words individually?)
 
 var walk = require('./utils/walk');
@@ -55,7 +46,6 @@ async.waterfall([
 
         if (err) throw err;
 
-        var trainCount = 0;
         var averageDict = {};
 
         averageDict["num_words"] = 0;
@@ -63,21 +53,22 @@ async.waterfall([
         averageDict["sentence_mean"] = 0;
         averageDict["sentence_var"] = 0;
         averageDict["sentence_num"] = 0;
+        averageDict["linking_verbs"] = 0;
+        averageDict["etymology_score"] = 0;
         averageDict["adj_count"] = 0;
         averageDict["adv_count"] = 0;
         averageDict["noun_count"] = 0;
         averageDict["verb_count"] = 0;
+        averageDict["sentiment"] = 0;
         //  NOTE! counting overused_words num rather than the words themselves
         averageDict["overused_words_num"] = 0;
 
-        var numFiles = 0;
+        var numFiles = 4;   ///  NOTE: HARD CODED
+        var trainCount = numFiles;
 
-        files.forEach(function(file) {
+          async.each(files, function(file) {
 
-            trainCount++;
-            numFiles++;
-
-            fs.readFile(dir + file, 'utf-8', function(err, html){
+            fs.readFile(dir + file, 'utf-8', function(err, html) {
 
                 if (err) throw err;
                 //  data[file] = html;
@@ -86,17 +77,30 @@ async.waterfall([
 
                 //  TODO -- current as of 4/22 -- update this based on essay.js
                 //  TODO -- watch out for numerical overflow from large data sets
-                //  TODO -- training data should be weighted according to the number of words? or number of sentences?
 
                 //  process the training set
                 //  generate heuristic data and save it
-                var dict;
-                process.objectiveHeuristics(-1, trainingData, 
-                    function (err, resultDict) {
+
+                async.series([
+                    function(callback) {
+                        process.objectiveHeuristics(-1, trainingData, callback);  
+                    },
+                    function(callback) {
+                        process.subjectiveHeuristics(-1, trainingData, callback);
+                    }
+                ], function(err, results) {
+                    var resultDict = results[0];
+                    var resultDict2 = results[1];
+
                     if (!err) {
                         console.log("successfully calculated objective heuristics from training set!");
+                        trainCount--;
+                        console.log("train count is now " + trainCount);
+
                         dict = resultDict;
                         console.log("content of training dict is: %j", dict);
+
+                        var num_words = resultDict["num_words"];
 
                         //  add dict results to an ongoing average
                         averageDict["num_words"] += resultDict["num_words"];
@@ -105,60 +109,113 @@ async.waterfall([
                         averageDict["sentence_mean"] += resultDict["sentence_info"]["mean"];
                         averageDict["sentence_var"] += resultDict["sentence_info"]["var"];
                         averageDict["sentence_num"] += resultDict["sentence_info"]["num"];
+
+                        averageDict["linking_verbs"] += resultDict["linking_verbs"];
+                        averageDict["etymology_score"] += resultDict2["etymology_score"];
+
                         averageDict["adj_count"] += resultDict["pos_info"]["adj_count"];
                         averageDict["adv_count"] += resultDict["pos_info"]["adv_count"];
                         averageDict["noun_count"] += resultDict["pos_info"]["noun_count"];
                         averageDict["verb_count"] += resultDict["pos_info"]["verb_count"];
 
+                        averageDict["sentiment"] += resultDict2["sentiment"];
+
                         console.log("content of updated averagedict is: %j", averageDict);
 
+                        if (0 == trainCount) {
+                            console.log("trainCount is zero; attempting to invoke callback with averageDict = %j",averageDict);
+                            callback(null, averageDict, numFiles);
+                        }
                     }
                 });
 
-                if (0 == --trainCount) {
-                    console.log("finished reading all training data"); 
-
-                //  save the averaged data into the objective model
-
-                var MasterObjectiveModel = require('mongoose').model('MasterObjectiveHeuristic');
-
-                var oh = new MasterObjectiveModel( 
-                { 
-                    num_words: averageDict["num_words"],
-                    num_chars: averageDict["num_chars"],
-                    overused_words_num: averageDict["overused_words_num"],
-                    sentence_mean: averageDict["mean"],
-                    sentence_var: averageDict["var"],
-                    sentence_num: averageDict["num"],
-                    adj_count: averageDict["adj_count"],
-                    adv_count: averageDict["adv_count"],
-                    noun_count: averageDict["noun_count"],
-                    verb_count: averageDict["verb_count"]
-                }
-                );
-                oh.save(function (err) {
-                  if (err) {
-                    console.log("error while saving oh!");
-                    return handleError(err);
-                }
-                  else {
-
-                    console.log("successfully saved the master of the objective heuristics!");
-
-                  }
-                  // saved!
-                });
-
-                }
-
-
-
             });
-        });
+        }
 
+        );
+    });
+  },
+
+
+  function(averageDict, numFiles) {
+  //  save the averaged data into the objective model
+  var MasterObjectiveModel = require('mongoose').model('MasterObjectiveHeuristic');
+  MasterObjectiveModel.remove({}, function(err) { 
+   
+    console.log("NOTICE: deleted MasterObjective to reset the database -- remove this line if you don't want this");
+
+    console.log("invoking final function with averageDict = %j", averageDict);
+    console.log("number of files =  " + numFiles);
+
+    var num_words = averageDict["num_words"];
+    var num_chars = averageDict["num_chars"];
+
+    console.log("num_words = " + num_words);
+
+    var avg_overused_words_num = (averageDict["overused_words_num"] / numFiles);
+
+    var avg_sentence_mean = (averageDict["sentence_mean"] / numFiles);
+    var avg_sentence_var = (averageDict["sentence_var"] / numFiles);
+    var avg_sentence_num = (averageDict["sentence_num"] / numFiles);
+
+    var avg_etymology_score = (averageDict["etymology_score"] / numFiles);
+
+    var avg_adj_count = averageDict["adj_count"] / num_words;
+    var avg_adv_count = averageDict["adv_count"] / num_words;
+    var avg_noun_count = averageDict["noun_count"] / num_words;
+    var avg_verb_count = averageDict["verb_count"] / num_words;
+    var avg_lv_ratio = averageDict["linking_verbs"] / num_words;
+
+    var avg_sentiment = (averageDict["sentiment"] / numFiles);
+
+    console.log("avg_overused_words_num = " + avg_overused_words_num);
+
+    console.log("avg_sentence_mean = " + avg_sentence_mean);
+    console.log("avg_sentence_var = " + avg_sentence_var);
+    console.log("avg_sentence_num = " + avg_sentence_num);
+
+    console.log("avg_verb_count = " + avg_verb_count);
+
+    console.log("avg_sentiment = " + avg_sentiment);
+
+    var oh = new MasterObjectiveModel( 
+    { 
+        //  divide all by num_words to get an averge
+        overused_words_num: avg_overused_words_num,
+
+        sentence_mean: avg_sentence_mean,
+        sentence_var: avg_sentence_var,
+        sentence_num: avg_sentence_num,
+
+        etymology_score: avg_etymology_score,
+
+        adj_ratio: avg_adj_count,
+        adv_ratio: avg_adv_count,
+        noun_ratio: avg_noun_count,
+        verb_ratio: avg_verb_count,
+        linking_verbs_ratio: avg_lv_ratio,
+
+        sentiment: avg_sentiment,
+    }
+    );
+    oh.save(function (err) {
+      if (err) {
+        console.log("error while saving oh!");
+        return handleError(err);
+    }
+      else {
+
+        console.log("successfully saved the master of the objective heuristics!");
+        console.log("master content is %j", oh);
+
+      }
+      // saved!
     });
 
-  }
+  });
+
+}
+
   
 ],
 // optional callback

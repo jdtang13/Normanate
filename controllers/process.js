@@ -2,16 +2,14 @@ var openNLP = require("opennlp");
 var training = require("../controllers/training");
 var mongoose = require("mongoose");
 var WordModel = mongoose.model('Word');
+var indico = require('indico.io');
+indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 
 var chi = require("chi-squared");
 
 var expectedHeuristics = training.getExpectedHeuristics();
 
-exports.processText = function(text) {
-	/* do text processing and calculate heuristics */
-}
-
-exports.prestigeOf = function(etymology) {
+function prestigeOf(etymology) {
 
     var etymologies = ["Abnaki", "Afrikaans", "Akkadian", "Algonquian", "American English", 
     "American Spanish", "Anglican", "Anglo-French", "Anglo-Latin", "Anglo-Norm", "Arabic", "Aramaic", "Arawakan", "Armenian", "Assyrian",
@@ -106,6 +104,7 @@ function checkCallback(counter, callback, resultDict) {
 	//  id:
 	//	num_words:
 	// 	num_chars:
+	// 	linking_verbs:
 	// 	etymology_score: 
 	// 	overused_words:
 	//		word:
@@ -125,7 +124,7 @@ function checkCallback(counter, callback, resultDict) {
 	//	
 	// }
 
-exports.objectiveHeuristics = function(id, text, callback) {
+function objectiveHeuristics(id, text, callback) {
 
 	var tokenizer = new openNLP().tokenizer;
 	var sentenceDetector = new openNLP().sentenceDetector;
@@ -181,7 +180,7 @@ exports.objectiveHeuristics = function(id, text, callback) {
 		if (resultDict['pos_info'] == null) {
 			resultDict['pos_info'] = {};
 		}
-		resultDict['pos_info']['linking_verbs'] = linkingVerbs;
+		resultDict['linking_verbs'] = linkingVerbs;
 
 		// store number of words, characters, and also
 		// top 5 most used words
@@ -273,10 +272,10 @@ exports.objectiveHeuristics = function(id, text, callback) {
 /* Wordnik: http://videlais.com/2015/03/25/starting-with-the-wordnik-api-in-node-js/ */
 /* API Key: 8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27 */
 
-exports.subjectiveHeuristics = function(id, text, callback) {
+function subjectiveHeuristics(id, text, callback) {
 
 	var APIKEY = '8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27';
-	var Wordnik = require('wordnik-bb').init(APIKEY);
+	/*var Wordnik = require('wordnik-bb').init(APIKEY);
 	 
 	var randomWordPromise = Wordnik.getRandomWordModel({
 	    includePartOfSpeech: "verb-transitive",
@@ -284,13 +283,13 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 	  }
 	);
 	randomWordPromise.done(function(wordModel) {
-	  console.log("Random word: ", wordModel.attributes.word); });
+	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
 	var counter = 2;
 
 	//calculate the prestige values of text
-	var tokenizer = new OpenNLP().tokenizer;
+	var tokenizer = new openNLP().tokenizer;
 	tokenizer.tokenize(text, function(err, results) {
 		// need some way to fetch from database 
 		// get the etymology associated with the word
@@ -298,15 +297,6 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 		var avg = 0;
 		var count = 0;
 		// take a running average of all words
-		calculatePrestige = function(prestige) {
-			avg += prestige;
-			count++;
-			if (count == results.length) {
-				avg /= results.length;
-				resultDict["etymology_score"] = avg;
-				counter = checkCallback(counter, callback, resultDict);
-			}
-		}
 		for(var i in results) {
 			var result = results[i];
 			var queryWord = WordModel.findOne({'content':result});
@@ -314,14 +304,30 @@ exports.subjectiveHeuristics = function(id, text, callback) {
 				if (word != null) {
 					var titleOrigin = word.etymology;
 					if (titleOrigin != "none") {
-						var prestige = self.prestigeOf(titleOrigin);
-						calculatePrestige(prestige);
+						var prestige = prestigeOf(titleOrigin);
+						avg += prestige;
 					}
+				}
+				count++;
+				if (count == results.length) {
+					avg /= results.length;
+					resultDict["etymology_score"] = avg;
+					counter = checkCallback(counter, callback, resultDict);
 				}
 			});
 		}
-
 	});
+
+	// calculate sentiment using Indico's API
+	indico.sentiment(text)
+	.then(function(res){
+		console.log("SENTIMENT: " + res);
+		resultDict["sentiment"] = res;
+		counter = checkCallback(counter, callback, resultDict);
+	})
+	.catch(function(err) {
+		console.log("Indico error -- suppressed");
+	})
 
 	/* TODO -- uncomment and debug
 
@@ -397,3 +403,24 @@ function calculatePOSMatch(text, callback) {
 		callback(0, prob);
 	});
 } */
+
+function deformatPairFreqs(pairFreqs) {
+
+}
+
+function deformatTotalFreqs(totalFreqs) {
+
+}
+
+function formatPairFreqs(pairFreqsArr) {
+
+}
+function formatTotalFreqs(totalFreqsArr) {
+
+}
+
+module.exports = {
+	prestigeOf: prestigeOf,
+	objectiveHeuristics: objectiveHeuristics,
+	subjectiveHeuristics: subjectiveHeuristics,
+}

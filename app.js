@@ -96,6 +96,30 @@ app.use(function(req, res, next) {
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
+//  config swig to add percent format function
+var swig = require('swig');
+//  enable nice formatting of numbers
+swig.setDefaults({ locals: { 
+  truncateNumber: function (number, digits) {
+    var multiplier = Math.pow(10, digits),
+        adjustedNum = number * multiplier,
+        truncatedNum = Math[adjustedNum < 0 ? 'ceil' : 'floor'](adjustedNum);
+
+    return truncatedNum / multiplier;
+ },
+
+ // percentage
+  percentage: function (number, digits) {
+    var multiplier = Math.pow(10, digits),
+        adjustedNum = number * multiplier,
+        truncatedNum = Math[adjustedNum < 0 ? 'ceil' : 'floor'](adjustedNum);
+
+    return (100 * truncatedNum / multiplier).toString() + "%";
+ } 
+
+}}
+);
+
 // ROUTES
 
 // Add in routes from the folder

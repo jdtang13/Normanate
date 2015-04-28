@@ -5,20 +5,29 @@ var mongoose = require('mongoose');
 
 // var wordSchema = require('mongoose').model('Word');
 
+
 ///  the central master data that the training data feeds into
 var masterObjectiveSchema = new mongoose.Schema( 
 {
-    num_words: Number,
-    num_chars: Number,
+
+  //  ALL OF THESE ARE AVERAGES
+
     //overused_words: [wordSchema],
     overused_words_num: Number,
     sentence_mean: Number,
     sentence_var: Number,
     sentence_num: Number,
-    adj_count: Number,
-    adv_count: Number,
-    noun_count: Number,
-    verb_count: Number,
+
+    etymology_score: Number, //added
+
+    adj_ratio: Number,
+    adv_ratio: Number,
+    noun_ratio: Number,
+    verb_ratio: Number,
+    linking_verbs_ratio: Number, //added
+
+    sentiment: Number,
+
     goodness_of_fit: Number
 });
 
@@ -27,7 +36,7 @@ masterObjectiveSchema.set('toJSON', {
     virtuals: true
 });
 
-//  CURRENT as of 4/21 -- please update this if things change
+//  DEPRECATED, was current as of 4/21 -- please update this if things change
 // basic structure of a result object. This should apply to both objective and subjective heuristics.
   // {
   //  id:
@@ -47,34 +56,79 @@ masterObjectiveSchema.set('toJSON', {
   //    goodness_of_fit: (subjective)
   // }
 
-var objectiveHeuristicSchema = new mongoose.Schema( 
-{
+// CURRENT as of 4/22 
+// basic structure of a result object. This should apply to both objective and subjective heuristics.
+  // {
+  //  id:
+  //  num_words:
+  //  num_chars:
+  //  linking_verbs:
+  //  etymology_score: 
+  //  overused_words:
+  //    word:
+  //  sentence_info:
+  //    mean:
+  //    var:
+  //    num:
+  //  pos_info:
+  //    adj_count:
+  //    adv_count:
+  //    noun_count:
+  //    verb_count:
+  //  pos_match_info:
+  //    pairFreqs: (2-d table)
+  //    totalFreqs (1-d table)
+  //    
+  //  
+  // }
 
-    //is_master: { type: Boolean, required: true, default: false}, //  is this the master set derived from training data?
 
-    num_words: Number,
-    num_chars: Number,
-    //overused_words: [wordSchema],
-    overused_words: [String],
-    sentence_mean: Number,
-    sentence_var: Number,
-    sentence_num: Number,
-    adj_count: Number,
-    adv_count: Number,
-    noun_count: Number,
-    verb_count: Number,
-    goodness_of_fit: Number
-});
+// var objectiveHeuristicSchema = new mongoose.Schema( 
+// {
+//     num_words: Number,
+//     num_chars: Number,
+//     linking_verbs: Number, //(added)
+//     etymology_score: Number, //(added)
+//     //overused_words: [wordSchema],
+//     overused_words: [String],
+//     sentence_mean: Number,
+//     sentence_var: Number,
+//     sentence_num: Number,
+//     adj_count: Number,
+//     adv_count: Number,
+//     noun_count: Number,
+//     verb_count: Number,
+//     //goodness_of_fit: Number (deprecated)
+//     pos_match_pairFreqs:
+
+// });
 
 // Ensure virtual fields are serialised.
-objectiveHeuristicSchema.set('toJSON', {
-    virtuals: true
-});
+// objectiveHeuristicSchema.set('toJSON', {
+//     virtuals: true
+// });
 
 // TODO -- remove heuristicSchema if it's unnecessary
 var heuristicSchema = new mongoose.Schema( 
 {
-    values: [Number] //  values associated with particular words
+    //values: [Number] //  values associated with particular words
+  num_words: Number,
+  num_chars: Number,
+  linking_verbs: Number, //(added)
+  etymology_score: Number, //(added)
+  //overused_words: [wordSchema],
+  overused_words: [String],
+  sentence_mean: Number,
+  sentence_var: Number,
+  sentence_num: Number,
+  adj_count: Number,
+  adv_count: Number,
+  noun_count: Number,
+  verb_count: Number,
+  sentiment: Number,
+  //goodness_of_fit: Number (deprecated)
+  pos_match_pairFreqs: [Number],
+  pos_match_totalFreqs: [Number],
 });
 
 // Ensure virtual fields are serialised.
@@ -98,7 +152,8 @@ var essaySchema = new mongoose.Schema({
     ref: 'User'
   },
 
-  objectives: [objectiveHeuristicSchema], /// objective heuristics
+  //objectives: [objectiveHeuristicSchema], /// objective heuristics
+  objectives: [heuristicSchema],
 
   //  use the subdocument
   //  allow for multiple heuristic schema -- perhaps heuristics[0] is a certain heuristic, heuristics[1], etc.?
@@ -119,6 +174,6 @@ essaySchema.set('toJSON', {
 });
 
 module.exports = mongoose.model('MasterObjectiveHeuristic', masterObjectiveSchema);
-module.exports = mongoose.model('ObjectiveHeuristic', objectiveHeuristicSchema);
+module.exports = mongoose.model('ObjectiveHeuristic', heuristicSchema);
 module.exports = mongoose.model('Heuristic', heuristicSchema);
 module.exports = mongoose.model('Essay', essaySchema);
