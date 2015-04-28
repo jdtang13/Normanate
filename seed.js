@@ -1,3 +1,5 @@
+var argv = require('minimist')(process.argv.slice(2));
+var fs = require('fs');
 
 
 var walk = require('./utils/walk');
@@ -15,7 +17,21 @@ var secrets = require('./config/secrets');
 /**
  * Connect to MongoDB.
  */
-mongoose.connect(secrets.db);
+
+var mongodb = secrets.db;
+
+console.log(argv);
+if (argv.mongo) {
+  if (argv.f) {
+    mongodb = fs.readFileSync(argv.mongo).toString().split('\n')[0];
+  }
+  else {
+    mongodb = argv.mongo;
+  }
+}
+
+
+mongoose.connect(mongodb);
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
 });
@@ -36,7 +52,6 @@ async.waterfall([
       hasBeenReset = 1;
 
       //  seed the etymology data if not done already
-      var fs = require('fs');
       var array = fs.readFileSync('etymologies.txt').toString().split("\n");
 
       console.log("Seeding database with existing words");
