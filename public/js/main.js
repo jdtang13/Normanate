@@ -2,6 +2,7 @@ window.$ = window.jQuery = require('jquery');
 require('expanding-textareas');
 require('bootstrap');
 
+var loader = require('./utils/load');
 var essays = require('./controllers/essays');
 
 $(document).ready(function() {
@@ -12,6 +13,7 @@ $(document).ready(function() {
 
   // Place JavaScript code here...
   $('#create-essay-button').click(function() {
+    loader.load();
     var essayTitle = $('#title').val();
     var essayBody = $('#content').val();
     if (! essayTitle || !essayTitle.length) {
@@ -46,6 +48,7 @@ $(document).ready(function() {
     if (!window.essay) {
         return;
     }
+    loader.load();
     var essayTitle = $('#title').val();
     if (! essayTitle || !essayTitle.length) {
         essayTitle = 'Untitled';

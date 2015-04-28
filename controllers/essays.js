@@ -124,6 +124,54 @@ exports.postCreateEssay = function(req, res) {
         essay.author = req.user;
     }
 
+    updateEssayMetrics(essay, req, res, function(e) {
+        e.save(function(err) {
+            if (err) {
+                console.log(err);
+                return res.status(400).json(err.errors);
+            } else {
+                console.log("essay saved!");
+                return res.json(e);
+            }
+        });
+    });
+    
+};
+
+// update an essay
+exports.updateEssay = function(req, res) {
+    var essay = req.essay;
+    essay = _.extend(essay, req.body);
+    essay.updated = Date.now();
+
+    updateEssayMetrics(essay, req, res, function(e) {
+        e.save(function(err) {
+            if (err) {
+                console.log(err);
+                return res.status(400).json(err.errors);
+            } else {
+                console.log("essay saved!");
+                return res.json(e);
+            }
+        });
+    });
+}
+
+exports.deleteEssay = function(req, res) {
+    var essay = req.essay;
+
+    essay.remove(function(err) {
+        if (err) {
+            return res.status(400).json(err.errors);
+        } else {
+            res.json(essay);
+        }
+    });
+}
+
+// TODO: apply metrics on an essay
+var updateEssayMetrics = function(essay, req, res, cb) {
+    
     //  temporary heuristic -- the prestige of the essay's title
     var essayTitle = (essay.title).toLowerCase();
     var WordModel = require('mongoose').model('Word');
@@ -212,54 +260,9 @@ exports.postCreateEssay = function(req, res) {
             else {
                 essay.objectives.push(oh);
                 console.log("successfully saved the objective heuristics!");
-                essay.save(function(err) {
-                    if (err) {
-                        console.log(err);
-                        return res.send('users/signup', {
-                            errors: err.errors,
-                            piece: piece
-                        });
-                    } else {
-                        console.log("essay saved!");
-                        return res.json(essay);
-                    }
-                });
+                cb(essay);
             }
             // saved!
         });
     });
-};
-
-// update an essay
-exports.updateEssay = function(req, res) {
-    var essay = req.essay;
-    essay = _.extend(essay, req.body);
-    essay.updated = Date.now();
-
-    //process.processText(essay);
-
-    essay.save(function(err) {
-        if (err) {
-            return res.status(400).json(err.errors);
-        } else {
-            res.json(essay);
-        }
-    });
-}
-
-exports.deleteEssay = function(req, res) {
-    var essay = req.essay;
-
-    essay.remove(function(err) {
-        if (err) {
-            return res.status(400).json(err.errors);
-        } else {
-            res.json(essay);
-        }
-    });
-}
-
-// TODO: apply metrics on an essay
-exports.updateEssayMetrics = function(req, res) {
-    return res.json(req.essay);
 };
