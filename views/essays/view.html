@@ -19,17 +19,22 @@
 
     {% if essay.objectives.length > 0 && masterObjective != null %}
     <p>Number of Words: {{ essay.objectives[0].num_words }}</p>
+    <p>Sentence Num: {{ truncateNumber(essay.objectives[0].sentence_num, 3) }}</p>
 
     <p>Overused Words: {{ essay.objectives[0].overused_words }} ({{ essay.objectives[0].overused_words.length }}) | {{ masterObjective.overused_words_count }} </p>
     <p>Sentence Mean: {{ truncateNumber(essay.objectives[0].sentence_mean, 3) }} | {{ truncateNumber(masterObjective.sentence_mean, 3) }} (Master)  </p>
     <p>Sentence Var: {{ truncateNumber(essay.objectives[0].sentence_var, 3) }} | {{ truncateNumber(masterObjective.sentence_var, 3) }} (Master)  </p>
-    <p>Sentence Num: {{ truncateNumber(essay.objectives[0].sentence_num, 3) }} | {{ truncateNumber(masterObjective.sentence_num, 3) }} (Master)  </p>
+
+    <p>Etymology Score: {{ percentage(essay.objectives[0].etymology_score, 3)}} | {{ percentage(masterObjective.etymology_score, 3)}} (Master) </p>
+
     <p>Adjective Ratio: {{ percentage(essay.objectives[0].adj_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.adj_ratio, 3) }} (Master) </p>
     <p>Adverb Ratio: {{ percentage(essay.objectives[0].adv_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.adv_ratio, 3) }} (Master) </p>
     <p>Noun Ratio: {{ percentage(essay.objectives[0].noun_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.noun_ratio, 3) }} (Master) </p>
     <p>Verb Ratio: {{ percentage(essay.objectives[0].verb_count / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.verb_ratio, 3) }} (Master) </p>
-    {% endif %}
+    <p>Linking Verbs: {{ percentage(essay.objectives[0].linking_verbs / essay.objectives[0].num_words, 3) }} | {{ percentage(masterObjective.linking_verbs_ratio, 3) }} (Master) </p>
 
+    <p>Sentiment: {{ percentage(essay.objectives[0].sentiment, 3) }} | {{ percentage(masterObjective.sentiment, 3) }} (Master) </p>
+    {% endif %}
   </div>
 
   </div>

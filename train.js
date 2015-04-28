@@ -66,7 +66,7 @@ async.waterfall([
         var numFiles = 4;   ///  NOTE: HARD CODED
         var trainCount = numFiles;
 
-          async.each(files, function(file) {
+          async.eachSeries(files, function(file, fileCallback) {
 
             fs.readFile(dir + file, 'utf-8', function(err, html) {
 
@@ -120,6 +120,7 @@ async.waterfall([
 
                         averageDict["sentiment"] += resultDict2["sentiment"];
 
+
                         console.log("content of updated averagedict is: %j", averageDict);
 
                         if (0 == trainCount) {
@@ -127,6 +128,7 @@ async.waterfall([
                             callback(null, averageDict, numFiles);
                         }
                     }
+                    fileCallback();
                 });
 
             });

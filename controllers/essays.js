@@ -38,7 +38,8 @@ exports.getEssay = function(req, res) {
     query.exec(function (err, masterObjective) {
         if (masterObjective != null) {
             var normals = calculateNormals(req.essay, masterObjective);
-            console.log("normals: %j", normals)
+            console.log("req.essay: " + req.essay);
+            console.log("normals: %j", normals);
             console.log("master objective found!");
             res.render('essays/view', {
                 essay: req.essay,
@@ -92,24 +93,26 @@ function calculatePValue(sample, mean, variance) {
 // etymology_score:
 function calculateNormals(essay, master) {
 
-    var s_sentenceVar = essay.heuristics[0].sentence_var;
+    console.log("master obj heuristics: %j", master);
+    var s_sentenceVar = essay.objectives[0].sentence_var;
     calculatePValue(s_sentenceVar, e_sentenceVar);
     var e_sentenceVar = master.sentence_var;
+    console.log("s_sentenceVar: " + s_sentenceVar + " e_sentenceVar: " + e_sentenceVar);
     var p_sentenceVar = calculatePValue(s_sentenceVar, e_sentenceVar, 1);
 
-    var s_sentenceMean = essay.heuristics[0].sentence_mean;
+    var s_sentenceMean = essay.objectives[0].sentence_mean;
     var e_sentenceMean = master.sentence_mean;
     var p_sentenceMean = calculatePValue(s_sentenceMean, e_sentenceMean, 1);
 
-    var s_linkingVerbs = (essay.heuristics[0].linking_verbs / essay.heuristics[0].num_words);
+    var s_linkingVerbs = (essay.objectives[0].linking_verbs / essay.objectives[0].num_words);
     var e_linkingVerbs = master.linking_verbs_ratio;
     var p_linkingVerbs = calculatePValue(s_linkingVerbs, e_linkingVerbs, 1);
 
-    var s_etymologyScore = essay.heuristics[0].etymology_score;
+    var s_etymologyScore = essay.objectives[0].etymology_score;
     var e_etymologyScore = master.etymology_score;
     var p_etymologyScore = calculatePValue(s_etymologyScore, e_etymologyScore, 1);
 
-    var s_sentiment = essay.heuristics[0].sentiment;
+    var s_sentiment = essay.objectives[0].sentiment;
     var e_sentiment = master.sentiment;
     var p_sentiment = calculatePValue(s_sentiment, e_sentiment, 1);
 
@@ -205,7 +208,7 @@ exports.postCreateEssay = function(req, res) {
             adv_count: resultDict["pos_info"]["adv_count"],
             noun_count: resultDict["pos_info"]["noun_count"],
             verb_count: resultDict["pos_info"]["verb_count"],
-            sentiment: resultDict["sentiment"]
+            sentiment: resultDict2["sentiment"]
         });
         oh.save(function (err) {
             if (err) {
