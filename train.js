@@ -37,6 +37,8 @@ var ObjectiveModel = require('mongoose').model('ObjectiveHeuristic');
 
 var hasBeenTrained = 0;
 
+var numFiles = 2;  ///  NOTE: HARD CODED
+
 async.waterfall([
   function(callback){
 
@@ -78,7 +80,6 @@ async.waterfall([
         varDict["verb_count"] = [];
         varDict["sentiment"] = [];
 
-        var numFiles = 4;   ///  NOTE: HARD CODED
         var trainCount = numFiles;
 
           async.eachSeries(files, function(file, fileCallback) {
