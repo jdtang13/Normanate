@@ -132,6 +132,8 @@ async.waterfall([
                         averageDict["verb_count"] += resultDict["pos_info"]["verb_count"];
                         averageDict["sentiment"] += resultDict2["sentiment"];
 
+                        // merge pos stuff into this dictionary
+
                         if (resultDict["overused_words"] != null) {
                             varDict["overused_words_num"].push(resultDict["overused_words"].length);
                         }

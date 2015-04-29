@@ -53,7 +53,6 @@ exports.getEssay = function(req, res) {
         var varObjective = results[1];
         if (avgObjective != null && varObjective != null) {
             var normals = calculateNormals(req.essay, avgObjective, varObjective);
-            console.log("req.essay: " + req.essay);
             console.log("normals: %j", normals);
             console.log("master objective found!");
             res.render('essays/view', {

@@ -244,6 +244,7 @@ function objectiveHeuristics(id, text, callback) {
 		counter = checkCallback(counter, callback, resultDict);	
 	});
 
+
 	// get num paragraphs - TO DO
 
 	posTagger.tag(text, function(err, results) {
@@ -301,7 +302,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
-	var counter = 2;
+	var counter = 3;
 
 	//calculate the prestige values of text
 	var tokenizer = new openNLP().tokenizer;
@@ -338,8 +339,7 @@ function subjectiveHeuristics(id, text, callback) {
 	});
 
 	// calculate sentiment using Indico's API
-	indico.sentiment(text)
-	.then(function(res){
+	indico.sentiment(text).then(function(res){
 		console.log("SENTIMENT: " + res);
 		resultDict["sentiment"] = res;
 		counter = checkCallback(counter, callback, resultDict);
@@ -348,7 +348,7 @@ function subjectiveHeuristics(id, text, callback) {
 		console.log("Indico error -- suppressed");
 	})
 
-	/* TODO -- uncomment and debug
+	// TODO -- uncomment and debug
 
 	// calculate POS frequencies
 	calculatePOSFreqs(text, function(err, posPairDict, 
@@ -356,12 +356,13 @@ function subjectiveHeuristics(id, text, callback) {
 		resultDict["pos_match_info"] = {};
 		resultDict["pos_match_info"]["pairFreqs"] = posPairDict;
 		resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
+		console.log("posPairDict: %j", posPairDict);
+		console.log("posTotalFreqs: %j", posTotalFreqs);
 		counter = checkCallback(counter, callback, resultDict);
-	}) 
-*/
+	}); 
 }
 
-/* todo -- uncomment and debug
+/* todo -- uncomment and debug */
 
 // helper function to calculate the frequency table for the POS match 
 // callback parameters: err, posPairDict, posTotalFreqs, totalWords
@@ -371,11 +372,14 @@ function calculatePOSFreqs(text, callback) {
 	var posPairDict = new Object(); //2-d dict
 	var posTotalFreqs = new Object();
 
+	console.log("Calculating POS frequencies");
+
 	posTagger.tag(text, function(err, results) {
+		var totalWords = 0;
 		for(var i = 0; i < results.length - 1; i++) {
 			if (posPairDict[results[i]] == null) {
 				posPairDict[results[i]] = new Object();
-				posTotalFreqs[results[i]] = new Object();
+				posTotalFreqs[results[i]] = 0;
 			}
 			if (posPairDict[results[i]][results[i+1]] == null) {
 				posPairDict[results[i]][results[i+1]] = 0;
@@ -421,7 +425,7 @@ function calculatePOSMatch(text, callback) {
 		var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
 		callback(0, prob);
 	});
-} */
+}
 
 function deformatPairFreqs(pairFreqs) {
 
