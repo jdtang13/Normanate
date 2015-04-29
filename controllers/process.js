@@ -62,10 +62,10 @@ function blacklistedWord(word) {
 		return true;
 	}
 	var hash = {'the':true,'be':true,'and':true, 'of':true, 'a':true, 'an':true, 'in':true, 'to':true, 
-	'have':true,'it':true,'I':true,'that':true,'for':true,'you':true,'he':true,'with':true,'on':true,'do':true,
-	'say':true,'this':true,'they':true,'at':true,'but':true,'we':true,'his':true,'from':true,'not':true,'by':true,
+	'have':true,'it':true,'i':true,'that':true,'for':true,'you':true,'he':true,'with':true,'on':true,'do':true,
+	'say':true,'this':true,'they':true,'at':true,'but':true,'we':true,'his':true, 'him':true,'from':true,'not':true,'by':true,
 	'she':true,'or':true,'as':true,'what':true,'go':true,'their':true,'can':true,'who':true,'get':true,'if':true,
-	'would':true,'her':true,'all':true,'my':true};
+	'would':true,'her':true,'all':true,'my':true, 'me':true};
 	if (hash[word.toLowerCase()] != null) {
 		return true;
 	}
@@ -137,9 +137,20 @@ function objectiveHeuristics(id, text, callback) {
 	var counter = 3;
 
 	// FETCH FROM DATABASE HERE
-
 	// calculate word statistics
 	tokenizer.tokenize(text, function(err, results) {
+
+		var temp = [];
+		for(var i in results) {
+			var result = results[i];
+			if (result.match(/^([A-Za-z0-9]|[-])+$/)) {
+				temp.push(result);
+			}
+		}
+
+		results = temp;
+
+		console.log(results);
 		var charCount = 0;
 		for (var i in results) {
 			var result = results[i];
@@ -191,12 +202,18 @@ function objectiveHeuristics(id, text, callback) {
 		var n = 5;
 		var i = 0;
 		while(i < n) {
+			if (freqTable[keys[i]] / results.length < 0.02) {
+				break;
+			}
+			if (blacklistedWord(keys[i])) {
+				console.log("BLACKLISTED word:");
+				i++;
+				continue;
+			}
+
 			resultDict["overused_words"].push(keys[i]);
 			console.log(keys[i] + " " + freqTable[keys[i]]);
 			i++;
-		}
-		for(var i = 0; i < n; i++) {
-			resultDict["overused_words"].push(keys[i]);
 		}
 
 		counter = checkCallback(counter, callback, resultDict);
@@ -207,9 +224,7 @@ function objectiveHeuristics(id, text, callback) {
 		var variance = 0;
 		for (var i in results) {
 			var result = results[i];
-			console.log(result);
 			var numWords = result.split(" ").length;
-			console.log(numWords);
 			mean += numWords;
 		}
 		mean /= results.length;
@@ -228,6 +243,7 @@ function objectiveHeuristics(id, text, callback) {
 
 		counter = checkCallback(counter, callback, resultDict);	
 	});
+
 
 	// get num paragraphs - TO DO
 
@@ -286,7 +302,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
-	var counter = 2;
+	var counter = 3;
 
 	//calculate the prestige values of text
 	var tokenizer = new openNLP().tokenizer;
@@ -294,6 +310,10 @@ function subjectiveHeuristics(id, text, callback) {
 		// need some way to fetch from database 
 		// get the etymology associated with the word
 		// calculate prestige value
+		console.log("results: " + results);
+		if (results.length == 0) {
+			counter = checkCallback(counter, callback, resultDict);
+		}
 		var avg = 0;
 		var count = 0;
 		// take a running average of all words
@@ -319,8 +339,7 @@ function subjectiveHeuristics(id, text, callback) {
 	});
 
 	// calculate sentiment using Indico's API
-	indico.sentiment(text)
-	.then(function(res){
+	indico.sentiment(text).then(function(res){
 		console.log("SENTIMENT: " + res);
 		resultDict["sentiment"] = res;
 		counter = checkCallback(counter, callback, resultDict);
@@ -329,7 +348,7 @@ function subjectiveHeuristics(id, text, callback) {
 		console.log("Indico error -- suppressed");
 	})
 
-	/* TODO -- uncomment and debug
+	// TODO -- uncomment and debug
 
 	// calculate POS frequencies
 	calculatePOSFreqs(text, function(err, posPairDict, 
@@ -337,12 +356,13 @@ function subjectiveHeuristics(id, text, callback) {
 		resultDict["pos_match_info"] = {};
 		resultDict["pos_match_info"]["pairFreqs"] = posPairDict;
 		resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
+		console.log("posPairDict: %j", posPairDict);
+		console.log("posTotalFreqs: %j", posTotalFreqs);
 		counter = checkCallback(counter, callback, resultDict);
-	}) 
-*/
+	}); 
 }
 
-/* todo -- uncomment and debug
+/* todo -- uncomment and debug */
 
 // helper function to calculate the frequency table for the POS match 
 // callback parameters: err, posPairDict, posTotalFreqs, totalWords
@@ -352,11 +372,14 @@ function calculatePOSFreqs(text, callback) {
 	var posPairDict = new Object(); //2-d dict
 	var posTotalFreqs = new Object();
 
+	console.log("Calculating POS frequencies");
+
 	posTagger.tag(text, function(err, results) {
+		var totalWords = 0;
 		for(var i = 0; i < results.length - 1; i++) {
 			if (posPairDict[results[i]] == null) {
 				posPairDict[results[i]] = new Object();
-				posTotalFreqs[results[i]] = new Object();
+				posTotalFreqs[results[i]] = 0;
 			}
 			if (posPairDict[results[i]][results[i+1]] == null) {
 				posPairDict[results[i]][results[i+1]] = 0;
@@ -402,7 +425,7 @@ function calculatePOSMatch(text, callback) {
 		var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
 		callback(0, prob);
 	});
-} */
+}
 
 function deformatPairFreqs(pairFreqs) {
 

@@ -66,7 +66,6 @@ async.waterfall([
 
         // this is the dictionary for variances
         var varDict = {};
-        varDict["overused_words_num"] = [];
         varDict["sentence_mean"] = [];
         varDict["sentence_var"] = [];
         varDict["sentence_num"] = [];
@@ -132,24 +131,16 @@ async.waterfall([
                         averageDict["verb_count"] += resultDict["pos_info"]["verb_count"];
                         averageDict["sentiment"] += resultDict2["sentiment"];
 
-                        // merge pos stuff into this dictionary
-
-                        if (resultDict["overused_words"] != null) {
-                            varDict["overused_words_num"].push(resultDict["overused_words"].length);
-                        }
-                        else {
-                            varDict["overused_words_num"].push(0);
-                        }
-                        
+                        varDict["overused_words_num"].push(resultDict["overused_words"].length);
                         varDict["sentence_mean"].push(resultDict["sentence_info"]["mean"]);
                         varDict["sentence_var"].push(resultDict["sentence_info"]["var"]);
                         varDict["linking_verbs"].push(resultDict["linking_verbs"]);
-                        varDict["etymology_score"].push(resultDict2["etymology_score"]);
+                        varDict["etymology_score"].push(resultDict["etymology_score"]);
                         varDict["adj_count"].push(resultDict["pos_info"]["adj_count"]);
                         varDict["adv_count"].push(resultDict["pos_info"]["adv_count"]);
                         varDict["noun_count"].push(resultDict["pos_info"]["noun_count"]);
                         varDict["verb_count"].push(resultDict["pos_info"]["verb_count"]);
-                        varDict["sentiment"].push(resultDict2["sentiment"]);
+                        varDict["sentiment"].push(resultDict["sentiment"]);
 
                         console.log("content of updated averagedict is: %j", averageDict);
 
@@ -212,19 +203,12 @@ async.waterfall([
     var var_noun_count = stats.calculateVariance(varDict["noun_count"]);
     var var_verb_count = stats.calculateVariance(varDict["verb_count"]);
     var var_lv_ratio = stats.calculateVariance(varDict["linking_verbs"]);
-    var_adj_count /= (num_words * num_words);
-    var_adv_count /= (num_words * num_words);
-    var_noun_count /= (num_words * num_words);
-    var_verb_count /= (num_words * num_words);
     var var_sentiment = stats.calculateVariance(varDict["sentiment"]);
-
-    console.log("var_overused_words_num = " + var_overused_words_num);
-    console.log("var_sentence_mean = " + var_sentence_mean);
-    console.log("var_etymology_score = " + var_etymology_score);
 
     var oh = new MasterObjectiveModel( 
     { 
         //  divide all by num_words to get an averge
+        overused_words_num: avg_overused_words_num,
         sentence_mean: avg_sentence_mean,
         sentence_var: avg_sentence_var,
         sentence_num: avg_sentence_num,
@@ -242,7 +226,7 @@ async.waterfall([
     oh.save(function (err) {
         if (err) {
             console.log("error while saving oh!");
-            //return handleError(err);
+            return handleError(err);
         }
         else {
             console.log("successfully saved the master of the objective heuristics!");
@@ -260,7 +244,7 @@ async.waterfall([
         adj_ratio: var_adj_count,
         adv_ratio: var_adv_count,
         noun_ratio: var_noun_count,
-        verb_ratio: var_verb_count,
+        verb_count: var_verb_count,
         linking_verbs_ratio: var_lv_ratio,
         sentiment: var_sentiment,
         type: "var",
@@ -268,8 +252,7 @@ async.waterfall([
     oh_var.save(function(err) {
         if (err) {
             console.log("error while saving oh_var!");
-            console.log(err);
-            //return handleError(err);
+            return handleError(err);
         }
         else {
             console.log("successfully saved the variances of the heuristics!");
