@@ -110,6 +110,26 @@ function calculateNormals(essay, master_avg, master_var) {
     var v_linkingVerbs = master_var.linking_verbs_ratio;
     var p_linkingVerbs = stats.calculatePValue(s_linkingVerbs, e_linkingVerbs, v_linkingVerbs);
 
+    var s_verbRatio = (essay.objectives[0].verb_count / essay.objectives[0].num_words );
+    var e_verbRatio = master_avg.verb_ratio;
+    var v_verbRatio = master_var.verb_ratio;
+    var p_verbRatio = stats.calculatePValue(s_verbRatio, e_verbRatio, v_verbRatio);
+
+    var s_nounRatio = (essay.objectives[0].noun_count / essay.objectives[0].num_words );
+    var e_nounRatio = master_avg.noun_ratio;
+    var v_nounRatio = master_var.noun_ratio;
+    var p_nounRatio = stats.calculatePValue(s_nounRatio, e_nounRatio, v_nounRatio);
+
+    var s_adjRatio = (essay.objectives[0].adj_count / essay.objectives[0].num_words );
+    var e_adjRatio = master_avg.adj_ratio;
+    var v_adjRatio = master_var.adj_ratio;
+    var p_adjRatio = stats.calculatePValue(s_adjRatio, e_adjRatio, v_adjRatio);
+
+    var s_advRatio = (essay.objectives[0].adv_count / essay.objectives[0].num_words );
+    var e_advRatio = master_avg.adv_ratio;
+    var v_advRatio = master_var.adv_ratio;
+    var p_advRatio = stats.calculatePValue(s_advRatio, e_advRatio, v_advRatio);
+
     var s_etymologyScore = essay.objectives[0].etymology_score;
     var e_etymologyScore = master_avg.etymology_score;
     var v_etymologyScore = master_var.etymology_score;
@@ -126,6 +146,10 @@ function calculateNormals(essay, master_avg, master_var) {
     normalDict["linking_verbs"] = p_linkingVerbs;
     normalDict["etymology_score"] = p_etymologyScore;
     normalDict["sentiment"] = p_sentiment; 
+    normalDict["verb_ratio"] = p_verbRatio;
+    normalDict["noun_ratio"] = p_nounRatio;
+    normalDict["adj_ratio"] = p_adjRatio;
+    normalDict["adv_ratio"] = p_advRatio;
     return normalDict; 
 }
 

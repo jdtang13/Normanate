@@ -62,10 +62,10 @@ function blacklistedWord(word) {
 		return true;
 	}
 	var hash = {'the':true,'be':true,'and':true, 'of':true, 'a':true, 'an':true, 'in':true, 'to':true, 
-	'have':true,'it':true,'I':true,'that':true,'for':true,'you':true,'he':true,'with':true,'on':true,'do':true,
-	'say':true,'this':true,'they':true,'at':true,'but':true,'we':true,'his':true,'from':true,'not':true,'by':true,
+	'have':true,'it':true,'i':true,'that':true,'for':true,'you':true,'he':true,'with':true,'on':true,'do':true,
+	'say':true,'this':true,'they':true,'at':true,'but':true,'we':true,'his':true, 'him':true,'from':true,'not':true,'by':true,
 	'she':true,'or':true,'as':true,'what':true,'go':true,'their':true,'can':true,'who':true,'get':true,'if':true,
-	'would':true,'her':true,'all':true,'my':true};
+	'would':true,'her':true,'all':true,'my':true, 'me':true};
 	if (hash[word.toLowerCase()] != null) {
 		return true;
 	}
@@ -205,6 +205,12 @@ function objectiveHeuristics(id, text, callback) {
 			if (freqTable[keys[i]] / results.length < 0.02) {
 				break;
 			}
+			if (blacklistedWord(keys[i])) {
+				console.log("BLACKLISTED word:");
+				i++;
+				continue;
+			}
+
 			resultDict["overused_words"].push(keys[i]);
 			console.log(keys[i] + " " + freqTable[keys[i]]);
 			i++;
