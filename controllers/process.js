@@ -139,6 +139,17 @@ function objectiveHeuristics(id, text, callback) {
 	// FETCH FROM DATABASE HERE
 	// calculate word statistics
 	tokenizer.tokenize(text, function(err, results) {
+
+		var temp = [];
+		for(var i in results) {
+			var result = results[i];
+			if (result.match(/^([A-Za-z0-9]|[-])+$/)) {
+				temp.push(result);
+			}
+		}
+
+		results = temp;
+
 		console.log(results);
 		var charCount = 0;
 		for (var i in results) {

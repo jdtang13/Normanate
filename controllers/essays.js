@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Essay = mongoose.model('Essay');
 var _ = require('lodash');
 var training = require('./training');
-var gaussian = require('gaussian');
 var async = require('async');
+var stats = require('./stats');
 
 
 //  require the process.js file
@@ -34,16 +34,31 @@ exports.getEditEssay = function(req, res) {
 exports.getEssay = function(req, res) {
 
     var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
-    var query = MasterObjective.findOne({ });
-    query.exec(function (err, masterObjective) {
-        if (masterObjective != null) {
-            var normals = calculateNormals(req.essay, masterObjective);
+    async.series([
+        function(callback) {
+            var query = MasterObjective.findOne({ type: "avg"});
+            query.exec(function(err, result){
+                callback(null, result);
+            });
+        },
+        function(callback) {
+            var query = MasterObjective.findOne({ type: "var"});
+            query.exec(function(err, result) {
+                callback(null, result);
+            });
+        }
+    ], function(err, results) {
+        console.log("master results: %j", results);
+        var avgObjective = results[0];
+        var varObjective = results[1];
+        if (avgObjective != null && varObjective != null) {
+            var normals = calculateNormals(req.essay, avgObjective, varObjective);
             console.log("req.essay: " + req.essay);
             console.log("normals: %j", normals);
             console.log("master objective found!");
             res.render('essays/view', {
                 essay: req.essay,
-                masterObjective: masterObjective,
+                masterObjective: avgObjective,
                 normals: normals
             });
         }
@@ -54,7 +69,6 @@ exports.getEssay = function(req, res) {
             });
         }
     });
-
 };
 
 exports.getEssays = function(req, res) {
@@ -72,49 +86,39 @@ exports.getEssays = function(req, res) {
     });
 };
 
-// helper function calculate P value given a sample, mean, and variance
-function calculatePValue(sample, mean, variance) {
-    var distr = gaussian(mean, variance);
-    var result = 0;
-    if (sample < mean) {
-        result = 2 * distr.cdf(sample);
-    }
-    else if (sample > mean) {
-        result = 2 * (1 - distr.cdf(sample));
-    }
-    return result;
-}
-
 // calculate normal distribution given essay object and masterObjective object
 // return dictionary with the following format:
 // sentence_var:
 // sentence_mean:
 // linking_verbs:
 // etymology_score:
-function calculateNormals(essay, master) {
+function calculateNormals(essay, master_avg, master_var) {
 
-    console.log("master obj heuristics: %j", master);
+    console.log("master obj heuristics: %j", master_avg);
     var s_sentenceVar = essay.objectives[0].sentence_var;
-    calculatePValue(s_sentenceVar, e_sentenceVar);
-    var e_sentenceVar = master.sentence_var;
-    console.log("s_sentenceVar: " + s_sentenceVar + " e_sentenceVar: " + e_sentenceVar);
-    var p_sentenceVar = calculatePValue(s_sentenceVar, e_sentenceVar, 1);
+    var e_sentenceVar = master_avg.sentence_var;
+    var v_sentenceVar = master_var.sentence_var;
+    var p_sentenceVar = stats.calculatePValue(s_sentenceVar, e_sentenceVar, v_sentenceVar);
 
     var s_sentenceMean = essay.objectives[0].sentence_mean;
-    var e_sentenceMean = master.sentence_mean;
-    var p_sentenceMean = calculatePValue(s_sentenceMean, e_sentenceMean, 1);
+    var e_sentenceMean = master_avg.sentence_mean;
+    var v_sentenceMean = master_var.sentence_mean;
+    var p_sentenceMean = stats.calculatePValue(s_sentenceMean, e_sentenceMean, v_sentenceMean);
 
     var s_linkingVerbs = (essay.objectives[0].linking_verbs / essay.objectives[0].num_words);
-    var e_linkingVerbs = master.linking_verbs_ratio;
-    var p_linkingVerbs = calculatePValue(s_linkingVerbs, e_linkingVerbs, 1);
+    var e_linkingVerbs = master_avg.linking_verbs_ratio;
+    var v_linkingVerbs = master_var.linking_verbs_ratio;
+    var p_linkingVerbs = stats.calculatePValue(s_linkingVerbs, e_linkingVerbs, v_linkingVerbs);
 
     var s_etymologyScore = essay.objectives[0].etymology_score;
-    var e_etymologyScore = master.etymology_score;
-    var p_etymologyScore = calculatePValue(s_etymologyScore, e_etymologyScore, 1);
+    var e_etymologyScore = master_avg.etymology_score;
+    var v_etymologyScore = master_var.etymology_score;
+    var p_etymologyScore = stats.calculatePValue(s_etymologyScore, e_etymologyScore, v_etymologyScore);
 
     var s_sentiment = essay.objectives[0].sentiment;
-    var e_sentiment = master.sentiment;
-    var p_sentiment = calculatePValue(s_sentiment, e_sentiment, 1);
+    var e_sentiment = master_avg.sentiment;
+    var v_sentiment = master_var.sentiment;
+    var p_sentiment = stats.calculatePValue(s_sentiment, e_sentiment, v_sentiment);
 
     var normalDict = {};
     normalDict["sentence_var"] = p_sentenceVar;

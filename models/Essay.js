@@ -7,11 +7,9 @@ var mongoose = require('mongoose');
 
 
 ///  the central master data that the training data feeds into
+// used for storing both the averages and variances
 var masterObjectiveSchema = new mongoose.Schema( 
 {
-
-  //  ALL OF THESE ARE AVERAGES
-
     //overused_words: [wordSchema],
     overused_words_num: Number,
     sentence_mean: Number,
@@ -27,8 +25,10 @@ var masterObjectiveSchema = new mongoose.Schema(
     linking_verbs_ratio: Number, //added
 
     sentiment: Number,
+    goodness_of_fit: Number,
 
-    goodness_of_fit: Number
+    // can take the value of "avg" or "var"
+    type: String
 });
 
 // Ensure virtual fields are serialised.
