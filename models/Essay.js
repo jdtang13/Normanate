@@ -27,6 +27,9 @@ var masterObjectiveSchema = new mongoose.Schema(
     sentiment: Number,
     goodness_of_fit: Number,
 
+    pos_match_pairFreqs: [Number],
+    pos_match_totalFreqs: [Number],
+
     // can take the value of "avg" or "var"
     type: String
 });

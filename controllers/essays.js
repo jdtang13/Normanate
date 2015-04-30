@@ -32,7 +32,6 @@ exports.getEditEssay = function(req, res) {
 
 // GET an essay
 exports.getEssay = function(req, res) {
-
     var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
     async.series([
         function(callback) {
@@ -46,19 +45,34 @@ exports.getEssay = function(req, res) {
             query.exec(function(err, result) {
                 callback(null, result);
             });
-        }
+        },
     ], function(err, results) {
         console.log("master results: %j", results);
         var avgObjective = results[0];
         var varObjective = results[1];
         if (avgObjective != null && varObjective != null) {
             var normals = calculateNormals(req.essay, avgObjective, varObjective);
+
+            var posPairFreqs = process.formatPairFreqs(
+                req.essay.objectives[0].pos_match_pairFreqs);
+            var posTotalFreqs = process.formatTotalFreqs(
+                req.essay.objectives[0].pos_match_totalFreqs);
+
+            var expectedPairFreqs = process.formatPairFreqs(
+                avgObjective.pos_match_pairFreqs);
+            var expectedTotalFreqs = process.formatTotalFreqs(
+                avgObjective.pos_match_totalFreqs);
+
+            var posProb = process.calculatePOSMatch(posPairFreqs,posTotalFreqs,
+                expectedPairFreqs, expectedTotalFreqs);
             console.log("normals: %j", normals);
+            console.log("pos prob: %j", posProb);
             console.log("master objective found!");
             res.render('essays/view', {
                 essay: req.essay,
                 masterObjective: avgObjective,
-                normals: normals
+                normals: normals,
+                posProb: prob,
             });
         }
         else {
@@ -206,7 +220,6 @@ exports.deleteEssay = function(req, res) {
 
 // TODO: apply metrics on an essay
 var updateEssayMetrics = function(essay, req, res, cb) {
-    
     //  temporary heuristic -- the prestige of the essay's title
     var essayTitle = (essay.title).toLowerCase();
     var WordModel = require('mongoose').model('Word');
@@ -269,6 +282,9 @@ var updateEssayMetrics = function(essay, req, res, cb) {
         // var posPairFreqs = dict["pos_match_info"]["pairFreqs"];
         // var posTotalFreqs = dict["pos_match_info"]["totalFreqs"];
 
+        var posPairArr = process.deformatPairFreqs(resultDict2["pos_match_info"]["pairFreqs"]);
+        var posTotalArr = process.deformatTotalFreqs(resultDict2["pos_match_info"]["totalFreqs"]);
+
         var oh = new ObjectiveModel( 
         {
             num_words: resultDict["num_words"],
@@ -283,7 +299,9 @@ var updateEssayMetrics = function(essay, req, res, cb) {
             adv_count: resultDict["pos_info"]["adv_count"],
             noun_count: resultDict["pos_info"]["noun_count"],
             verb_count: resultDict["pos_info"]["verb_count"],
-            sentiment: resultDict2["sentiment"]
+            sentiment: resultDict2["sentiment"],
+            pos_match_pairFreqs: posPairArr,
+            pos_match_totalFreqs: posTotalArr,
         });
         oh.save(function (err) {
             if (err) {
