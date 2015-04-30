@@ -3,6 +3,11 @@ var gaussian = require('gaussian');
 // given a sample dataset, calculate the variance
 exports.calculateVariance = function(arr) {
 	var mean = 0;
+
+	if (arr == null || arr.length <= 1) {
+		return 0;
+	}
+
 	for(var i in arr) {
 		mean += arr[i];
 	}
@@ -14,7 +19,8 @@ exports.calculateVariance = function(arr) {
 	    temp /= mean;
 	    result += temp;
 	}
-	return result;
+
+	return result || 0;
 }
 
 // helper function calculate P value given a sample, mean, and variance
@@ -27,5 +33,5 @@ exports.calculatePValue = function(sample, mean, variance) {
     else if (sample > mean) {
         result = 2 * (1 - distr.cdf(sample));
     }
-    return result;
+    return result || 0;
 }
