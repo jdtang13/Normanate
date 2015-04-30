@@ -5,6 +5,7 @@ var training = require('./training');
 var async = require('async');
 var stats = require('./stats');
 
+var writeGood = require('write-good');
 
 //  require the process.js file
 var process = require('../controllers/process');
@@ -33,6 +34,8 @@ exports.getEditEssay = function(req, res) {
 // GET an essay
 exports.getEssay = function(req, res) {
 
+    var suggestions = writeGood(req.essay.content);
+    
     var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
     async.series([
         function(callback) {
@@ -57,6 +60,7 @@ exports.getEssay = function(req, res) {
             console.log("master objective found!");
             res.render('essays/view', {
                 essay: req.essay,
+                suggestions: suggestions,
                 masterObjective: avgObjective,
                 normals: normals
             });
@@ -64,7 +68,8 @@ exports.getEssay = function(req, res) {
         else {
             console.log(" ERROR : master objective not found, please run 'node train' and try again.");
             res.render('essays/view', {
-                essay: req.essay
+                essay: req.essay,
+                suggestions: suggestions
             });
         }
     });
@@ -203,10 +208,9 @@ exports.deleteEssay = function(req, res) {
         }
     });
 }
-
-// TODO: apply metrics on an essay
 var updateEssayMetrics = function(essay, req, res, cb) {
-    
+
+
     //  temporary heuristic -- the prestige of the essay's title
     var essayTitle = (essay.title).toLowerCase();
     var WordModel = require('mongoose').model('Word');

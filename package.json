@@ -41,8 +41,8 @@
     "express-session": "^1.10.3",
     "express-validator": "^2.8.0",
     "fbgraph": "^0.3.0",
-    "gaussian": "^1.0.0",
     "forever": "^0.14.1",
+    "gaussian": "^1.0.0",
     "github-api": "^0.10.3",
     "grunt": "~0.4.1",
     "grunt-browserify": "~3.2.1",
@@ -98,6 +98,7 @@
     "twit": "^1.1.20",
     "uglify-js": "^2.4.17",
     "validator": "^3.33.0",
+    "write-good": "^0.9.1",
     "yui": "^3.18.1"
   },
   "devDependencies": {

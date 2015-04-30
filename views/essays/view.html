@@ -36,7 +36,16 @@
     <p>Sentiment: {{ percentage(essay.objectives[0].sentiment, 3) }} | {{ percentage(masterObjective.sentiment, 3) }} (Master) </p>
     {% endif %}
   </div>
+  <hr>
+  <h3>Suggestions</h3>
 
   </div>
 </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+window.suggestions = {{suggestions|json|safe}};
+
+</script>
 {% endblock %}

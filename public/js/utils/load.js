@@ -4,8 +4,11 @@ $('body').append($(centerLoader));
         $('#loading').hide();
         
 module.exports = {
-    load: function() {
+    load: function(cb) {
         $('#loading').fadeIn();
+        if (cb) {
+            cb();
+        }
     },
     unload: function() {
         $('#loading').fadeOut();
