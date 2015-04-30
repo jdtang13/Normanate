@@ -218,6 +218,13 @@ async.waterfall([
 
     var pairFreqsArr = process.deformatPairFreqs(averageDict["pos_match_pairFreqs"]);
     var totalFreqsArr = process.deformatTotalFreqs(averageDict["pos_match_totalFreqs"]);
+    var posTags = process.getPosTags();
+    for(var i in pairFreqsArr) {
+        pairFreqsArr[i] /= num_words;
+    }
+    for(var j in totalFreqsArr) {
+        totalFreqsArr[j] /= num_words;
+    }
 
     console.log("avg_overused_words_num = " + avg_overused_words_num);
     console.log("avg_sentence_mean = " + avg_sentence_mean);
@@ -267,6 +274,7 @@ async.waterfall([
     oh.save(function (err) {
         if (err) {
             console.log("error while saving oh!");
+            console.log(err);
             //return handleError(err);
         }
         else {

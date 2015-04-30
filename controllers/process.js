@@ -429,9 +429,9 @@ function calculatePOSFreqs(text, callback) {
 	for(var i in posTags) {
 		posPairDict[posTags[i]] = {};
 		for(var j in posTags) {
-			posPairDict[posTags[i]][posTags[j]] = 0;
+			posPairDict[posTags[i]][posTags[j]] = 1;
 		}
-		posTotalFreqs[posTags[i]] = 0;
+		posTotalFreqs[posTags[i]] = 1;
 	}
 
 	posTagger.tag(text, function(err, results) {
@@ -439,9 +439,6 @@ function calculatePOSFreqs(text, callback) {
 		for(var i = 0; i < results.length - 1; i++) {
 			var pos = identifyPOS(results[i]);
 			var pos2 = identifyPOS(results[i+1]);
-
-			console.log(results[i] + " " + results[i+1]);
-			console.log("pos: " + pos + "; pos2: " + pos2);
 
 			posPairDict[pos][pos2] += 1;
 			posTotalFreqs[pos] += 1;
@@ -462,27 +459,24 @@ function calculatePOSMatch(posPairDict, posTotalFreqs,
 	for (var key in posTotalFreqs) {
 		totalWords += posTotalFreqs[key];
 	}
-	// 1) first return the frequencies in a hash table
-	// 2) then compute expected frequencies 
-	for (var key in expectedPairFreqs) {
-		var posFreqs = expectedPairFreqs[key];
-		for (var key2 in posFreqs) {
-			expectedPairFreqs[key][key2] *= posFreqs[key];
-		}
-	}
+
 	// 3) using observed and expected frequencies, run a chi-squared test (for each POS) 
 	// 4) We can weight each chi-squared test by the frequency of each POS
 	for (var key in expectedPairFreqs) {
 		var expectedPosFreqs = expectedPairFreqs[key];
 		var chiSquaredValue = 0;
 		for(var key2 in expectedPosFreqs) {
-			var temp = Math.pow(expectedPosFreqs[key][key2] - observedPosFreqs[key][key2], 2);
-			temp /= expectedPosFreqs[key][key2];
+			var temp = Math.pow(expectedPosFreqs[key2] - posPairDict[key][key2], 2);
+			temp /= expectedPosFreqs[key2];
+			console.log("temp: " + temp);
 			chiSquaredValue += temp;
 		}
 		chiSquaredDict[key] = chiSquaredValue;
+		console.log("chi squared value: " + chiSquaredValue);
 		finalChiSquared += (chiSquaredValue) * (posTotalFreqs[key]) / totalWords;
 	}
+
+	console.log("final chi squared: " + finalChiSquared);
 
 	// 5) Now that we have the final chi-squared static, calculate the probability
 	var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);

@@ -62,6 +62,22 @@ exports.getEssay = function(req, res) {
                 avgObjective.pos_match_pairFreqs);
             var expectedTotalFreqs = process.formatTotalFreqs(
                 avgObjective.pos_match_totalFreqs);
+            var posTags = process.getPosTags();
+            for(var i in posTags) {
+                for(var j in posTags) {
+                    expectedPairFreqs[posTags[i]][posTags[j]] *= req.essay.objectives[0].num_words;
+                    if (expectedPairFreqs[posTags[i]][posTags[j]] == 0) {
+                        expectedPairFreqs[posTags[i]][posTags[j]] = 1;
+                    }
+                }
+                expectedTotalFreqs[posTags[i]] *= req.essay.objectives[0].num_words;
+                if (expectedTotalFreqs[posTags[i]] == 0) {
+                    expectedTotalFreqs[posTags[i]] = 1;
+                }
+            }
+
+            console.log("sample pairfreqs: %j", posPairFreqs);
+            console.log("expected pairfreqs: %j", expectedPairFreqs);
 
             var posProb = process.calculatePOSMatch(posPairFreqs,posTotalFreqs,
                 expectedPairFreqs, expectedTotalFreqs);
@@ -72,7 +88,7 @@ exports.getEssay = function(req, res) {
                 essay: req.essay,
                 masterObjective: avgObjective,
                 normals: normals,
-                posProb: prob,
+                posProb: posProb,
             });
         }
         else {
