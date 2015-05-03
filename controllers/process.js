@@ -6,8 +6,8 @@ var indico = require('indico.io');
 indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 
 var chi = require("chi-squared");
-
 var expectedHeuristics = training.getExpectedHeuristics();
+var readingTime = require('reading-time');
 
 function prestigeOf(etymology) {
 
@@ -304,7 +304,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
-	var counter = 3;
+	var counter = 4;
 
 	//calculate the prestige values of text
 	var tokenizer = new openNLP().tokenizer;
@@ -363,6 +363,12 @@ function subjectiveHeuristics(id, text, callback) {
 		console.log("posTotalFreqs: %j", posTotalFreqs);
 		counter = checkCallback(counter, callback, resultDict);
 	}); 
+
+	//calculate reading time
+	var stats = readingTime(text);
+	resultDict["reading_time"] = stats["text"];
+	counter = checkCallback(counter, callback, resultDict);
+
 }
 
 /* todo -- uncomment and debug */

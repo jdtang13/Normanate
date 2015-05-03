@@ -316,13 +316,15 @@ var updateEssayMetrics = function(essay, req, res, cb) {
             noun_count: resultDict["pos_info"]["noun_count"],
             verb_count: resultDict["pos_info"]["verb_count"],
             sentiment: resultDict2["sentiment"],
+            reading_time: resultDict2["reading_time"],
             pos_match_pairFreqs: posPairArr,
             pos_match_totalFreqs: posTotalArr,
+
         });
         oh.save(function (err) {
             if (err) {
                 console.log("error while saving oh!");
-                return handleError(err);
+                console.log(err);
             }
             else {
                 essay.objectives.push(oh);
