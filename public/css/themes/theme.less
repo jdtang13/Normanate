@@ -359,14 +359,14 @@
 @navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
 @navbar-collapse-max-height:       340px;
 
-@navbar-default-color:             #fff;
-@navbar-default-bg:                @gray-darker;
+@navbar-default-color:             @text-color;
+@navbar-default-bg:                @body-bg;
 @navbar-default-border:            darken(@navbar-default-bg, 6.5%);
 
 // Navbar links
-@navbar-default-link-color:                #fff;
-@navbar-default-link-hover-color:          #fff;
-@navbar-default-link-hover-bg:             darken(@navbar-default-bg, 10%);
+@navbar-default-link-color:                @text-color;
+@navbar-default-link-hover-color:          @brand-primary;
+@navbar-default-link-hover-bg:             darken(@navbar-default-bg, 3%);
 @navbar-default-link-active-color:         @navbar-default-link-hover-color;
 @navbar-default-link-active-bg:            @navbar-default-link-hover-bg;
 @navbar-default-link-disabled-color:       #ccc;
@@ -379,7 +379,7 @@
 
 // Navbar toggle
 @navbar-default-toggle-hover-bg:           @navbar-default-link-hover-bg;
-@navbar-default-toggle-icon-bar-bg:        #fff;
+@navbar-default-toggle-icon-bar-bg:        @text-color;
 @navbar-default-toggle-border-color:       transparent;
 
 
