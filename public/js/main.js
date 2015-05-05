@@ -10,8 +10,7 @@ window.highlightSuggestions = require('./utils/highlight-suggestions');
 
 $(document).ready(function() {
 
-    $(".expanding").expanding();
-
+    
     require('./views/dashboard')();
 
   // Place JavaScript code here...
@@ -64,5 +63,7 @@ $(document).ready(function() {
         console.log(err)
     });
   });
+
+    
 
 });
