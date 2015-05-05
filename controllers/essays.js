@@ -334,6 +334,8 @@ var updateEssayMetrics = function(essay, req, res, cb) {
                 console.log(err);
             }
             else {
+                // we only use element 0 for now, since subdocuments
+                // cannot be embedded without an array.
                 essay.objectives = [];
                 essay.objectives.unshift(oh);
                 console.log("successfully saved the objective heuristics!");
