@@ -27,6 +27,9 @@ var masterObjectiveSchema = new mongoose.Schema(
     sentiment: Number,
     goodness_of_fit: Number,
 
+    pos_match_pairFreqs: [Number],
+    pos_match_totalFreqs: [Number],
+
     // can take the value of "avg" or "var"
     type: String
 });
@@ -126,6 +129,7 @@ var heuristicSchema = new mongoose.Schema(
   noun_count: Number,
   verb_count: Number,
   sentiment: Number,
+  reading_time: String,
   //goodness_of_fit: Number (deprecated)
   pos_match_pairFreqs: [Number],
   pos_match_totalFreqs: [Number],

@@ -49,20 +49,51 @@ exports.getEssay = function(req, res) {
             query.exec(function(err, result) {
                 callback(null, result);
             });
-        }
+        },
     ], function(err, results) {
         console.log("master results: %j", results);
         var avgObjective = results[0];
         var varObjective = results[1];
         if (avgObjective != null && varObjective != null) {
             var normals = calculateNormals(req.essay, avgObjective, varObjective);
+
+            var posPairFreqs = process.formatPairFreqs(
+                req.essay.objectives[0].pos_match_pairFreqs);
+            var posTotalFreqs = process.formatTotalFreqs(
+                req.essay.objectives[0].pos_match_totalFreqs);
+
+            var expectedPairFreqs = process.formatPairFreqs(
+                avgObjective.pos_match_pairFreqs);
+            var expectedTotalFreqs = process.formatTotalFreqs(
+                avgObjective.pos_match_totalFreqs);
+            var posTags = process.getPosTags();
+            for(var i in posTags) {
+                for(var j in posTags) {
+                    expectedPairFreqs[posTags[i]][posTags[j]] *= req.essay.objectives[0].num_words;
+                    if (expectedPairFreqs[posTags[i]][posTags[j]] == 0) {
+                        expectedPairFreqs[posTags[i]][posTags[j]] = 1;
+                    }
+                }
+                expectedTotalFreqs[posTags[i]] *= req.essay.objectives[0].num_words;
+                if (expectedTotalFreqs[posTags[i]] == 0) {
+                    expectedTotalFreqs[posTags[i]] = 1;
+                }
+            }
+
+            console.log("sample pairfreqs: %j", posPairFreqs);
+            console.log("expected pairfreqs: %j", expectedPairFreqs);
+
+            var posProb = process.calculatePOSMatch(posPairFreqs,posTotalFreqs,
+                expectedPairFreqs, expectedTotalFreqs);
             console.log("normals: %j", normals);
+            console.log("pos prob: %j", posProb);
             console.log("master objective found!");
             res.render('essays/view', {
                 essay: req.essay,
                 suggestions: suggestions,
                 masterObjective: avgObjective,
-                normals: normals
+                normals: normals,
+                posProb: posProb,
             });
         }
         else {
@@ -210,7 +241,6 @@ exports.deleteEssay = function(req, res) {
 }
 var updateEssayMetrics = function(essay, req, res, cb) {
 
-
     //  temporary heuristic -- the prestige of the essay's title
     var essayTitle = (essay.title).toLowerCase();
     var WordModel = require('mongoose').model('Word');
@@ -273,6 +303,9 @@ var updateEssayMetrics = function(essay, req, res, cb) {
         // var posPairFreqs = dict["pos_match_info"]["pairFreqs"];
         // var posTotalFreqs = dict["pos_match_info"]["totalFreqs"];
 
+        var posPairArr = process.deformatPairFreqs(resultDict2["pos_match_info"]["pairFreqs"]);
+        var posTotalArr = process.deformatTotalFreqs(resultDict2["pos_match_info"]["totalFreqs"]);
+
         var oh = new ObjectiveModel( 
         {
             num_words: resultDict["num_words"],
@@ -287,12 +320,16 @@ var updateEssayMetrics = function(essay, req, res, cb) {
             adv_count: resultDict["pos_info"]["adv_count"],
             noun_count: resultDict["pos_info"]["noun_count"],
             verb_count: resultDict["pos_info"]["verb_count"],
-            sentiment: resultDict2["sentiment"]
+            sentiment: resultDict2["sentiment"],
+            reading_time: resultDict2["reading_time"],
+            pos_match_pairFreqs: posPairArr,
+            pos_match_totalFreqs: posTotalArr,
+
         });
         oh.save(function (err) {
             if (err) {
                 console.log("error while saving oh!");
-                return handleError(err);
+                console.log(err);
             }
             else {
                 essay.objectives.push(oh);

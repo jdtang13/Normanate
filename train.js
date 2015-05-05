@@ -37,6 +37,8 @@ var ObjectiveModel = require('mongoose').model('ObjectiveHeuristic');
 
 var hasBeenTrained = 0;
 
+var numFiles = 2;  ///  NOTE: HARD CODED
+
 async.waterfall([
   function(callback){
 
@@ -64,6 +66,17 @@ async.waterfall([
         //  NOTE! counting overused_words num rather than the words themselves
         averageDict["overused_words_num"] = 0;
 
+        averageDict["pos_match_pairFreqs"] = {};
+        averageDict["pos_match_totalFreqs"] = {};
+        var posTags = process.getPosTags();
+        for(var i in posTags) {
+            averageDict["pos_match_pairFreqs"][posTags[i]] = {};
+            for(var j in posTags) {
+                averageDict["pos_match_pairFreqs"][posTags[i]][posTags[j]] = 0;
+            }
+            averageDict["pos_match_totalFreqs"][posTags[i]] = 0;
+        }
+
         // this is the dictionary for variances
         var varDict = {};
         varDict["overused_words_num"] = [];
@@ -78,7 +91,6 @@ async.waterfall([
         varDict["verb_count"] = [];
         varDict["sentiment"] = [];
 
-        var numFiles = 4;   ///  NOTE: HARD CODED
         var trainCount = numFiles;
 
           async.eachSeries(files, function(file, fileCallback) {
@@ -132,8 +144,16 @@ async.waterfall([
                         averageDict["verb_count"] += resultDict["pos_info"]["verb_count"];
                         averageDict["sentiment"] += resultDict2["sentiment"];
 
-                        // merge pos stuff into this dictionary
+                        var posPairFreqs = resultDict2["pos_match_info"]["pairFreqs"];
+                        var posTotalFreqs = resultDict2["pos_match_info"]["totalFreqs"];
+                        for(var i in posTags) {
+                            for(var j in posTags) {
+                                averageDict["pos_match_pairFreqs"][posTags[i]][posTags[j]] += posPairFreqs[posTags[i]][posTags[j]];
+                            }
+                            averageDict["pos_match_totalFreqs"][posTags[i]] += posTotalFreqs[posTags[i]];
+                        }
 
+                        // merge pos stuff into this dictionary
                         if (resultDict["overused_words"] != null) {
                             varDict["overused_words_num"].push(resultDict["overused_words"].length);
                         }
@@ -196,6 +216,16 @@ async.waterfall([
     var avg_lv_ratio = averageDict["linking_verbs"] / num_words;
     var avg_sentiment = (averageDict["sentiment"] / numFiles);
 
+    var pairFreqsArr = process.deformatPairFreqs(averageDict["pos_match_pairFreqs"]);
+    var totalFreqsArr = process.deformatTotalFreqs(averageDict["pos_match_totalFreqs"]);
+    var posTags = process.getPosTags();
+    for(var i in pairFreqsArr) {
+        pairFreqsArr[i] /= num_words;
+    }
+    for(var j in totalFreqsArr) {
+        totalFreqsArr[j] /= num_words;
+    }
+
     console.log("avg_overused_words_num = " + avg_overused_words_num);
     console.log("avg_sentence_mean = " + avg_sentence_mean);
     console.log("avg_sentence_var = " + avg_sentence_var);
@@ -237,11 +267,14 @@ async.waterfall([
         linking_verbs_ratio: avg_lv_ratio,
 
         sentiment: avg_sentiment,
+        pos_match_pairFreqs: pairFreqsArr,
+        pos_match_totalFreqs: totalFreqsArr,
         type: "avg",
     });
     oh.save(function (err) {
         if (err) {
             console.log("error while saving oh!");
+            console.log(err);
             //return handleError(err);
         }
         else {

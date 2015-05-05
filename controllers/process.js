@@ -6,8 +6,8 @@ var indico = require('indico.io');
 indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 
 var chi = require("chi-squared");
-
 var expectedHeuristics = training.getExpectedHeuristics();
+var readingTime = require('reading-time');
 
 function prestigeOf(etymology) {
 
@@ -123,6 +123,16 @@ function checkCallback(counter, callback, resultDict) {
 	//		
 	//	
 	// }
+function pruneResults(results) {
+	var temp = [];
+	for(var i in results) {
+		var result = results[i];
+		if (result.match(/^([A-Za-z0-9]|[-])+$/)) {
+			temp.push(result);
+		}
+	}
+	return temp;
+}
 
 function objectiveHeuristics(id, text, callback) {
 
@@ -140,15 +150,7 @@ function objectiveHeuristics(id, text, callback) {
 	// calculate word statistics
 	tokenizer.tokenize(text, function(err, results) {
 
-		var temp = [];
-		for(var i in results) {
-			var result = results[i];
-			if (result.match(/^([A-Za-z0-9]|[-])+$/)) {
-				temp.push(result);
-			}
-		}
-
-		results = temp;
+		results = pruneResults(results);
 
 		console.log(results);
 		var charCount = 0;
@@ -302,7 +304,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
-	var counter = 3;
+	var counter = 4;
 
 	//calculate the prestige values of text
 	var tokenizer = new openNLP().tokenizer;
@@ -310,6 +312,7 @@ function subjectiveHeuristics(id, text, callback) {
 		// need some way to fetch from database 
 		// get the etymology associated with the word
 		// calculate prestige value
+		results = pruneResults(results);
 		console.log("results: " + results);
 		if (results.length == 0) {
 			counter = checkCallback(counter, callback, resultDict);
@@ -360,12 +363,65 @@ function subjectiveHeuristics(id, text, callback) {
 		console.log("posTotalFreqs: %j", posTotalFreqs);
 		counter = checkCallback(counter, callback, resultDict);
 	}); 
+
+	//calculate reading time
+	var stats = readingTime(text);
+	resultDict["reading_time"] = stats["text"];
+	counter = checkCallback(counter, callback, resultDict);
+
 }
 
 /* todo -- uncomment and debug */
 
 // helper function to calculate the frequency table for the POS match 
 // callback parameters: err, posPairDict, posTotalFreqs, totalWords
+// return values:
+// NOU - noun
+// PRO - pronoun
+// ADJ - adjective
+// VER - verb
+// ADV - adverb
+// PRE - preposition
+// CON - conjunction
+// INT - interjection
+// DET - determinant
+// NUL - null
+
+function getPosTags() {
+	var posTags = ["NOU","PRO","ADJ","VER","ADV","PRE","CON","INT","DET","NUL"];
+	return posTags;
+}
+
+function getPosMapping() {
+	var NOU = 0;
+	var PRO = 1;
+	var ADJ = 2;
+	var VER = 3;
+	var ADV = 4;
+	var PRE = 5;
+	var CON = 6;
+	var INT = 7;
+	var DET = 8;
+	var NUL = 9;
+	var posDict = {"CC":CON, "CD": NUL, "DT": DET, "EX": NUL, "FW": NUL,
+					"IN": PRE, "JJ": ADJ, "JJR": ADJ, "JJS":ADJ,"LS":NUL,
+					"MD":NUL, "NN":NOU, "NNS":NOU, "NNP":NOU,"NNPS":NOU,"PDT":NUL,"POS":NUL,"PRP":PRO,
+					"PRP$":PRO,"RB":ADV,"RBR":ADV,"RBS":ADV,"RP":PRE,"SYM":NUL,"TO":PRE,"UH":INT,
+					"VB":VER,"VBD":VER,"VBG":VER,"VBN":VER,"VBP":VER,"VBZ":VER,"WDT":DET,"WP":PRE,
+					"WP$":PRE,"WRB":ADV};
+	return posDict;
+}
+
+function identifyPOS(posTag) {
+	var posMapping = getPosMapping();
+	var posTags = getPosTags();
+	if (posTag in posMapping) {
+		return posTags[posMapping[posTag]];
+	}
+	return posTags[9]; //NUL tag
+	
+}
+
 function calculatePOSFreqs(text, callback) {
 	// store frequencies in a hash table, mapping from one POS -> next POS
 	var posTagger = new openNLP().posTagger;
@@ -374,18 +430,24 @@ function calculatePOSFreqs(text, callback) {
 
 	console.log("Calculating POS frequencies");
 
+	// initialize the dictionaries
+	var posTags = getPosTags();
+	for(var i in posTags) {
+		posPairDict[posTags[i]] = {};
+		for(var j in posTags) {
+			posPairDict[posTags[i]][posTags[j]] = 1;
+		}
+		posTotalFreqs[posTags[i]] = 1;
+	}
+
 	posTagger.tag(text, function(err, results) {
 		var totalWords = 0;
 		for(var i = 0; i < results.length - 1; i++) {
-			if (posPairDict[results[i]] == null) {
-				posPairDict[results[i]] = new Object();
-				posTotalFreqs[results[i]] = 0;
-			}
-			if (posPairDict[results[i]][results[i+1]] == null) {
-				posPairDict[results[i]][results[i+1]] = 0;
-			}
-			posPairDict[results[i]][results[i+1]] += 1;
-			posTotalFreqs[results[i]] += 1;
+			var pos = identifyPOS(results[i]);
+			var pos2 = identifyPOS(results[i+1]);
+
+			posPairDict[pos][pos2] += 1;
+			posTotalFreqs[pos] += 1;
 			totalWords++;
 		}
 		callback(0, posPairDict, posTotalFreqs, totalWords);
@@ -394,56 +456,92 @@ function calculatePOSFreqs(text, callback) {
 
 // calculate POS match - DON'T USE FOR TRAINING DATA, shouldn't really be in process.js
 // callback: pass prob as the parameter
-function calculatePOSMatch(text, callback) {
+function calculatePOSMatch(posPairDict, posTotalFreqs,
+	expectedPairFreqs,expectedTotalFreqs) {
 	var chiSquaredDict = new Object();
 	var finalChiSquared = 0.0;
-	// 1) first return the frequencies in a hash table
-	calculatePOSFreqs(text, function(err, posPairDict, posTotalFreqs, totalWords) {
-		// 2) then compute expected frequencies 
-		var expectedPairDict = expectedHeuristics["pos_distr"];
-		for (var key in expectedPairDict) {
-			var posFreqs = expectedPairDict[key];
-			for (var key2 in posFreqs) {
-				expectedPairDict[key][key2] *= posFreqs[key];
-			}
-		}
-		// 3) using observed and expected frequencies, run a chi-squared test (for each POS) 
-		// 4) We can weight each chi-squared test by the frequency of each POS
-		for (var key in expectedPairDict) {
-			var expectedPosFreqs = expectedPairDict[key];
-			var chiSquaredValue = 0;
-			for(var key2 in expectedPosFreqs) {
-				var temp = Math.pow(expectedPosFreqs[key][key2] - observedPosFreqs[key][key2], 2);
-				temp /= expectedPosFreqs[key][key2];
-				chiSquaredValue += temp;
-			}
-			chiSquaredDict[key] = chiSquaredValue;
-			finalChiSquared += (chiSquaredValue) * (posTotalFreqs[key]) / totalWords;
-		}
 
-		// 5) Now that we have the final chi-squared static, calculate the probability
-		var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
-		callback(0, prob);
-	});
+	var totalWords = 0;
+	for (var key in posTotalFreqs) {
+		totalWords += posTotalFreqs[key];
+	}
+
+	// 3) using observed and expected frequencies, run a chi-squared test (for each POS) 
+	// 4) We can weight each chi-squared test by the frequency of each POS
+	for (var key in expectedPairFreqs) {
+		var expectedPosFreqs = expectedPairFreqs[key];
+		var chiSquaredValue = 0;
+		for(var key2 in expectedPosFreqs) {
+			var temp = Math.pow(expectedPosFreqs[key2] - posPairDict[key][key2], 2);
+			temp /= expectedPosFreqs[key2];
+			console.log("temp: " + temp);
+			chiSquaredValue += temp;
+		}
+		chiSquaredDict[key] = chiSquaredValue;
+		console.log("chi squared value: " + chiSquaredValue);
+		finalChiSquared += (chiSquaredValue) * (posTotalFreqs[key]) / totalWords;
+	}
+
+	console.log("final chi squared: " + finalChiSquared);
+
+	// 5) Now that we have the final chi-squared static, calculate the probability
+	var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
+	return prob;
 }
 
+/* deformats into a 1-d array for storage in Mongo */
 function deformatPairFreqs(pairFreqs) {
-
+	var posTags = getPosTags();
+	var results = [];
+	for(var i in posTags) {
+		for(var j in posTags) {
+			results.push(pairFreqs[posTags[i]][posTags[j]]);
+		}
+	}
+	return results;
 }
 
 function deformatTotalFreqs(totalFreqs) {
-
+	var posTags = getPosTags();
+	var results = [];
+	for(var i in posTags) {
+		results.push(totalFreqs[posTags[i]]);
+	}
+	return results;
 }
 
+/* formats from a 1-d array into a 2-d dictionary */
 function formatPairFreqs(pairFreqsArr) {
-
+	var posTags = getPosTags();
+	var results = {};
+	var count = 0;
+	for(var i in posTags) {
+		results[posTags[i]] = {};
+		for(var j in posTags) {
+			results[posTags[i]][posTags[j]] = pairFreqsArr[count];
+			count++;
+		}
+	}
+	return results;
 }
 function formatTotalFreqs(totalFreqsArr) {
-
+	var posTags = getPosTags();
+	var results = {};
+	for(var i in posTags) {
+		results[posTags[i]] = totalFreqsArr[i];
+	}
+	return results;
 }
 
 module.exports = {
 	prestigeOf: prestigeOf,
 	objectiveHeuristics: objectiveHeuristics,
 	subjectiveHeuristics: subjectiveHeuristics,
+	getPosTags: getPosTags,
+	calculatePOSFreqs: calculatePOSFreqs,
+	calculatePOSMatch: calculatePOSMatch,
+	deformatPairFreqs: deformatPairFreqs,
+	deformatTotalFreqs: deformatTotalFreqs,
+	formatPairFreqs: formatPairFreqs,
+	formatTotalFreqs: formatTotalFreqs,
 }
