@@ -58,6 +58,9 @@ function prestigeOf(etymology) {
 }
 
 function blacklistedWord(word) {
+	if (!word) {
+		return false;
+	}
 	if (!word.match(/^([A-Za-z0-9]|[-])+$/)) {
 		return true;
 	}
@@ -73,6 +76,9 @@ function blacklistedWord(word) {
 }
 
 function linkingVerb(word) {
+	if (!word) {
+		return false;
+	}
 	var hash = {'be':true,'is':true,
 	'are':true,'were':true,'was':true,'veen':true,'appear':true,'appears':true,'appeared':true,
 	'seem':true,'seems':true,'seemed':true,'am':true,'look':true,'looks':true,'looked':true,

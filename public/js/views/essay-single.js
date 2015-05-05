@@ -19,6 +19,9 @@ $(document).ready(function() {
                 highlightSuggestions(e, window.suggestions.so, "h-so", callback);
             },
             function(callback) {
+                highlightSuggestions(e, window.suggestions.thereIs, "h-thereIs", callback);
+            },
+            function(callback) {
                 highlightSuggestions(e, window.suggestions.adverb, "h-adverb", callback);
             },
             function(callback) {
@@ -32,6 +35,7 @@ $(document).ready(function() {
             }
         ], function(err, results) {
             loader.unload();
+            rangy.getSelection().removeAllRanges();
         });
     }, 10);
     
