@@ -26,7 +26,7 @@ module.exports = {
             data: JSON.stringify(data),
             dataType: 'json',
             success: function(essay) {
-                window.location.replace('/essays/'+essay.id);
+                // window.location.replace('/essays/'+essay.id);
             },
             error: error
         });

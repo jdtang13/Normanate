@@ -35,6 +35,7 @@ exports.getEditEssay = function(req, res) {
 exports.getEssay = function(req, res) {
 
     var suggestions = writeGood(req.essay.content);
+    console.log(req.essay);
     
     var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
     async.series([
@@ -222,6 +223,7 @@ exports.updateEssay = function(req, res) {
                 return res.status(400).json(err.errors);
             } else {
                 console.log("essay saved!");
+                console.log(e);
                 return res.json(e);
             }
         });
@@ -332,7 +334,8 @@ var updateEssayMetrics = function(essay, req, res, cb) {
                 console.log(err);
             }
             else {
-                essay.objectives.push(oh);
+                essay.objectives = [];
+                essay.objectives.unshift(oh);
                 console.log("successfully saved the objective heuristics!");
                 cb(essay);
             }
