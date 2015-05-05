@@ -17,6 +17,7 @@ var masterObjectiveSchema = new mongoose.Schema(
     sentence_num: Number,
 
     etymology_score: Number, //added
+    cadence_gap: Number,
 
     adj_ratio: Number,
     adv_ratio: Number,
@@ -119,6 +120,7 @@ var heuristicSchema = new mongoose.Schema(
   num_chars: Number,
   linking_verbs: Number, //(added)
   etymology_score: Number, //(added)
+  cadence_gap: Number,
   //overused_words: [wordSchema],
   overused_words: [String],
   sentence_mean: Number,

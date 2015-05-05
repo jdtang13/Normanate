@@ -170,6 +170,11 @@ function calculateNormals(essay, master_avg, master_var) {
     var v_etymologyScore = master_var.etymology_score;
     var p_etymologyScore = stats.calculatePValue(s_etymologyScore, e_etymologyScore, v_etymologyScore);
 
+    var s_cadenceGap = essay.objectives[0].cadence_gap;
+    var e_cadenceGap = master_avg.cadence_gap;
+    var v_cadenceGap = master_var.cadence_gap;
+    var p_cadenceGap = stats.calculatePValue(s_cadenceGap, e_cadenceGap, v_cadenceGap);
+
     var s_sentiment = essay.objectives[0].sentiment;
     var e_sentiment = master_avg.sentiment;
     var v_sentiment = master_var.sentiment;
@@ -180,6 +185,7 @@ function calculateNormals(essay, master_avg, master_var) {
     normalDict["sentence_mean"] = p_sentenceMean;
     normalDict["linking_verbs"] = p_linkingVerbs;
     normalDict["etymology_score"] = p_etymologyScore;
+    normalDict["cadence_gap"] = p_cadenceGap;
     normalDict["sentiment"] = p_sentiment; 
     normalDict["verb_ratio"] = p_verbRatio;
     normalDict["noun_ratio"] = p_nounRatio;
@@ -312,6 +318,7 @@ var updateEssayMetrics = function(essay, req, res, cb) {
             num_chars: resultDict["num_chars"],
             linking_verbs: resultDict["linking_verbs"],
             etymology_score: resultDict2["etymology_score"],
+            cadence_gap: resultDict2["cadence_gap"],
             overused_words: [resultDict["overused_words"]],
             sentence_mean: resultDict["sentence_info"]["mean"],
             sentence_var: resultDict["sentence_info"]["var"],

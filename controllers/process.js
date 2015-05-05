@@ -319,7 +319,11 @@ function subjectiveHeuristics(id, text, callback) {
 		}
 		var avg = 0;
 		var count = 0;
-		// take a running average of all words
+		// take a running average of all words for etymology
+		// calculate syllable cadence by taking the avg of all the gaps
+		var curGap = 0;
+		var avgGap = 0;
+		var numGaps = 0;
 		for(var i in results) {
 			var result = results[i];
 			var queryWord = WordModel.findOne({'content':result});
@@ -330,15 +334,36 @@ function subjectiveHeuristics(id, text, callback) {
 						var prestige = prestigeOf(titleOrigin);
 						avg += prestige;
 					}
+
+					//syllable cadence
+					var cadence = word.cadence; 
+					if (cadence != null) {
+						var index = cadence.indexOf("1");
+						if (index == -1) {
+							curGap += cadence.length;
+						}
+						else {
+							curGap += index;
+							numGaps++;
+							avgGap += curGap;
+							curGap = cadence.length - index - 1;
+						}
+					}
 				}
 				count++;
 				if (count == results.length) {
+					// calculate etymology score
 					avg /= results.length;
 					resultDict["etymology_score"] = avg;
+
+					// calculate syllable cadence
+					avgGap /= numGaps;
+					resultDict["cadence_gap"] = avgGap;
 					counter = checkCallback(counter, callback, resultDict);
 				}
 			});
 		}
+
 	});
 
 	// calculate sentiment using Indico's API
@@ -367,7 +392,7 @@ function subjectiveHeuristics(id, text, callback) {
 	//calculate reading time
 	var stats = readingTime(text);
 	resultDict["reading_time"] = stats["text"];
-	counter = checkCallback(counter, callback, resultDict);
+	counter = checkCallback(counter, callback, resultDict);		
 
 }
 
