@@ -5,12 +5,10 @@ require('bootstrap');
 var loader = require('./utils/load');
 var essays = require('./controllers/essays');
 
-window.highlightSuggestions = require('./utils/highlight-suggestions');
-
 
 $(document).ready(function() {
 
-    
+    loader.init();
     require('./views/dashboard')();
 
   // Place JavaScript code here...

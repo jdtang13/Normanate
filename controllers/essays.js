@@ -5,7 +5,8 @@ var training = require('./training');
 var async = require('async');
 var stats = require('./stats');
 
-var writeGood = require('write-good');
+var suggest = require('./suggestions');
+
 
 //  require the process.js file
 var process = require('../controllers/process');
@@ -34,8 +35,8 @@ exports.getEditEssay = function(req, res) {
 // GET an essay
 exports.getEssay = function(req, res) {
 
-    var suggestions = writeGood(req.essay.content);
     console.log(req.essay);
+    var suggestions = suggest.getSuggestions(req.essay);
     
     var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
     async.series([

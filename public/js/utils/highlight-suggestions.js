@@ -1,26 +1,50 @@
-var rangy = require('rangy');
 require('../vendor/rangy-textrange');
 require('../vendor/rangy-classapplier');
-var loader = require('./load');
 
-function highlightSuggestions($element, suggestions) {
+
+
+function highlightSuggestions($element, suggestions, cssClass, callback) {
+    cssClass = cssClass || "highlighted";
     var selection = rangy.getSelection();
-    var highlightApplier = rangy.createCssClassApplier("highlighted", true);
+    var highlightApplier = rangy.createCssClassApplier(cssClass, true);
+
+    var busy = false;
 
     $element = $($element);
-    loader.load(function() {
+    
+    // load the highlights asynchronously with the preloader
+    var i = 0;
+    var limit = suggestions.length;
+    var processor = setInterval(function() 
+    { 
+        if(!busy) 
+        { 
+            if(i >= limit) 
+            { 
+                clearInterval(processor); 
+                if (callback) {
+                    callback();
+                }
+            } 
+            else {
+                busy = true; 
 
-        for (var i = 0; i < suggestions.length; i++) {
-            selection.removeAllRanges();
-            var sug = suggestions[i];
-            selection.selectCharacters($element[0], sug.index, sug.index + sug.offset);
-            highlightApplier.applyToSelection();
-        }
+                selection.removeAllRanges();
+                var sug = suggestions[i];
+                if (sug) {
+                    selection.selectCharacters($element[0], sug.index, sug.index + sug.offset);
+                    highlightApplier.applyToSelection();
 
-        loader.unload();
+                }
+                
+                i++;
+                busy = false; 
 
-    });
+            }
+            
+        } 
 
+    }, 1); 
     
     
 }
