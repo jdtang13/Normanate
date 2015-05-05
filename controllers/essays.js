@@ -35,6 +35,7 @@ exports.getEditEssay = function(req, res) {
 exports.getEssay = function(req, res) {
 
     var suggestions = writeGood(req.essay.content);
+    console.log(req.essay);
     
     var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
     async.series([
@@ -108,7 +109,7 @@ exports.getEssay = function(req, res) {
 
 exports.getEssays = function(req, res) {
 
-    Essay.find({ author:req.user.id }).sort('-updated').exec(function(err, essays) {
+    Essay.find({ author:req.user.id }).sort('-modified').exec(function(err, essays) {
         if (err) {
             res.render('error', {
                 status: 500
@@ -228,6 +229,7 @@ exports.updateEssay = function(req, res) {
                 return res.status(400).json(err.errors);
             } else {
                 console.log("essay saved!");
+                console.log(e);
                 return res.json(e);
             }
         });
@@ -339,7 +341,10 @@ var updateEssayMetrics = function(essay, req, res, cb) {
                 console.log(err);
             }
             else {
-                essay.objectives.push(oh);
+                // we only use element 0 for now, since subdocuments
+                // cannot be embedded without an array.
+                essay.objectives = [];
+                essay.objectives.unshift(oh);
                 console.log("successfully saved the objective heuristics!");
                 cb(essay);
             }
