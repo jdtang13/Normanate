@@ -109,7 +109,7 @@ exports.getEssay = function(req, res) {
 
 exports.getEssays = function(req, res) {
 
-    Essay.find({ author:req.user.id }).sort('-updated').exec(function(err, essays) {
+    Essay.find({ author:req.user.id }).sort('-modified').exec(function(err, essays) {
         if (err) {
             res.render('error', {
                 status: 500
