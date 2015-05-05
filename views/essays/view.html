@@ -42,7 +42,7 @@
   <h3>Suggestions</h3>
   {% if suggestions.passive.length > 0 %}
     <div class="panel">
-      <div class="panel-heading h-passive">Passive Voice<span class='pull-right'><span data-toggle="tooltip" title="Passive voice puts the subject of a sentence at the end of the sentence. Example: 'The ball was hit by me.'" class='fa fa-question-circle'></span></span></div>
+      <div class="panel-heading h-passive">Passive Voice &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="passive-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="Passive voice puts the subject of a sentence at the end of the sentence. Example: 'The ball was hit by me.'" class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <p>There are <strong>{{suggestions.passive.length}}</strong> possible uses of the passive voice in this essay.</p>
       </div>
@@ -50,7 +50,7 @@
   {% endif %}
   {% if suggestions.weasel.length > 0 %}
     <div class="panel">
-      <div class="panel-heading h-weasel">Weasel Words<span class='pull-right'><span data-toggle="tooltip" title="Weasel words are words / phrases that give an impression that a specific statement has been made, but actually give a vague or ambiguous claim." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-heading h-weasel">Weasel Words &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="weasel-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="Weasel words are words / phrases that give an impression that a specific statement has been made, but actually give a vague or ambiguous claim." class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <p>There are <strong>{{suggestions.weasel.length}}</strong> possible weasel words in this essay.</p>
       </div>
@@ -59,16 +59,25 @@
 
   {% if suggestions.illusion.length > 0 %}
     <div class="panel">
-      <div class="panel-heading h-illusion">Repeated Words<span class='pull-right'><span data-toggle="tooltip" title="This just checks for cases in which a word is used twice in a row, though in some cases that can be intentional." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-heading h-illusion">Repeated Words &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="repeated-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="This just checks for cases in which a word is used twice in a row, though in some cases that can be intentional." class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <p>There are <strong>{{suggestions.illusion.length}}</strong> possible repeated words in this essay.</p>
       </div>
     </div>
   {% endif %}
 
+  {% if suggestions.cliches.length > 0 %}
+    <div class="panel">
+      <div class="panel-heading h-cliches">Common Cliches &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="cliche-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="Cliches are phrases or words that are overused to the point of losing its original meaning or effect.." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-body">
+        <p>There are <strong>{{suggestions.cliches.length}}</strong> possible cliches in this essay.</p>
+      </div>
+    </div>
+  {% endif %}
+
   {% if suggestions.adverb.length > 0 %}
     <div class="panel">
-      <div class="panel-heading h-adverb">Adverbs<span class='pull-right'><span data-toggle="tooltip" title="Some adverbs, such as 'really' or 'only' can weaken the meaning of a sentence." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-heading h-adverb">Adverbs &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="adverb-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="Some adverbs, such as 'really' or 'only' can weaken the meaning of a sentence." class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <p>There are <strong>{{suggestions.adverb.length}}</strong> possible uses of adverbs that can weaken meaning.</p>
       </div>
@@ -77,7 +86,7 @@
 
   {% if suggestions.tooWordy.length > 0 %}
     <div class="panel">
-      <div class="panel-heading h-wordy">Wordy Phrasing<span class='pull-right'><span data-toggle="tooltip" title="These words or phrases can possibly be replaced with a simpler or more concise phrasing that conveys the same meaning." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-heading h-wordy">Wordy Phrasing &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="wordy-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="These words or phrases can possibly be replaced with a simpler or more concise phrasing that conveys the same meaning." class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <p>There are <strong>{{suggestions.tooWordy.length}}</strong> possible words or phrases that can be simplified.</p>
       </div>
@@ -86,7 +95,7 @@
 
   {% if suggestions.so.length > 0 %}
     <div class="panel">
-      <div class="panel-heading h-so">Use of 'So'<span class='pull-right'><span data-toggle="tooltip" title="Using 'so' at the beginning of a sentence may not add meaning." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-heading h-so">Use of 'So' &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="so-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="Using 'so' at the beginning of a sentence may not add meaning." class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <p>There are <strong>{{suggestions.so.length}}</strong> instances of 'so' being used at the beginning of a sentence.</p>
       </div>
@@ -95,7 +104,7 @@
 
   {% if suggestions.thereIs.length > 0 %}
     <div class="panel">
-      <div class="panel-heading h-thereIs">Use of 'There Is'<span class='pull-right'><span data-toggle="tooltip" title="Using 'there is' or 'there are' at the beginning of a sentence can cause unnecessary wordiness." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-heading h-thereIs">Use of 'There Is' &nbsp;&nbsp;&nbsp; <input type="checkbox" class='switch-check' id="there-check" checked> <span class='pull-right'><span data-toggle="tooltip" title="Using 'there is' or 'there are' at the beginning of a sentence can cause unnecessary wordiness." class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <p>There are <strong>{{suggestions.thereIs.length}}</strong> instances of 'there is' or 'there are' being used at the beginning of a sentence.</p>
       </div>
@@ -108,9 +117,7 @@
 {% block pageScripts %}
 <script>
 window.suggestions = {{suggestions|json|safe}};
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-});
+
 
 </script>
 <script type="text/javascript" src="/build/js/essay.js"></script>

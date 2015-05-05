@@ -22,6 +22,8 @@ function highlightSuggestions($element, suggestions, cssClass, callback) {
             if(i >= limit) 
             { 
                 clearInterval(processor); 
+                selection.removeAllRanges();
+                
                 if (callback) {
                     callback();
                 }

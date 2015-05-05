@@ -1,6 +1,7 @@
 window.$ = window.jQuery = require('jquery');
 require('expanding-textareas');
 require('bootstrap');
+require('bootstrap-switch');
 
 var loader = require('./utils/load');
 var essays = require('./controllers/essays');
