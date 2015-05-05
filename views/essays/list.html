@@ -22,30 +22,31 @@
 </div>
 
 
-<div class="page-header">
-  <div class='pull-left'>
-  <h1>Welcome, {{user.profile.name || user.email || user.id}}</h1>
-  </div>
-  <div class='pull-right'>
-    <a data-toggle="collapse" href="#new-essay-collapse" aria-expanded="false" aria-controls="new-essay-collapse" class='btn btn-default'>Add an Essay</a>
-  </div>
-  <div style='clear:both'></div>
-</div>
 <div class='row'>
 <div class='col-sm-8 col-sm-offset-2'>
-<div class="collapse" id="new-essay-collapse">
+<div class="page-header">
+  <h1>Welcome, {{user.profile.name || user.email || user.id}} &nbsp;&nbsp;&nbsp; <a href="#essay-list" class='btn btn-default'>View Previous Essays</a></h1>
+  
+    
+  <div style='clear:both'></div>
+</div>
+
+<div class='row'>
+<div class='col-sm-12'>
+
   <div class='essay-container'>
 <textarea id='title' type='text' class='essay-title form-control expanding' placeholder='Title of Essay'></textarea>
-<textarea id='content' class='essay-content essay-content-truncated form-control expanding' placeholder='Type the content of your essay here'></textarea>
+<textarea id='content' autofocus class='essay-content essay-content-truncated form-control expanding' placeholder='Type the content of your essay here'></textarea>
 
   
 </div>
 <a id="create-essay-button" data-csrf="{{_csrf}}" role="button" class="btn btn-lg btn-default">Create an Essay</a>
 </div>
 </div>
-</div>
-<div class='row'>
-  <div class='col-sm-8'>
+
+<hr>
+<div class='row' id='essay-list'>
+  <div class='col-sm-12'>
 
                <div class="widget">
                     <div class="widget-title">
@@ -72,9 +73,11 @@
                     </div>
                 </div>
     
-  </div>
+  </div>{#
   <div class='col-sm-4'>
     <h3>Stats</h3>
-  </div>
+  </div>#}
+</div>
+</div>
 </div>
 {% endblock %}

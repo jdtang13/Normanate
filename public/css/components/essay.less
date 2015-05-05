@@ -1,9 +1,9 @@
 .essay-container {
     background-color: #FFFFFF;
-    padding: 48px;
+    padding-top: 48px;
+    padding-bottom: 48px;
     margin-bottom: 24px;
     .form-control {
-        padding: 0;
         &[readonly],
       fieldset[disabled] & {
         background-color: #FFFFFF;
@@ -11,6 +11,10 @@
         opacity: 1;
       }
   }
+}
+
+.highlighted {
+    background-color: #FFFF00;
 }
 
 .essay-title {
@@ -34,10 +38,15 @@
 
 .essay-content {
     @essay-typography();
-    padding: none;
     border: none;
     box-shadow: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     font-size: 20px;
+    padding: 48px;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow:hidden;
     
     min-height: 320px;
 
@@ -50,6 +59,7 @@
 .essay-content-truncated {
     height: 320px;
     max-height: 320px;
+    overflow: auto;
 }
 
 
