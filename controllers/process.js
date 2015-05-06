@@ -159,7 +159,7 @@ function objectiveHeuristics(id, text, callback) {
 
 		results = pruneResults(results);
 
-		console.log(results);
+		// console.log(results);
 		var charCount = 0;
 		for (var i in results) {
 			var result = results[i];
@@ -216,12 +216,12 @@ function objectiveHeuristics(id, text, callback) {
 				break;
 			}
 			if (blacklistedWord(keys[i])) {
-				console.log("BLACKLISTED word:");
+				// console.log("BLACKLISTED word:");
 				i++;
 				continue;
 			}
 			resultDict["overused_words"].push(keys[i]);
-			console.log(keys[i] + " " + freqTable[keys[i]]);
+			// console.log(keys[i] + " " + freqTable[keys[i]]);
 			i++;
 		}
 
@@ -320,7 +320,7 @@ function subjectiveHeuristics(id, text, callback) {
 		// get the etymology associated with the word
 		// calculate prestige value
 		results = pruneResults(results);
-		console.log("results: " + results);
+		// console.log("results: " + results);
 		if (results.length == 0) {
 			counter = checkCallback(counter, callback, resultDict);
 		}
@@ -401,8 +401,8 @@ function subjectiveHeuristics(id, text, callback) {
 		resultDict["pos_match_info"] = {};
 		resultDict["pos_match_info"]["pairFreqs"] = posPairDict;
 		resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
-		console.log("posPairDict: %j", posPairDict);
-		console.log("posTotalFreqs: %j", posTotalFreqs);
+		// console.log("posPairDict: %j", posPairDict);
+		// console.log("posTotalFreqs: %j", posTotalFreqs);
 		counter = checkCallback(counter, callback, resultDict);
 	}); 
 
@@ -516,18 +516,18 @@ function calculatePOSMatch(posPairDict, posTotalFreqs,
 		for(var key2 in expectedPosFreqs) {
 			var temp = Math.pow(expectedPosFreqs[key2] - posPairDict[key][key2], 2);
 			temp /= expectedPosFreqs[key2];
-			console.log("temp: " + temp);
+			// console.log("temp: " + temp);
 			chiSquaredValue += temp;
 		}
 		chiSquaredDict[key] = chiSquaredValue;
-		console.log("chi squared value: " + chiSquaredValue);
+		// console.log("chi squared value: " + chiSquaredValue);
 		finalChiSquared += (chiSquaredValue) * (posTotalFreqs[key]) / totalWords;
 	}
 
-	console.log("final chi squared: " + finalChiSquared);
+	// console.log("final chi squared: " + finalChiSquared);
 
 	// 5) Now that we have the final chi-squared static, calculate the probability
-	console.log("df: " + Object.keys(posTotalFreqs).length);
+	// console.log("df: " + Object.keys(posTotalFreqs).length);
 	var prob = 1 - chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length * 5);
 	return prob;
 }
