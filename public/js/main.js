@@ -2,6 +2,7 @@ window.$ = window.jQuery = require('jquery');
 require('expanding-textareas');
 require('bootstrap');
 require('bootstrap-switch');
+require('./vendor/bootstrap-growl');
 
 var loader = require('./utils/load');
 var essays = require('./controllers/essays');
@@ -41,7 +42,13 @@ $(document).ready(function() {
         _csrf: $('#create-essay-button').data('csrf'),
         content: essayBody
     }, function(err) {
-        console.log(err)
+        for (var error in err.responseJSON) {
+                $.bootstrapGrowl(err.responseJSON[error].message, {
+                    delay: 3000,
+                    type: 'danger',
+                    allow_dismiss: true,
+                    offset: {from: 'bottom', amount: 20}});
+            }
     });
   });
 
@@ -59,7 +66,17 @@ $(document).ready(function() {
         _csrf: $('#update-essay-button').data('csrf'),
         content: $('#content').val()
     }, function(err) {
-        console.log(err)
+        console.log(err);
+
+            for (var error in err.responseJSON) {
+                $.bootstrapGrowl(err.responseJSON[error].message, {
+                    delay: 3000,
+                    type: 'danger',
+                    allow_dismiss: true,
+                    offset: {from: 'bottom', amount: 20}});
+            }
+            
+        
     });
   });
 

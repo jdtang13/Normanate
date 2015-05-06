@@ -20,11 +20,17 @@ exports.calculateVariance = function(arr) {
 	    result += temp;
 	}
 
-	return result || 0;
+	return result || 1;
 }
 
 // helper function calculate P value given a sample, mean, and variance
 exports.calculatePValue = function(sample, mean, variance) {
+    console.log(sample);
+    console.log(mean);
+    console.log(variance);
+    if (variance == 0) {
+        return 0;
+    }
     var distr = gaussian(mean, variance);
     var result = 0;
     if (sample < mean) {
