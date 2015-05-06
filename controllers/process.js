@@ -417,7 +417,12 @@ function subjectiveHeuristics(id, text, callback) {
 
 	//calculate reading time
 	var stats = readingTime(text);
-	resultDict["reading_time"] = stats["text"];
+	if (stats != null) {
+		resultDict["reading_time"] = stats["text"];
+	}
+	else {
+		resultDict["reading_time"] = "0 min read";
+	}
 	counter = checkCallback(counter, callback, resultDict);		
 
 }
