@@ -166,7 +166,6 @@ var essaySchema = new mongoose.Schema({
   heuristics: [heuristicSchema],
 
   miscValues: [Number] //  use this for random values that you want to use as output
-
 });
 
 // Duplicate the ID field.

@@ -41,12 +41,14 @@ walk(modelsPath, '', function(path) {
 });
 
 var WordModel = mongoose.model('Word');
+var WordCadenceModel = mongoose.model('WordCadence');
 
 var hasBeenReset = 0;
 
 async.waterfall([
-  function(callback){
 
+  //******SEED DATABASE WITH ETYMOLOGIES*******
+  function(callback){
     WordModel.remove({}, function(err) { 
       console.log("NOTICE: deleted all Words to reset the database -- remove this line if you don't want this");
       hasBeenReset = 1;
@@ -103,8 +105,49 @@ async.waterfall([
         seedCount = count;
         callback(null);
     });
+  },
+  //******SEED DATABASE WITH CADENCES*******
+  function(callback) {
+    WordCadenceModel.remove({}, function(err) { 
+      console.log("NOTICE: deleted all Words to reset the database -- remove this line if you don't want this");
+      hasBeenReset = 1;
 
-  }
+      //  seed the etymology data if not done already
+      var array = fs.readFileSync('syllables.txt').toString().split("\n");
+      console.log("Seeding database with existing words");
+      // do some stuff ...
+      callback(null, array);
+    });
+  },
+  function(array, outerCB) {
+    async.each(array, function(pair, callback) {
+      var wordData = pair.split(",");
+      var queryWord = WordCadenceModel.findOne({ 'content': wordData[0] }, function(err, word) {
+        if (word != null) {            
+          console.log("word already exists, cadence is " + cadence);
+          word.cadence = wordData[1];
+        }
+        else {
+          WordCadenceModel.create({ content: wordData[0], cadence: wordData[1] }, function(err) {
+            // console.log('Added ' + wordData[0] + ' with origin ' + wordData[1]);
+            callback();
+          });
+        }
+      });
+    }, function(err) {
+        // if any of the file processing produced an error, err would equal that error
+        if( err ) {
+          // One of the iterations produced an error.
+          // All processing will now stop.
+          console.log('Cadence failed to process');
+          outerCB(err);
+        } 
+        else {
+          console.log('All cadences processed successfully');
+          outerCB(null);
+        }
+    });
+  },
   
 ],
 // optional callback
