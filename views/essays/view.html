@@ -134,6 +134,7 @@
 {% block pageScripts %}
 <script>
 window.suggestions = {{suggestions|json|safe}};
+window.masterObjective = {{masterObjective|json|safe}};
 </script>
 <script type="text/javascript" src="/build/js/essay.js"></script>
 {% endblock %}

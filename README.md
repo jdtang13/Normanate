@@ -35,6 +35,12 @@ Example:
     $ node seed --mongo mongodb://localhost:27017/test
     $ node seed --mongo -f mongodata.txt
 
+A similar process is needed to install the training data into the database. Run:
+
+    $ node train
+
+in the base folder to install all the training sets. This takes some time, but only needs to be done once to configure the database.
+
 ### Running the program
 
 The app is built using a weird Frankenstein hybrid of LESS and SASS at the moment for CSS, and Browserify for Javascript. A lot of it is handled in-app, but we use grunt to deal with any and all preprocessing.
