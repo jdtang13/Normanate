@@ -2,6 +2,7 @@ var openNLP = require("opennlp");
 var training = require("../controllers/training");
 var mongoose = require("mongoose");
 var WordModel = mongoose.model('Word');
+var WordCadenceModel = mongoose.model('WordCadence');
 var indico = require('indico.io');
 indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 
@@ -304,7 +305,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
-	var counter = 4;
+	var counter = 5;
 
 	//calculate the prestige values of text
 	var tokenizer = new openNLP().tokenizer;
@@ -317,16 +318,18 @@ function subjectiveHeuristics(id, text, callback) {
 		if (results.length == 0) {
 			counter = checkCallback(counter, callback, resultDict);
 		}
-		var avg = 0;
-		var count = 0;
 		// take a running average of all words for etymology
 		// calculate syllable cadence by taking the avg of all the gaps
+		var avg = 0;
+		var count = 0;
 		var curGap = 0;
 		var avgGap = 0;
 		var numGaps = 0;
+		var count2 = 0;
 		for(var i in results) {
 			var result = results[i];
 			var queryWord = WordModel.findOne({'content':result});
+			var queryWordCadence = WordCadenceModel.findOne({'content':result});
 			queryWord.exec(function(err, word) {
 				if (word != null) {
 					var titleOrigin = word.etymology;
@@ -334,7 +337,17 @@ function subjectiveHeuristics(id, text, callback) {
 						var prestige = prestigeOf(titleOrigin);
 						avg += prestige;
 					}
-
+				}
+				count++;
+				if (count == results.length) {
+					// calculate etymology score
+					avg /= results.length;
+					resultDict["etymology_score"] = avg;
+					counter = checkCallback(counter, callback, resultDict);
+				}
+			});
+			queryWordCadence.exec(function(err, word) {
+				if (word != null) {
 					//syllable cadence
 					var cadence = word.cadence; 
 					if (cadence != null) {
@@ -350,12 +363,8 @@ function subjectiveHeuristics(id, text, callback) {
 						}
 					}
 				}
-				count++;
-				if (count == results.length) {
-					// calculate etymology score
-					avg /= results.length;
-					resultDict["etymology_score"] = avg;
-
+				count2++;
+				if (count2 == results.length) {
 					// calculate syllable cadence
 					avgGap /= numGaps;
 					resultDict["cadence_gap"] = avgGap;
