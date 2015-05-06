@@ -101,6 +101,7 @@ Ideal schema:
 function checkCallback(counter, callback, resultDict) {
 	counter--;
 	if (counter == 0) {
+		console.log("DOING CALLBACK\n");
 		callback(0, resultDict);
 	}
 	return counter;
@@ -156,6 +157,12 @@ function objectiveHeuristics(id, text, callback) {
 	// FETCH FROM DATABASE HERE
 	// calculate word statistics
 	tokenizer.tokenize(text, function(err, results) {
+
+		if (results == null || results.length == 0) {
+			resultDict["error"] = "Write more words! We can't process your essay like this.";
+			counter = checkCallback(counter, callback, resultDict);
+			return;
+		}
 
 		results = pruneResults(results);
 
@@ -320,9 +327,11 @@ function subjectiveHeuristics(id, text, callback) {
 		// get the etymology associated with the word
 		// calculate prestige value
 		results = pruneResults(results);
-		// console.log("results: " + results);
-		if (results.length == 0) {
+		if (results == null || results.length == 0) {
+			resultDict["error"] = "Write more words! We can't process your essay like this.";
 			counter = checkCallback(counter, callback, resultDict);
+			counter = checkCallback(counter, callback, resultDict);
+			return;
 		}
 		// take a running average of all words for etymology
 		// calculate syllable cadence by taking the avg of all the gaps
