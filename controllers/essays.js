@@ -205,7 +205,7 @@ exports.postCreateEssay = function(req, res) {
 
     updateEssayMetrics(essay, req, res, function(error, e) {
         if (error) {
-            return res.status(400).json(error.errors);
+            return res.status(400).json(error);
         }
         e.save(function(err) {
             if (err) {
@@ -228,7 +228,7 @@ exports.updateEssay = function(req, res) {
 
     updateEssayMetrics(essay, req, res, function(error, e) {
         if (error) {
-            return res.status(400).json(error.errors);
+            return res.status(400).json(error);
         }
         e.save(function(err) {
             if (err) {

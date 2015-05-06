@@ -42,13 +42,24 @@ $(document).ready(function() {
         _csrf: $('#create-essay-button').data('csrf'),
         content: essayBody
     }, function(err) {
-        for (var error in err.responseJSON) {
+        loader.error();
+        if ($.isArray(err.responseJSON)) {
+            for (var error in err.responseJSON) {
                 $.bootstrapGrowl(err.responseJSON[error].message, {
-                    delay: 3000,
+                    delay: 2000,
                     type: 'danger',
                     allow_dismiss: true,
                     offset: {from: 'bottom', amount: 20}});
             }
+        }
+        else {
+            $.bootstrapGrowl(err.responseJSON.message, {
+                delay: 2000,
+                type: 'danger',
+                allow_dismiss: true,
+                offset: {from: 'bottom', amount: 20}});
+        }
+        
     });
   });
 
@@ -66,15 +77,23 @@ $(document).ready(function() {
         _csrf: $('#update-essay-button').data('csrf'),
         content: $('#content').val()
     }, function(err) {
-        console.log(err);
-
+        loader.error();
+        if ($.isArray(err.responseJSON)) {
             for (var error in err.responseJSON) {
                 $.bootstrapGrowl(err.responseJSON[error].message, {
-                    delay: 3000,
+                    delay: 2000,
                     type: 'danger',
                     allow_dismiss: true,
                     offset: {from: 'bottom', amount: 20}});
             }
+        }
+        else {
+            $.bootstrapGrowl(err.responseJSON.message, {
+                delay: 2000,
+                type: 'danger',
+                allow_dismiss: true,
+                offset: {from: 'bottom', amount: 20}});
+        }
             
         
     });
