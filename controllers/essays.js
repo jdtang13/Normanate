@@ -307,6 +307,10 @@ var updateEssayMetrics = function(essay, req, res, cb) {
         console.log("RESULTS: %j", results);
         var resultDict = results[0];
         var resultDict2 = results[1];
+
+        if (resultDict["error"] != null || resultDict2["error"] != null) {
+
+        }
         //convert pos_match_info into 1-d arrays for 
         //insertion into Mongo
         // var posPairFreqs = dict["pos_match_info"]["pairFreqs"];
