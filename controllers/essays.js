@@ -203,7 +203,10 @@ exports.postCreateEssay = function(req, res) {
         essay.author = req.user;
     }
 
-    updateEssayMetrics(essay, req, res, function(e) {
+    updateEssayMetrics(essay, req, res, function(error, e) {
+        if (error) {
+            return res.status(400).json(error.errors);
+        }
         e.save(function(err) {
             if (err) {
                 console.log(err);
@@ -223,7 +226,10 @@ exports.updateEssay = function(req, res) {
     essay = _.extend(essay, req.body);
     essay.updated = Date.now();
 
-    updateEssayMetrics(essay, req, res, function(e) {
+    updateEssayMetrics(essay, req, res, function(error, e) {
+        if (error) {
+            return res.status(400).json(error.errors);
+        }
         e.save(function(err) {
             if (err) {
                 console.log(err);
@@ -340,6 +346,7 @@ var updateEssayMetrics = function(essay, req, res, cb) {
             if (err) {
                 console.log("error while saving oh!");
                 console.log(err);
+                cb(err);
             }
             else {
                 // we only use element 0 for now, since subdocuments
@@ -347,7 +354,7 @@ var updateEssayMetrics = function(essay, req, res, cb) {
                 essay.objectives = [];
                 essay.objectives.unshift(oh);
                 console.log("successfully saved the objective heuristics!");
-                cb(essay);
+                cb(null, essay);
             }
             // saved!
         });
