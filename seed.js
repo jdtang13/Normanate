@@ -109,7 +109,7 @@ async.waterfall([
   //******SEED DATABASE WITH CADENCES*******
   function(callback) {
     WordCadenceModel.remove({}, function(err) { 
-      console.log("NOTICE: deleted all Words to reset the database -- remove this line if you don't want this");
+      console.log("NOTICE: deleted all Cadences to reset the database -- remove this line if you don't want this");
       hasBeenReset = 1;
 
       //  seed the etymology data if not done already
