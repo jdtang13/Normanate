@@ -204,7 +204,8 @@ function objectiveHeuristics(id, text, callback) {
 		resultDict["overused_words"] = [];
 		var n = 5;
 		var i = 0;
-		while(i < n) {
+		var min = Math.min(n, keys.length);
+		while(i < min) {
 			if (freqTable[keys[i]] / results.length < 0.02) {
 				break;
 			}
@@ -519,7 +520,8 @@ function calculatePOSMatch(posPairDict, posTotalFreqs,
 	console.log("final chi squared: " + finalChiSquared);
 
 	// 5) Now that we have the final chi-squared static, calculate the probability
-	var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
+	console.log("df: " + Object.keys(posTotalFreqs).length);
+	var prob = 1 - chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length * 5);
 	return prob;
 }
 

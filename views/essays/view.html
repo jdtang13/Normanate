@@ -35,6 +35,7 @@
 
     <p>Sentiment: {{ percentage(essay.objectives[0].sentiment, 3) }} |  <b>{{ percentage(normals["sentiment"], 3) }}</b> </p>
     <p>Cadence Gap: {{ essay.objectives[0].cadence_gap}} | <b>{{ percentage(normals["cadence_gap"], 3)}}</b></p>
+    <p>Part of Speech Matching: <b>{{percentage(posProb, 3)}}</b></p>
     {% endif %}
   </div>
   <hr>
