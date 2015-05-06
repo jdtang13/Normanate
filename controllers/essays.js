@@ -322,7 +322,7 @@ var updateEssayMetrics = function(essay, req, res, cb) {
             linking_verbs: resultDict["linking_verbs"],
             etymology_score: resultDict2["etymology_score"],
             cadence_gap: resultDict2["cadence_gap"],
-            overused_words: [resultDict["overused_words"]],
+            overused_words: resultDict["overused_words"],
             sentence_mean: resultDict["sentence_info"]["mean"],
             sentence_var: resultDict["sentence_info"]["var"],
             sentence_num: resultDict["sentence_info"]["num"],

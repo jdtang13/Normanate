@@ -220,7 +220,6 @@ function objectiveHeuristics(id, text, callback) {
 				i++;
 				continue;
 			}
-
 			resultDict["overused_words"].push(keys[i]);
 			console.log(keys[i] + " " + freqTable[keys[i]]);
 			i++;
@@ -373,7 +372,9 @@ function subjectiveHeuristics(id, text, callback) {
 				count2++;
 				if (count2 == results.length) {
 					// calculate syllable cadence
-					avgGap /= numGaps;
+					if (numGaps !== 0) {
+						avgGap /= numGaps;
+					}
 					resultDict["cadence_gap"] = avgGap;
 					counter = checkCallback(counter, callback, resultDict);
 				}
