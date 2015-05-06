@@ -74,6 +74,9 @@ while line != None:
 	tokens = line.split(',')
 	word = tokens[0]
 	sys.stderr.write(word + "\n")
+	if word <= "butter":
+		line = f.readline()
+		continue
 	#url = 'http://en.wiktionary.org/wiki/' + word
 	#url = 'http://www.thefreedictionary.com/' + word
 	url = 'http://dictionary.reference.com/browse/' + word
