@@ -1,6 +1,7 @@
 window.$ = window.jQuery = require('jquery');
 require('expanding-textareas');
 require('bootstrap');
+require('bootstrap-switch');
 
 var loader = require('./utils/load');
 var essays = require('./controllers/essays');
@@ -8,8 +9,7 @@ var essays = require('./controllers/essays');
 
 $(document).ready(function() {
 
-    $(".expanding").expanding();
-
+    loader.init();
     require('./views/dashboard')();
 
   // Place JavaScript code here...
@@ -62,5 +62,7 @@ $(document).ready(function() {
         console.log(err)
     });
   });
+
+    
 
 });

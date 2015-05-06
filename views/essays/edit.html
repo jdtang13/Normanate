@@ -1,20 +1,20 @@
 {% extends '../layouts/layout.html' %}
 {% block content %}
-<div class="page-header">
-<div class='pull-left'>
-  <h1>Editor</h1>
-  </div>
-  <div class='pull-right'>
-    <a id='update-essay-button' data-csrf="{{_csrf}}" class='btn btn-default'>Update Essay</a>
-  </div>
-  <div style='clear:both'></div>
-</div>
+
 <div class='row'>
-  <div class='col-sm-8 col-sm-offset-2'>
+  <div class='col-sm-8'>
   <div class='essay-container'>
     <textarea id='title' type='text' class='essay-title form-control expanding' placeholder='Title of Essay'>{{essay.title}}</textarea>
-    <textarea id='content' class='essay-content form-control expanding' placeholder='Type the content of your essay here'>{{essay.content}}</textarea>
+    <textarea id='content' autofocus class='essay-content expanding form-control' placeholder='Type the content of your essay here'>{{essay.content}}</textarea>
     </div>
+  </div>
+  <div class='col-sm-4'>
+  <h1>Editor</h1>
+  <hr>
+  <div class='text-center'>
+  <a id='update-essay-button' data-csrf="{{_csrf}}" class='btn btn-lg btn-default'>Update Essay</a>
+  </div>
+  <hr>
   </div>
   
 </div>
@@ -23,5 +23,8 @@
 {% block pageScripts %}
 <script>
 window.essay = {{essay|json|safe}};
+
+// $('#content').css('font-size', x);
+
 </script>
 {% endblock %}

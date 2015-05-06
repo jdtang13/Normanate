@@ -17,6 +17,7 @@ var masterObjectiveSchema = new mongoose.Schema(
     sentence_num: Number,
 
     etymology_score: Number, //added
+    cadence_gap: Number,
 
     adj_ratio: Number,
     adv_ratio: Number,
@@ -26,6 +27,9 @@ var masterObjectiveSchema = new mongoose.Schema(
 
     sentiment: Number,
     goodness_of_fit: Number,
+
+    pos_match_pairFreqs: [Number],
+    pos_match_totalFreqs: [Number],
 
     // can take the value of "avg" or "var"
     type: String
@@ -116,6 +120,7 @@ var heuristicSchema = new mongoose.Schema(
   num_chars: Number,
   linking_verbs: Number, //(added)
   etymology_score: Number, //(added)
+  cadence_gap: Number,
   //overused_words: [wordSchema],
   overused_words: [String],
   sentence_mean: Number,
@@ -126,6 +131,7 @@ var heuristicSchema = new mongoose.Schema(
   noun_count: Number,
   verb_count: Number,
   sentiment: Number,
+  reading_time: String,
   //goodness_of_fit: Number (deprecated)
   pos_match_pairFreqs: [Number],
   pos_match_totalFreqs: [Number],
@@ -160,7 +166,6 @@ var essaySchema = new mongoose.Schema({
   heuristics: [heuristicSchema],
 
   miscValues: [Number] //  use this for random values that you want to use as output
-
 });
 
 // Duplicate the ID field.
