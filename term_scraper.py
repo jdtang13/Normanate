@@ -97,8 +97,9 @@ class MyHTMLParser(HTMLParser):
 					cur_root = root
 			if cur_root == "":
 				cur_root = "none"
-			sys.stdout.write(cur_root + "\n")
+			sys.stdout.write(cur_root + ",")
 			self.description = ""
+
 
 for i in range(26):
 	c = chr(i + 97)
@@ -109,7 +110,6 @@ for i in range(26):
 
 		parser = MyHTMLParser()
 		parser.feed(html)
-
 		parser.close()
 
 # response = urllib2.urlopen('http://www.etymonline.com/index.php?l=a&p=0&allowed_in_frame=0')

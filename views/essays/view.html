@@ -36,6 +36,8 @@
     <p>Linking Verbs: {{ percentage(essay.objectives[0].linking_verbs / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["linking_verbs"], 3) }}</b> </p>
 
     <p>Sentiment: {{ percentage(essay.objectives[0].sentiment, 3) }} |  <b>{{ percentage(normals["sentiment"], 3) }}</b> </p>
+    <p>Cadence Gap: {{ essay.objectives[0].cadence_gap}} | <b>{{ percentage(normals["cadence_gap"], 3)}}</b></p>
+    <p>Part of Speech Matching: <b>{{percentage(posProb, 3)}}</b></p>
     {% endif %}
   </div>
   <hr>

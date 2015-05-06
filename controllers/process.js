@@ -2,6 +2,7 @@ var openNLP = require("opennlp");
 var training = require("../controllers/training");
 var mongoose = require("mongoose");
 var WordModel = mongoose.model('Word');
+var WordCadenceModel = mongoose.model('WordCadence');
 var indico = require('indico.io');
 indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 
@@ -209,7 +210,8 @@ function objectiveHeuristics(id, text, callback) {
 		resultDict["overused_words"] = [];
 		var n = 5;
 		var i = 0;
-		while(i < n) {
+		var min = Math.min(n, keys.length);
+		while(i < min) {
 			if (freqTable[keys[i]] / results.length < 0.02) {
 				break;
 			}
@@ -310,7 +312,7 @@ function subjectiveHeuristics(id, text, callback) {
 	  console.log("Random word: ", wordModel.attributes.word); });*/
 
 	resultDict = {};
-	var counter = 4;
+	var counter = 5;
 
 	//calculate the prestige values of text
 	var tokenizer = new openNLP().tokenizer;
@@ -323,12 +325,18 @@ function subjectiveHeuristics(id, text, callback) {
 		if (results.length == 0) {
 			counter = checkCallback(counter, callback, resultDict);
 		}
+		// take a running average of all words for etymology
+		// calculate syllable cadence by taking the avg of all the gaps
 		var avg = 0;
 		var count = 0;
-		// take a running average of all words
+		var curGap = 0;
+		var avgGap = 0;
+		var numGaps = 0;
+		var count2 = 0;
 		for(var i in results) {
 			var result = results[i];
 			var queryWord = WordModel.findOne({'content':result});
+			var queryWordCadence = WordCadenceModel.findOne({'content':result});
 			queryWord.exec(function(err, word) {
 				if (word != null) {
 					var titleOrigin = word.etymology;
@@ -339,12 +347,39 @@ function subjectiveHeuristics(id, text, callback) {
 				}
 				count++;
 				if (count == results.length) {
+					// calculate etymology score
 					avg /= results.length;
 					resultDict["etymology_score"] = avg;
 					counter = checkCallback(counter, callback, resultDict);
 				}
 			});
+			queryWordCadence.exec(function(err, word) {
+				if (word != null) {
+					//syllable cadence
+					var cadence = word.cadence; 
+					if (cadence != null) {
+						var index = cadence.indexOf("1");
+						if (index == -1) {
+							curGap += cadence.length;
+						}
+						else {
+							curGap += index;
+							numGaps++;
+							avgGap += curGap;
+							curGap = cadence.length - index - 1;
+						}
+					}
+				}
+				count2++;
+				if (count2 == results.length) {
+					// calculate syllable cadence
+					avgGap /= numGaps;
+					resultDict["cadence_gap"] = avgGap;
+					counter = checkCallback(counter, callback, resultDict);
+				}
+			});
 		}
+
 	});
 
 	// calculate sentiment using Indico's API
@@ -373,7 +408,7 @@ function subjectiveHeuristics(id, text, callback) {
 	//calculate reading time
 	var stats = readingTime(text);
 	resultDict["reading_time"] = stats["text"];
-	counter = checkCallback(counter, callback, resultDict);
+	counter = checkCallback(counter, callback, resultDict);		
 
 }
 
@@ -491,7 +526,8 @@ function calculatePOSMatch(posPairDict, posTotalFreqs,
 	console.log("final chi squared: " + finalChiSquared);
 
 	// 5) Now that we have the final chi-squared static, calculate the probability
-	var prob = chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length);
+	console.log("df: " + Object.keys(posTotalFreqs).length);
+	var prob = 1 - chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length * 5);
 	return prob;
 }
 

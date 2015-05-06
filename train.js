@@ -58,6 +58,7 @@ async.waterfall([
         averageDict["sentence_num"] = 0;
         averageDict["linking_verbs"] = 0;
         averageDict["etymology_score"] = 0;
+        averageDict["cadence_gap"] = 0;
         averageDict["adj_count"] = 0;
         averageDict["adv_count"] = 0;
         averageDict["noun_count"] = 0;
@@ -85,6 +86,7 @@ async.waterfall([
         varDict["sentence_num"] = [];
         varDict["linking_verbs"] = [];
         varDict["etymology_score"] = [];
+        varDict["cadence_gap"] = [];
         varDict["adj_count"] = [];
         varDict["adv_count"] = [];
         varDict["noun_count"] = [];
@@ -138,6 +140,7 @@ async.waterfall([
                         averageDict["sentence_num"] += resultDict["sentence_info"]["num"];
                         averageDict["linking_verbs"] += resultDict["linking_verbs"];
                         averageDict["etymology_score"] += resultDict2["etymology_score"];
+                        averageDict["cadence_gap"] += resultDict2["cadence_gap"];
                         averageDict["adj_count"] += resultDict["pos_info"]["adj_count"];
                         averageDict["adv_count"] += resultDict["pos_info"]["adv_count"];
                         averageDict["noun_count"] += resultDict["pos_info"]["noun_count"];
@@ -165,6 +168,7 @@ async.waterfall([
                         varDict["sentence_var"].push(resultDict["sentence_info"]["var"]);
                         varDict["linking_verbs"].push(resultDict["linking_verbs"]);
                         varDict["etymology_score"].push(resultDict2["etymology_score"]);
+                        varDict["cadence_gap"].push(resultDict2["cadence_gap"]);
                         varDict["adj_count"].push(resultDict["pos_info"]["adj_count"]);
                         varDict["adv_count"].push(resultDict["pos_info"]["adv_count"]);
                         varDict["noun_count"].push(resultDict["pos_info"]["noun_count"]);
@@ -209,6 +213,7 @@ async.waterfall([
     var avg_sentence_var = (averageDict["sentence_var"] / numFiles);
     var avg_sentence_num = (averageDict["sentence_num"] / numFiles);
     var avg_etymology_score = (averageDict["etymology_score"] / numFiles);
+    var avg_cadence_gap = (averageDict["cadence_gap"] / numFiles);
     var avg_adj_count = averageDict["adj_count"] / num_words;
     var avg_adv_count = averageDict["adv_count"] / num_words;
     var avg_noun_count = averageDict["noun_count"] / num_words;
@@ -237,6 +242,7 @@ async.waterfall([
     var var_sentence_mean = stats.calculateVariance(varDict["sentence_mean"]);
     var var_sentence_var = stats.calculateVariance(varDict["sentence_var"]);
     var var_etymology_score = stats.calculateVariance(varDict["etymology_score"]);
+    var var_cadence_gap = stats.calculateVariance(varDict["cadence_gap"]);
     var var_adj_count = stats.calculateVariance(varDict["adj_count"]);
     var var_adv_count = stats.calculateVariance(varDict["adv_count"]);
     var var_noun_count = stats.calculateVariance(varDict["noun_count"]);
@@ -260,6 +266,7 @@ async.waterfall([
         sentence_num: avg_sentence_num,
 
         etymology_score: avg_etymology_score,  
+        cadence_gap: avg_cadence_gap,
         adj_ratio: avg_adj_count,
         adv_ratio: avg_adv_count,
         noun_ratio: avg_noun_count,
@@ -290,6 +297,7 @@ async.waterfall([
         sentence_mean: var_sentence_mean,
         sentence_var: var_sentence_var,
         etymology_score: var_etymology_score,
+        cadence_gap: var_cadence_gap,
         adj_ratio: var_adj_count,
         adv_ratio: var_adv_count,
         noun_ratio: var_noun_count,
