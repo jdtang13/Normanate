@@ -23,7 +23,7 @@
     <hr>
     <div class='inverse text-center'>
     <p>Overall Score:</p>
-    <h1>100%</h1>
+    <h1>{{ percentage(finalScore,3) }} </h1>
     </div>
     <hr>
     
@@ -44,7 +44,7 @@
     </div>
 
     <div class="panel panel-default">
-      <div class='panel-heading'>Sentence Length Variation: <strong>{{ truncateNumber(essay.objectives[0].sentence_var, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="the variation in sentence length throughout this essay" class='fa fa-question-circle'></span></span></div>
+      <div class='panel-heading'>Sentence Length Variation: <strong>{{ truncateNumber(essay.objectives[0].sentence_var, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The variation in sentence length throughout this essay" class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
         <div class="progress">
           <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage(normals['sentence_var'], 3) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage(normals['sentence_var'], 2) }};">
