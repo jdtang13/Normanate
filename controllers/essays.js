@@ -201,8 +201,8 @@ function calculateNormals(essay, master_avg, master_var) {
 
 function calculateFinal(normalDict, posProb) {
     var w_linkingVerbs = 1;
-    var w_etymologyScore = 1;
-    var w_cadenceGap = 1;
+    var w_etymologyScore = 10;
+    var w_cadenceGap = 10;
     var w_sentiment = 1;
     var w_verbRatio = 1;
     var w_nounRatio = 1;
