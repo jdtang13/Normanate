@@ -159,7 +159,7 @@ function objectiveHeuristics(id, text, callback) {
 	tokenizer.tokenize(text, function(err, results) {
 
 		if (results == null || results.length == 0) {
-			resultDict["error"] = "Write more words! We can't process your essay like this.";
+			resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
 			counter = checkCallback(counter, callback, resultDict);
 			return;
 		}
@@ -328,7 +328,7 @@ function subjectiveHeuristics(id, text, callback) {
 		// calculate prestige value
 		results = pruneResults(results);
 		if (results == null || results.length == 0) {
-			resultDict["error"] = "Write more words! We can't process your essay like this.";
+			resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
 			counter = checkCallback(counter, callback, resultDict);
 			counter = checkCallback(counter, callback, resultDict);
 			return;
