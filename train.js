@@ -145,7 +145,7 @@ async.waterfall([
                     //  add dict results to an ongoing average
                     averageDict["num_words"] += resultDict["num_words"];
                     averageDict["num_chars"] += resultDict["num_chars"];
-                    averageDict["overused_words_num"] += resultDict["overused_words"].length;
+                    //averageDict["overused_words_num"] += resultDict["overused_words"].length;
                     averageDict["sentence_mean"] += resultDict["sentence_info"]["mean"];
                     averageDict["sentence_var"] += resultDict["sentence_info"]["var"];
                     averageDict["sentence_num"] += resultDict["sentence_info"]["num"];
@@ -247,15 +247,31 @@ async.waterfall([
         var var_sentence_var = stats.calculateVariance(varDict["sentence_var"]);
         var var_etymology_score = stats.calculateVariance(varDict["etymology_score"]);
         var var_cadence_gap = stats.calculateVariance(varDict["cadence_gap"]);
+        for (var i in varDict["adj_count"]) {
+            varDict["adj_count"][i] /= num_words;
+        }
         var var_adj_count = stats.calculateVariance(varDict["adj_count"]);
+        for (var i in varDict["adv_count"]) {
+            varDict["adv_count"][i] /= num_words;
+        }
         var var_adv_count = stats.calculateVariance(varDict["adv_count"]);
+        for (var i in varDict["noun_count"]) {
+            varDict["noun_count"][i] /= num_words;
+        }
         var var_noun_count = stats.calculateVariance(varDict["noun_count"]);
+        for (var i in varDict["verb_count"]) {
+            varDict["verb_count"][i] /= num_words;
+        }
         var var_verb_count = stats.calculateVariance(varDict["verb_count"]);
+        for (var i in varDict["linking_verbs"]) {
+            varDict["linking_verbs"][i] /= num_words;
+        }
         var var_lv_ratio = stats.calculateVariance(varDict["linking_verbs"]);
-        var_adj_count /= (num_words * num_words);
-        var_adv_count /= (num_words * num_words);
-        var_noun_count /= (num_words * num_words);
-        var_verb_count /= (num_words * num_words);
+        // var_adj_count /= (numFiles * numFiles);
+        // var_adv_count /= (numFiles * numFiles);
+        // var_noun_count /= (numFiles * numFiles);
+        // var_verb_count /= (numFiles * numFiles);
+        // var_lv_ratio /= (numFiles * numFiles);
         var var_sentiment = stats.calculateVariance(varDict["sentiment"]);
 
         console.log("var_overused_words_num = " + var_overused_words_num);

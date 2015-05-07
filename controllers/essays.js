@@ -58,6 +58,7 @@ exports.getEssay = function(req, res) {
         var varObjective = results[1];
         if (avgObjective != null && varObjective != null) {
             var normals = calculateNormals(req.essay, avgObjective, varObjective);
+            var finalScore = calculateFinal(normals, posProb);
 
             var posPairFreqs = process.formatPairFreqs(
                 req.essay.objectives[0].pos_match_pairFreqs);
@@ -96,6 +97,7 @@ exports.getEssay = function(req, res) {
                 masterObjective: avgObjective,
                 normals: normals,
                 posProb: posProb,
+                finalScore: finalScore,
             });
         }
         else {
@@ -193,7 +195,46 @@ function calculateNormals(essay, master_avg, master_var) {
     normalDict["noun_ratio"] = p_nounRatio;
     normalDict["adj_ratio"] = p_adjRatio;
     normalDict["adv_ratio"] = p_advRatio;
+
     return normalDict; 
+}
+
+function calculateFinal(normalDict, posProb) {
+    var w_linkingVerbs = 1;
+    var w_etymologyScore = 1;
+    var w_cadenceGap = 1;
+    var w_sentiment = 1;
+    var w_verbRatio = 1;
+    var w_nounRatio = 1;
+    var w_adjRatio = 1;
+    var w_advRatio = 1;
+    var w_posProb = 1;
+
+    var p_sentenceVar = normalDict["sentence_var"];
+    var p_sentenceMean = normalDict["sentence_mean"];
+    var p_linkingVerbs = normalDict["linking_verbs"];
+    var p_etymologyScore = normalDict["etymology_score"];
+    var p_cadenceGap = normalDict["cadence_gap"];
+    var p_sentiment = normalDict["sentiment"]; 
+    var p_verbRatio = normalDict["verb_ratio"];
+    var p_nounRatio = normalDict["noun_ratio"];
+    var p_adjRatio = normalDict["adj_ratio"];
+    var p_advRatio = normalDict["adv_ratio"];
+
+    var totalScore = (w_linkingVerbs * p_linkingVerbs) + 
+        (w_etymologyScore * p_etymologyScore) +
+        (w_cadenceGap * p_cadenceGap) + 
+        (w_sentiment * p_sentiment) + 
+        (w_verbRatio * p_verbRatio) + 
+        (w_nounRatio * p_nounRatio) + 
+        (w_adjRatio * p_adjRatio) +
+        (w_advRatio * p_advRatio);
+    var totalWeights = (w_linkingVerbs + w_etymologyScore +
+        w_cadenceGap + w_sentiment + 
+        w_verbRatio + w_nounRatio + 
+        w_adjRatio + w_advRatio + 
+        w_posProb);
+    return totalScore / totalWeights;
 }
 
 // create an essay
@@ -314,8 +355,14 @@ var updateEssayMetrics = function(essay, req, res, cb) {
         var resultDict = results[0];
         var resultDict2 = results[1];
 
-        if (resultDict["error"] != null || resultDict2["error"] != null) {
-
+        console.log("error: " + resultDict["error"]);
+        if ("error" in resultDict) {
+            cb(resultDict["error"]);
+            return;
+        }
+        if ("error" in resultDict2) {
+            cb(resultDict2["error"]);
+            return;
         }
         //convert pos_match_info into 1-d arrays for 
         //insertion into Mongo
