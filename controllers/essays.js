@@ -200,15 +200,15 @@ function calculateNormals(essay, master_avg, master_var) {
 }
 
 function calculateFinal(normalDict, posProb) {
-    var w_linkingVerbs = 5;
-    var w_etymologyScore = 50;
+    var w_linkingVerbs = 15;
+    var w_etymologyScore = 100;
     var w_cadenceGap = 5;
     var w_sentiment = 3;
     var w_verbRatio = 1;
     var w_nounRatio = 1;
     var w_adjRatio = 1;
     var w_advRatio = 5;
-    var w_posProb = 5;
+    var w_posProb = 1;
 
     var p_sentenceVar = normalDict["sentence_var"];
     var p_sentenceMean = normalDict["sentence_mean"];
