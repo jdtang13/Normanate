@@ -29,7 +29,7 @@
     
     <h3>Stats<div class='pull-right' data-toggle="tooltip" title="Percentage values compare your essay’s attributes to those of an 'ideal' essay. The higher the percentage, the more similar your essay is to the ideal." ><span class='fa fa-question-circle'></span></div></h3>
     <hr>
-    <h4>Aural Cadence</h4>
+    <h4>Aural Cadence <span class='pull-right'><span data-toggle="tooltip" title="The physical sound and rhythm of your essay." class='fa fa-question-circle'></span></span></h4>
 
     <div class="panel panel-default">
       <div class='panel-heading'>Sentence length: <strong>{{ truncateNumber(essay.objectives[0].sentence_mean, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The average number of words in a sentence." class='fa fa-question-circle'></span></span></div>
@@ -59,7 +59,7 @@
 
     <p>Syllable stress distance: {{ truncateNumber(essay.objectives[0].cadence_gap, 3) }} | <b>{{ percentage(normals["cadence_gap"], 3)}}</b></p>
     
-    <h4>Contextual Harmony</h4>
+    <h4>Contextual Harmony <span class='pull-right'><span data-toggle="tooltip" title="The psychological and contextual feeling of your essay." class='fa fa-question-circle'></span></span></h4>
 
     <p>Prestige word ratio: {{ percentage(essay.objectives[0].etymology_score, 3)}} |  <b>{{ percentage(normals["etymology_score"], 3) }}</b> </p>
     <p>Average sentiment: {{ percentage(essay.objectives[0].sentiment, 3) }} |  <b>{{ percentage(normals["sentiment"], 3) }}</b> </p>
