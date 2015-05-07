@@ -31,6 +31,18 @@
     <hr>
     <h4>Aural Cadence <span class='pull-right'><span data-toggle="tooltip" title="The physical sound and rhythm of your essay." class='fa fa-question-circle'></span></span></h4>
 
+   <div class="panel panel-default">
+      <div class='panel-heading'>Syllable stress distance: <strong>{{ truncateNumber(essay.objectives[0].cadence_gap, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The average number of unstressed syllables between stressed syllables." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-body">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage(normals['cadence_gap'], 3)}}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage(normals['cadence_gap'], 2)}};">
+            <span class="sr-only">{{ percentage(normals['cadence_gap'], 2)}}</span>
+          </div>
+        </div>
+        <div class='text-center'><span class='primary-color'><strong>{{ percentage(normals['cadence_gap'], 3)}}</strong></span> similarity</div>
+      </div>
+    </div>
+
     <div class="panel panel-default">
       <div class='panel-heading'>Sentence length: <strong>{{ truncateNumber(essay.objectives[0].sentence_mean, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The average number of words in a sentence." class='fa fa-question-circle'></span></span></div>
       <div class="panel-body">
@@ -43,33 +55,53 @@
       </div>
     </div>
 
-    <div class="panel panel-default">
-      <div class='panel-heading'>Sentence length variation: <strong>{{ truncateNumber(essay.objectives[0].sentence_var, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The variation in sentence length throughout this essay." class='fa fa-question-circle'></span></span></div>
-      <div class="panel-body">
-        <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage(normals['sentence_var'], 3) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage(normals['sentence_var'], 2) }};">
-            <span class="sr-only">{{ percentage(normals["sentence_var"], 3) }}</span>
-          </div>
-        </div>
-        <div class='text-center'><span class='primary-color'><strong>{{ percentage(normals["sentence_var"], 3) }}</strong></span> similarity</div>
-      </div>
-    </div>
-
     <p>Sentence length variation: {{ truncateNumber(essay.objectives[0].sentence_var, 3) }} |  <b>{{ percentage(normals["sentence_var"], 3) }}</b> </p>
-
-    <p>Syllable stress distance: {{ truncateNumber(essay.objectives[0].cadence_gap, 3) }} | <b>{{ percentage(normals["cadence_gap"], 3)}}</b></p>
     
     <h4>Contextual Harmony <span class='pull-right'><span data-toggle="tooltip" title="The psychological and contextual feeling of your essay." class='fa fa-question-circle'></span></span></h4>
 
-    <p>Prestige word ratio: {{ percentage(essay.objectives[0].etymology_score, 3)}} |  <b>{{ percentage(normals["etymology_score"], 3) }}</b> </p>
-    <p>Average sentiment: {{ percentage(essay.objectives[0].sentiment, 3) }} |  <b>{{ percentage(normals["sentiment"], 3) }}</b> </p>
+    <div class="panel panel-default">
+      <div class='panel-heading'>Prestige word ratio: <strong>{{ percentage(essay.objectives[0].etymology_score, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The proportion of 'fancy-sounding' prestige words used in an average sentence." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-body">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage(normals['etymology_score'], 3) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage(normals['etymology_score'], 2) }};">
+            <span class="sr-only">{{ percentage(normals['etymology_score'], 3) }}</span>
+          </div>
+        </div>
+        <div class='text-center'><span class='primary-color'><strong>{{ percentage(normals['etymology_score'], 3) }}</strong></span> similarity</div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class='panel-heading'>Average sentiment: <strong>{{ percentage(essay.objectives[0].sentiment, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The emotional sentiment intensity of your essay." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-body">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage(normals['sentiment'], 3)  }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage(normals['sentiment'], 2)  }};">
+            <span class="sr-only">{{ percentage(normals['sentiment'], 3)  }}</span>
+          </div>
+        </div>
+        <div class='text-center'><span class='primary-color'><strong>{{ percentage(normals['sentiment'], 3)  }}</strong></span> similarity</div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class='panel-heading'>Linking verb ratio: <strong>{{ percentage(essay.objectives[0].linking_verbs / essay.objectives[0].num_words, 3) }} </strong> <span class='pull-right'><span data-toggle="tooltip" title="The proportion of linking verbs such as 'is' and 'are' in your essay." class='fa fa-question-circle'></span></span></div>
+      <div class="panel-body">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage(normals['linking_verbs'], 3) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage(normals['linking_verbs'], 2) }};">
+            <span class="sr-only">{{ percentage(normals['linking_verbs'], 3)  }}</span>
+          </div>
+        </div>
+        <div class='text-center'><span class='primary-color'><strong>{{ percentage(normals['linking_verbs'], 3) }}</strong></span> similarity</div>
+      </div>
+    </div>
+
     <p>Part of speech flow: <b>{{percentage(posProb, 3)}}</b></p>
 
     <p>Adjective ratio: {{ percentage(essay.objectives[0].adj_count / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["adj_ratio"], 3) }}</b>  </p>
     <p>Adverb ratio: {{ percentage(essay.objectives[0].adv_count / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["adv_ratio"], 3) }}</b>  </p>
     <p>Noun ratio: {{ percentage(essay.objectives[0].noun_count / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["noun_ratio"], 3) }}</b> </p>
     <p>Verb ratio: {{ percentage(essay.objectives[0].verb_count / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["verb_ratio"], 3) }}</b> </p>
-    <p>Linking verb ratio: {{ percentage(essay.objectives[0].linking_verbs / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["linking_verbs"], 3) }}</b> </p>    
+
   </div>
   <hr>
   {% endif %}
