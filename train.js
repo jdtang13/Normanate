@@ -109,7 +109,7 @@ async.waterfall([
 
         var trainCount = numFiles;
 
-        async.each(files, function(file, fileCallback) {
+        async.eachSeries(files, function(file, fileCallback) {
             console.log("Starting to train "+file);
 
             var html = fs.readFileSync(dir + file, 'utf-8');
@@ -133,6 +133,7 @@ async.waterfall([
             ], function(err, results) {
                 var resultDict = results[0];
                 var resultDict2 = results[1];
+                console.log("sentiment: " + resultDict2["sentiment"]);
 
                 if (!err) {
                     console.log("successfully calculated objective heuristics from training set!");
@@ -192,7 +193,6 @@ async.waterfall([
                     }
                 }
                 fileCallback();
-            
             
             });
         });
@@ -272,6 +272,7 @@ async.waterfall([
         // var_noun_count /= (numFiles * numFiles);
         // var_verb_count /= (numFiles * numFiles);
         // var_lv_ratio /= (numFiles * numFiles);
+        console.log("sentiments! " + varDict["sentiment"]);
         var var_sentiment = stats.calculateVariance(varDict["sentiment"]);
 
         console.log("var_overused_words_num = " + var_overused_words_num);

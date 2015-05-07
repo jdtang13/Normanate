@@ -41,10 +41,7 @@
     <p>Adverb Ratio: {{ percentage(essay.objectives[0].adv_count / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["adv_ratio"], 3) }}</b>  </p>
     <p>Noun Ratio: {{ percentage(essay.objectives[0].noun_count / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["noun_ratio"], 3) }}</b> </p>
     <p>Verb Ratio: {{ percentage(essay.objectives[0].verb_count / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["verb_ratio"], 3) }}</b> </p>
-    <p>Linking Verbs: {{ percentage(essay.objectives[0].linking_verbs / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["linking_verbs"], 3) }}</b> </p>
-
-    
-    
+    <p>Linking Verbs: {{ percentage(essay.objectives[0].linking_verbs / essay.objectives[0].num_words, 3) }} |  <b>{{ percentage(normals["linking_verbs"], 3) }}</b> </p>    
   </div>
   <hr>
   {% endif %}
