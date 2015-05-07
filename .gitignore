@@ -23,3 +23,5 @@ Thumbs.db
 
 public/build
 public/components
+
+deploy-mongo.sh
