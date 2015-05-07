@@ -50,17 +50,18 @@ var WordModel = mongoose.model('Word');
 var ObjectiveModel = require('mongoose').model('ObjectiveHeuristic');
 
 var hasBeenTrained = 0;
+var dir = './train/';
+var files = fs.readdirSync(dir);
+var numFiles = files.length;
 
 async.waterfall([
     function(callback){
 
         console.log("Begin training");
 
-        var dir = './train/';
         
-        var files = fs.readdirSync(dir);
-        var numFiles = files.length;
-
+        
+        
         console.log(files);
 
         // this is the dictionary for averages
