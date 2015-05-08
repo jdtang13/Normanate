@@ -111,7 +111,13 @@ async.waterfall([
         var trainCount = numFiles;
 
         async.eachSeries(files, function(file, fileCallback) {
-            console.log("Starting to train "+file);
+
+            console.log("Starting to train "+ file);
+
+            /*if (file.indexOf(".txt") == -1) {
+                console.log(file + " is not a .txt! skipping!");
+            }
+            else {*/
 
             var html = fs.readFileSync(dir + file, 'utf-8');
 
@@ -143,6 +149,8 @@ async.waterfall([
                     dict = resultDict;
                     
                     var num_words = resultDict["num_words"];
+
+                    console.log("cadence gap is " + resultDict2["cadence_gap"]);
 
                     //  add dict results to an ongoing average
                     averageDict["num_words"] += resultDict["num_words"];
