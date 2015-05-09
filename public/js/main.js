@@ -4,6 +4,8 @@ require('bootstrap');
 require('bootstrap-switch');
 require('./vendor/bootstrap-growl');
 
+var count = require('../../utils/count');
+
 var loader = require('./utils/load');
 var essays = require('./controllers/essays');
 
@@ -102,3 +104,23 @@ $(document).ready(function() {
     
 
 });
+
+var area = $('#content')[0];
+if (area.addEventListener) {
+  area.addEventListener('input', function() {
+    updateCounter();
+  }, false);
+} else if (area.attachEvent) {
+  area.attachEvent('onpropertychange', function() {
+    updateCounter();
+  });
+}
+
+function updateCounter() {
+    var essayCount = count($('.essay-content').val() || "");
+    console.log(essayCount);
+    $('#word-count').text(essayCount.words);
+    $('#char-count').text(essayCount.characters);
+}
+
+window.updateCounter = updateCounter;

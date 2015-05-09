@@ -15,6 +15,9 @@
   <a id='update-essay-button' data-csrf="{{_csrf}}" class='btn btn-lg btn-default'>Update Essay</a>
   </div>
   <hr>
+  <div>
+  <p>~<span id='word-count'>0</span> Words | <span id='char-count'>0</span> Characters</p>
+  </div>
   </div>
   
 </div>
@@ -23,6 +26,7 @@
 {% block pageScripts %}
 <script>
 window.essay = {{essay|json|safe}};
+window.updateCounter();
 
 // $('#content').css('font-size', x);
 

@@ -4,7 +4,7 @@
   <div class='col-sm-8'>
   <div class='essay-container'>
     <h1 class='essay-title'>{{essay.title}}</h1>
-    <p class='essay-content'>{{essay.content|striptags|replace('\n', '<br>', 'g')|safe}}</p>
+    <p class='essay-content'>{{essay.content|escape|replace('\n', '<br>', 'g')|safe}}</p>
     </div>
   </div>
   <div class='col-sm-4 essay-stats'>
