@@ -1,9 +1,9 @@
-var openNLP = require("opennlp");
 var training = require("../controllers/training");
 var mongoose = require("mongoose");
 var WordModel = mongoose.model('Word');
 var WordCadenceModel = mongoose.model('WordCadence');
 var indico = require('indico.io');
+var async = require('async');
 indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 
 var chi = require("chi-squared");
@@ -98,15 +98,6 @@ Ideal schema:
 
 */
 
-function checkCallback(counter, callback, resultDict) {
-	counter--;
-	if (counter == 0) {
-		console.log("DOING CALLBACK\n");
-		callback(0, resultDict);
-	}
-	return counter;
-}
-
 // basic structure of a result object. This should apply to both objective and subjective heuristics.
 	// {
 	//  id:
@@ -144,159 +135,176 @@ function pruneResults(results) {
 
 function objectiveHeuristics(id, text, callback) {
 
-	var tokenizer = new openNLP().tokenizer;
-	var sentenceDetector = new openNLP().sentenceDetector;
-	var posTagger = new openNLP().posTagger;
+	async.parallel([
+		// calculate various word-level statistics
+		function(aCB) {
+			var openNLP = require("opennlp");
+			var tokenizer = new openNLP().tokenizer;
+			var freqTable = {};
+			var resultDict = {};
+			tokenizer.tokenize(text, function(err, results) {
 
-	var freqTable = {};
-	var posArray = [];
-	var resultDict = {};
+				if (results == null || results.length == 0) {
+					resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
+					aCB(null, resultDict);
+					return;
+				}
 
-	var counter = 3;
+				results = pruneResults(results);
 
-	// FETCH FROM DATABASE HERE
-	// calculate word statistics
-	tokenizer.tokenize(text, function(err, results) {
+				var charCount = 0;
+				for (var i in results) {
+					var result = results[i];
+					charCount += result.length;
+					if (result in freqTable) {
+						freqTable[result]++;
+					}
+					else {
+						freqTable[result] = 1;
+					}
+				}
 
-		if (results == null || results.length == 0) {
-			resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
-			counter = checkCallback(counter, callback, resultDict);
-			return;
+				var keys = Object.keys(freqTable);
+				keys.sort(function(a,b) {
+					if (blacklistedWord(a) && !blacklistedWord(b)) {
+						return 1;
+					}
+					else if (!blacklistedWord(a) && blacklistedWord(b)) {
+						return -1;
+					}
+					if (linkingVerb(a) && !linkingVerb(b)) {
+						return 1;
+					}
+					else if (!linkingVerb(a) && linkingVerb(b)) {
+						return -1;
+					}
+					return freqTable[b] - freqTable[a];
+				});
+
+				//calculate linking verbs - TO DO
+				var linkingVerbs = 0;
+				for(var i in results) {
+					var result = results[i];
+					if (linkingVerb(result)) {
+						linkingVerbs++;
+					}
+				}
+				if (resultDict['pos_info'] == null) {
+					resultDict['pos_info'] = {};
+				}
+				resultDict['linking_verbs'] = linkingVerbs;
+
+				// store number of words, characters, and also
+				// top 5 most used words
+				resultDict["num_words"] = results.length;
+				resultDict["num_chars"] = charCount;
+
+				resultDict["overused_words"] = [];
+				var n = 5;
+				var i = 0;
+				var min = Math.min(n, keys.length);
+				while(i < min) {
+					if (freqTable[keys[i]] / results.length < 0.02) {
+						break;
+					}
+					if (blacklistedWord(keys[i])) {
+						// console.log("BLACKLISTED word:");
+						i++;
+						continue;
+					}
+					resultDict["overused_words"].push(keys[i]);
+					// console.log(keys[i] + " " + freqTable[keys[i]]);
+					i++;
+				}
+				tokenizer = null;
+				aCB(null, resultDict);
+			});
+		},
+		// calculate various sentence-level statistics
+		function(aCB) {
+			console.log("Calculating sentence statistics");
+			var openNLP = require("opennlp");
+			var sentenceDetector = new openNLP().sentenceDetector;
+			var resultDict = {};
+			sentenceDetector.sentDetect(text, function(err, results) {
+				var mean = 0;
+				var variance = 0;
+				for (var i in results) {
+					var result = results[i];
+					var numWords = result.split(" ").length;
+					mean += numWords;
+				}
+				mean /= results.length;
+
+				for (var i in results) {
+					var result = results[i];
+					var numWords = result.split(" ").length;
+					variance += Math.pow(mean - numWords,2);
+				}
+				variance /= results.length;
+
+				resultDict["sentence_info"] = {};
+				resultDict["sentence_info"]["mean"] = mean;
+				resultDict["sentence_info"]["var"] = variance;
+				resultDict["sentence_info"]["num"] = results.length;
+				sentenceDetector = null;
+				aCB(null, resultDict);
+			});
+		},
+		// calculate various part of speech -level statistics
+		function(aCB) {
+			console.log("calculating POS statistics");
+			var openNLP = require("opennlp");
+			var posTagger = new openNLP().posTagger;
+			var resultDict = {};
+			posTagger.tag(text, function(err, results) {
+				var adjectiveCount = 0;
+				var adverbCount = 0;
+				var nounCount = 0;
+				var verbCount = 0;
+				for(var i in results) {
+					var result = results[i];
+					if (result == "JJ" || result == "JJR" || result == "JJS") {
+						adjectiveCount++;
+					}
+					else if (result == "RB" || result == "RBR" 
+						|| result == "RBS" || result == "WRB") {
+						adverbCount++;
+					}
+					else if (result == "NN" || result == "NNS" || 
+						result == "NNP" || result == "NNPS" || 
+						result == "PRP" || result == "PRP$" || 
+						result == "WP" || result == "WP$") {
+						nounCount++;
+					}
+					else if (result == "VB" || result == "VBD" ||
+						result == "VBG" || result == "VBN" || 
+						result == "VBP" || result == "VBZ") {
+						verbCount++;
+					}
+				}
+				if (resultDict['pos_info'] == null) {
+					resultDict['pos_info'] = {};
+				}
+				resultDict["pos_info"]["adj_count"] = adjectiveCount;
+				resultDict["pos_info"]["adv_count"] = adverbCount;
+				resultDict["pos_info"]["noun_count"] = nounCount;
+				resultDict["pos_info"]["verb_count"] = verbCount;
+				posTagger = null;
+				aCB(null, resultDict);
+			});
 		}
-
-		results = pruneResults(results);
-
-		// console.log(results);
-		var charCount = 0;
-		for (var i in results) {
-			var result = results[i];
-			charCount += result.length;
-			if (result in freqTable) {
-				freqTable[result]++;
-			}
-			else {
-				freqTable[result] = 1;
+	], function(err, results) {
+		//load everything in result dictionary
+		resultDict = {};
+		for(i in results) {
+			result = results[i];
+			for (key in result) {
+				resultDict[key] = result[key];
 			}
 		}
-
-		var keys = Object.keys(freqTable);
-		keys.sort(function(a,b) {
-			if (blacklistedWord(a) && !blacklistedWord(b)) {
-				return 1;
-			}
-			else if (!blacklistedWord(a) && blacklistedWord(b)) {
-				return -1;
-			}
-			if (linkingVerb(a) && !linkingVerb(b)) {
-				return 1;
-			}
-			else if (!linkingVerb(a) && linkingVerb(b)) {
-				return -1;
-			}
-			return freqTable[b] - freqTable[a];
-		});
-
-		//calculate linking verbs - TO DO
-		var linkingVerbs = 0;
-		for(var i in results) {
-			var result = results[i];
-			if (linkingVerb(result)) {
-				linkingVerbs++;
-			}
-		}
-		if (resultDict['pos_info'] == null) {
-			resultDict['pos_info'] = {};
-		}
-		resultDict['linking_verbs'] = linkingVerbs;
-
-		// store number of words, characters, and also
-		// top 5 most used words
-		resultDict["num_words"] = results.length;
-		resultDict["num_chars"] = charCount;
-
-		resultDict["overused_words"] = [];
-		var n = 5;
-		var i = 0;
-		var min = Math.min(n, keys.length);
-		while(i < min) {
-			if (freqTable[keys[i]] / results.length < 0.02) {
-				break;
-			}
-			if (blacklistedWord(keys[i])) {
-				// console.log("BLACKLISTED word:");
-				i++;
-				continue;
-			}
-			resultDict["overused_words"].push(keys[i]);
-			// console.log(keys[i] + " " + freqTable[keys[i]]);
-			i++;
-		}
-
-		counter = checkCallback(counter, callback, resultDict);
-	});
-	// calculate sentence length variation 
-	sentenceDetector.sentDetect(text, function(err, results) {
-		var mean = 0;
-		var variance = 0;
-		for (var i in results) {
-			var result = results[i];
-			var numWords = result.split(" ").length;
-			mean += numWords;
-		}
-		mean /= results.length;
-
-		for (var i in results) {
-			var result = results[i];
-			var numWords = result.split(" ").length;
-			variance += Math.pow(mean - numWords,2);
-		}
-		variance /= results.length;
-
-		resultDict["sentence_info"] = {};
-		resultDict["sentence_info"]["mean"] = mean;
-		resultDict["sentence_info"]["var"] = variance;
-		resultDict["sentence_info"]["num"] = results.length;
-
-		counter = checkCallback(counter, callback, resultDict);	
-	});
-
-
-	// get num paragraphs - TO DO
-
-	posTagger.tag(text, function(err, results) {
-		var adjectiveCount = 0;
-		var adverbCount = 0;
-		var nounCount = 0;
-		var verbCount = 0;
-		for(var i in results) {
-			var result = results[i];
-			if (result == "JJ" || result == "JJR" || result == "JJS") {
-				adjectiveCount++;
-			}
-			else if (result == "RB" || result == "RBR" 
-				|| result == "RBS" || result == "WRB") {
-				adverbCount++;
-			}
-			else if (result == "NN" || result == "NNS" || 
-				result == "NNP" || result == "NNPS" || 
-				result == "PRP" || result == "PRP$" || 
-				result == "WP" || result == "WP$") {
-				nounCount++;
-			}
-			else if (result == "VB" || result == "VBD" ||
-				result == "VBG" || result == "VBN" || 
-				result == "VBP" || result == "VBZ") {
-				verbCount++;
-			}
-		}
-		if (resultDict['pos_info'] == null) {
-			resultDict['pos_info'] = {};
-		}
-		resultDict["pos_info"]["adj_count"] = adjectiveCount;
-		resultDict["pos_info"]["adv_count"] = adverbCount;
-		resultDict["pos_info"]["noun_count"] = nounCount;
-		resultDict["pos_info"]["verb_count"] = verbCount;
-		counter = checkCallback(counter, callback, resultDict);
+		console.log("after objective heuristics: %j", resultDict);
+		callback(null, resultDict);
 	});
 
 }
@@ -306,125 +314,144 @@ function objectiveHeuristics(id, text, callback) {
 
 function subjectiveHeuristics(id, text, callback) {
 
-	var APIKEY = '8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27';
-	/*var Wordnik = require('wordnik-bb').init(APIKEY);
-	 
-	var randomWordPromise = Wordnik.getRandomWordModel({
-	    includePartOfSpeech: "verb-transitive",
-	    minCorpusCount: 10000
-	  }
-	);
-	randomWordPromise.done(function(wordModel) {
-	  console.log("Random word: ", wordModel.attributes.word); });*/
+	console.log("calculating subjective heuristics");
 
-	resultDict = {};
-	var counter = 5;
+	async.parallel([
+		// tokenize essay and calculate 1) etymology score, and 2) cadence gap
+		// function(aCB) {
+		// 	var openNLP = require("opennlp");
+		// 	var tokenizer = new openNLP().tokenizer;
+		// 	resultDict = {};
+		// 	tokenizer.tokenize(text, function(err, results) {
+		// 		// need some way to fetch from database 
+		// 		// get the etymology associated with the word
+		// 		// calculate prestige value
+		// 		results = pruneResults(results);
+		// 		if (results == null || results.length == 0) {
+		// 			resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
+		// 			aCB(null, resultDict);
+		// 			return;
+		// 		}
+		// 		// take a running average of all words for etymology
+		// 		// calculate syllable cadence by taking the avg of all the gaps
+		// 		var avg = 0;
+		// 		var count = 0;
+		// 		var curGap = 0;
+		// 		var avgGap = 0;
+		// 		var numGaps = 0;
+		// 		var count2 = 0;
 
-	//calculate the prestige values of text
-	var tokenizer = new openNLP().tokenizer;
-	tokenizer.tokenize(text, function(err, results) {
-		// need some way to fetch from database 
-		// get the etymology associated with the word
-		// calculate prestige value
-		results = pruneResults(results);
-		if (results == null || results.length == 0) {
-			resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
-			counter = checkCallback(counter, callback, resultDict);
-			counter = checkCallback(counter, callback, resultDict);
-			return;
+		// 		async.each(results, function(result, resultCB) {
+		// 			var queryWord = WordModel.findOne({'content':result});
+		// 			var queryWordCadence = WordCadenceModel.findOne({'content':result});
+		// 			async.parallel([
+		// 				// query database for etymology
+		// 				function(qCB) {
+		// 					queryWord.exec(function(err, word) {
+		// 						if (word != null) {
+		// 							var titleOrigin = word.etymology;
+		// 							if (titleOrigin != "none") {
+		// 								var prestige = prestigeOf(titleOrigin);
+		// 								avg += prestige;
+		// 							}
+		// 						}
+		// 						queryWord = null;
+		// 						qCB(null, result);
+		// 					});
+		// 				},
+		// 				// query database for cadence gap
+		// 				function(qCB) {
+		// 					queryWordCadence.exec(function(err, word) {
+		// 						if (word != null) {
+		// 							//syllable cadence
+		// 							var cadence = word.cadence; 
+		// 							if (cadence != null) {
+		// 								var index = cadence.indexOf("1");
+		// 								if (index == -1) {
+		// 									curGap += cadence.length;
+		// 								}
+		// 								else {
+		// 									curGap += index;
+		// 									numGaps++;
+		// 									avgGap += curGap;
+		// 									curGap = cadence.length - index - 1;
+		// 								}
+		// 							}
+		// 						}
+		// 						queryWordCadence = null;
+		// 						qCB(null, result);
+		// 					});
+		// 				}
+		// 			],function(err, results) {
+		// 				resultCB();
+		// 			});
+		// 		}, function(err) {
+		// 			avg /= results.length;
+		// 			avgGap /= numGaps;
+		// 			resultDict["etymology_score"] = avg;
+		// 			resultDict["cadence_gap"] = avgGap;
+		// 			console.log("done processing etymology, cadence");
+		// 			tokenizer = null;
+		// 			results = null;
+		// 			aCB(null, resultDict);
+		// 		});
+		// 	});
+
+		// },
+		// calculate sentiment using Indico's API
+		function(aCB) {
+			console.log("calculating sentiment");
+			resultDict = {};
+			indico.sentiment(text).then(function(res){
+				console.log("SENTIMENT: " + res);
+				resultDict["sentiment"] = res;
+				aCB(null, resultDict);
+			})
+			.catch(function(err) {
+				console.log("Indico error -- suppressed");
+			})
+		},
+		// calculate POS frequencies
+		function(aCB) {
+			console.log("calculating POS frequencies");
+			resultDict = {};
+			calculatePOSFreqs(text, function(err, posPairDict, 
+				posTotalFreqs, totalWords) {
+				resultDict["pos_match_info"] = {};
+				resultDict["pos_match_info"]["pairFreqs"] = posPairDict;
+				resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
+				console.log("posPairDict: %j", posPairDict);
+				console.log("posTotalFreqs: %j", posTotalFreqs);
+				posPairDict = null;
+				posTotalFreqs = null;
+				aCB(null, resultDict);
+			}); 
+		},
+		// calculate reading time
+		function(aCB) {
+			console.log("calculating reading time");
+			resultDict = {};
+			var stats = readingTime(text);
+			if (stats != null) {
+				resultDict["reading_time"] = stats["text"];
+			}
+			else {
+				resultDict["reading_time"] = "0 min read";
+			}
+			aCB(null, resultDict);
 		}
-		// take a running average of all words for etymology
-		// calculate syllable cadence by taking the avg of all the gaps
-		var avg = 0;
-		var count = 0;
-		var curGap = 0;
-		var avgGap = 0;
-		var numGaps = 0;
-		var count2 = 0;
-		for(var i in results) {
-			var result = results[i];
-			var queryWord = WordModel.findOne({'content':result});
-			var queryWordCadence = WordCadenceModel.findOne({'content':result});
-			queryWord.exec(function(err, word) {
-				if (word != null) {
-					var titleOrigin = word.etymology;
-					if (titleOrigin != "none") {
-						var prestige = prestigeOf(titleOrigin);
-						avg += prestige;
-					}
-				}
-				count++;
-				if (count == results.length) {
-					// calculate etymology score
-					avg /= results.length;
-					resultDict["etymology_score"] = avg;
-					counter = checkCallback(counter, callback, resultDict);
-				}
-			});
-			queryWordCadence.exec(function(err, word) {
-				if (word != null) {
-					//syllable cadence
-					var cadence = word.cadence; 
-					if (cadence != null) {
-						var index = cadence.indexOf("1");
-						if (index == -1) {
-							curGap += cadence.length;
-						}
-						else {
-							curGap += index;
-							numGaps++;
-							avgGap += curGap;
-							curGap = cadence.length - index - 1;
-						}
-					}
-				}
-				count2++;
-				if (count2 == results.length) {
-					// calculate syllable cadence
-					if (numGaps !== 0) {
-						avgGap /= numGaps;
-					}
-					resultDict["cadence_gap"] = avgGap;
-					counter = checkCallback(counter, callback, resultDict);
-				}
-			});
+	],
+	function(err, results) {
+		//load everything in result dictionary
+		resultDict = {};
+		for(i in results) {
+			result = results[i];
+			for (key in result) {
+				resultDict[key] = result[key];
+			}
 		}
-
+		callback(null, resultDict);
 	});
-
-	// calculate sentiment using Indico's API
-	indico.sentiment(text).then(function(res){
-		console.log("SENTIMENT: " + res);
-		resultDict["sentiment"] = res;
-		counter = checkCallback(counter, callback, resultDict);
-	})
-	.catch(function(err) {
-		console.log("Indico error -- suppressed");
-	})
-
-	// TODO -- uncomment and debug
-
-	// calculate POS frequencies
-	calculatePOSFreqs(text, function(err, posPairDict, 
-		posTotalFreqs, totalWords) {
-		resultDict["pos_match_info"] = {};
-		resultDict["pos_match_info"]["pairFreqs"] = posPairDict;
-		resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
-		// console.log("posPairDict: %j", posPairDict);
-		// console.log("posTotalFreqs: %j", posTotalFreqs);
-		counter = checkCallback(counter, callback, resultDict);
-	}); 
-
-	//calculate reading time
-	var stats = readingTime(text);
-	if (stats != null) {
-		resultDict["reading_time"] = stats["text"];
-	}
-	else {
-		resultDict["reading_time"] = "0 min read";
-	}
-	counter = checkCallback(counter, callback, resultDict);		
-
 }
 
 /* todo -- uncomment and debug */
@@ -478,8 +505,10 @@ function identifyPOS(posTag) {
 	
 }
 
+// calculate the POS frequencies
 function calculatePOSFreqs(text, callback) {
 	// store frequencies in a hash table, mapping from one POS -> next POS
+	var openNLP = require("opennlp");
 	var posTagger = new openNLP().posTagger;
 	var posPairDict = new Object(); //2-d dict
 	var posTotalFreqs = new Object();
@@ -506,6 +535,8 @@ function calculatePOSFreqs(text, callback) {
 			posTotalFreqs[pos] += 1;
 			totalWords++;
 		}
+		posTagger = null;
+		results = null;
 		callback(0, posPairDict, posTotalFreqs, totalWords);
 	});
 }

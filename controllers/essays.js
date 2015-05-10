@@ -201,7 +201,7 @@ function calculateNormals(essay, master_avg, master_var) {
 
 function calculateFinal(normalDict, posProb) {
     var w_linkingVerbs = 15;
-    var w_etymologyScore = 100;
+    var w_etymologyScore = 50;
     var w_cadenceGap = 5;
     var w_sentiment = 3;
     var w_verbRatio = 1;
@@ -345,11 +345,12 @@ var updateEssayMetrics = function(essay, req, res, cb) {
         function(callback) {
             console.log("hello world");
             process.objectiveHeuristics(-1, essay.content, callback);
+            //callback(null, {});
         },
         function(callback) {
             console.log("hello world2");
             process.subjectiveHeuristics(-1, essay.content, callback);
-        }
+        },
     ], function(err, results) {
         console.log("RESULTS: %j", results);
         var resultDict = results[0];
@@ -366,31 +367,28 @@ var updateEssayMetrics = function(essay, req, res, cb) {
         }
         //convert pos_match_info into 1-d arrays for 
         //insertion into Mongo
-        // var posPairFreqs = dict["pos_match_info"]["pairFreqs"];
-        // var posTotalFreqs = dict["pos_match_info"]["totalFreqs"];
-
-        var posPairArr = process.deformatPairFreqs(resultDict2["pos_match_info"]["pairFreqs"]);
-        var posTotalArr = process.deformatTotalFreqs(resultDict2["pos_match_info"]["totalFreqs"]);
+        // var posPairArr = process.deformatPairFreqs(resultDict2["pos_match_info"]["pairFreqs"]);
+        // var posTotalArr = process.deformatTotalFreqs(resultDict2["pos_match_info"]["totalFreqs"]);
 
         var oh = new ObjectiveModel( 
         {
-            num_words: resultDict["num_words"],
-            num_chars: resultDict["num_chars"],
-            linking_verbs: resultDict["linking_verbs"],
-            etymology_score: resultDict2["etymology_score"],
-            cadence_gap: resultDict2["cadence_gap"],
-            overused_words: resultDict["overused_words"],
-            sentence_mean: resultDict["sentence_info"]["mean"],
-            sentence_var: resultDict["sentence_info"]["var"],
-            sentence_num: resultDict["sentence_info"]["num"],
-            adj_count: resultDict["pos_info"]["adj_count"],
-            adv_count: resultDict["pos_info"]["adv_count"],
-            noun_count: resultDict["pos_info"]["noun_count"],
-            verb_count: resultDict["pos_info"]["verb_count"],
+           // num_words: resultDict["num_words"],
+           // num_chars: resultDict["num_chars"],
+           // linking_verbs: resultDict["linking_verbs"],
+           // etymology_score: resultDict2["etymology_score"],
+           // cadence_gap: resultDict2["cadence_gap"],
+           // overused_words: resultDict["overused_words"],
+           // sentence_mean: resultDict["sentence_info"]["mean"],
+            // sentence_var: resultDict["sentence_info"]["var"],
+           //  sentence_num: resultDict["sentence_info"]["num"],
+            // adj_count: resultDict["pos_info"]["adj_count"],
+            // adv_count: resultDict["pos_info"]["adv_count"],
+            // noun_count: resultDict["pos_info"]["noun_count"],
+            // verb_count: resultDict["pos_info"]["verb_count"],
             sentiment: resultDict2["sentiment"],
             reading_time: resultDict2["reading_time"],
-            pos_match_pairFreqs: posPairArr,
-            pos_match_totalFreqs: posTotalArr,
+            // pos_match_pairFreqs: posPairArr,
+            // pos_match_totalFreqs: posTotalArr,
 
         });
         oh.save(function (err) {
@@ -408,6 +406,9 @@ var updateEssayMetrics = function(essay, req, res, cb) {
                 cb(null, essay);
             }
             // saved!
+            resultDict = null;
+            resultDict2 = null; 
+            oh = null;
         });
     });
 };
