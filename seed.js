@@ -152,5 +152,5 @@ async.waterfall([
 ],
 // optional callback
 function(err, results){
-    return results;
+  process.exit();
 });

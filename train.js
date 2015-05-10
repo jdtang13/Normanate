@@ -208,7 +208,7 @@ async.waterfall([
     },
 
 
-    function(averageDict, varDict, numFiles) {
+    function(averageDict, varDict, numFiles, callback) {
     //  save the averaged data into the objective model
     var MasterObjectiveModel = require('mongoose').model('MasterObjectiveHeuristic');
     MasterObjectiveModel.remove({}, function(err) { 
@@ -312,45 +312,53 @@ async.waterfall([
             if (err) {
                 console.log("error while saving oh!");
                 console.log(err);
+                callback(err);
                 //return handleError(err);
             }
             else {
                 console.log("successfully saved the master of the objective heuristics!");
                 console.log("master content is %j", oh);
+
+
+                var oh_var = new MasterObjectiveModel(
+                {
+                    overused_words_num: var_overused_words_num,
+                    sentence_mean: var_sentence_mean,
+                    sentence_var: var_sentence_var,
+                    etymology_score: var_etymology_score,
+                    cadence_gap: var_cadence_gap,
+                    adj_ratio: var_adj_count,
+                    adv_ratio: var_adv_count,
+                    noun_ratio: var_noun_count,
+                    verb_ratio: var_verb_count,
+                    linking_verbs_ratio: var_lv_ratio,
+                    sentiment: var_sentiment,
+                    type: "var",
+                });
+                oh_var.save(function(err) {
+                    if (err) {
+                        console.log("error while saving oh_var!");
+                        console.log(err);
+                        callback(err);
+                        //return handleError(err);
+                    }
+                    else {
+                        console.log("successfully saved the variances of the heuristics!");
+                        console.log("variance content is %j", oh_var);
+                        callback(null);
+                    }
+                });
             }
           // saved!
         });
 
-        var oh_var = new MasterObjectiveModel(
-        {
-            overused_words_num: var_overused_words_num,
-            sentence_mean: var_sentence_mean,
-            sentence_var: var_sentence_var,
-            etymology_score: var_etymology_score,
-            cadence_gap: var_cadence_gap,
-            adj_ratio: var_adj_count,
-            adv_ratio: var_adv_count,
-            noun_ratio: var_noun_count,
-            verb_ratio: var_verb_count,
-            linking_verbs_ratio: var_lv_ratio,
-            sentiment: var_sentiment,
-            type: "var",
-        });
-        oh_var.save(function(err) {
-            if (err) {
-                console.log("error while saving oh_var!");
-                console.log(err);
-                //return handleError(err);
-            }
-            else {
-                console.log("successfully saved the variances of the heuristics!");
-                console.log("variance content is %j", oh_var);
-            }
-        });
 
     });
 }],
 // optional callback
 function(err, results){
-    return;
+    if (err) {
+        console.log(err);
+    }
+    process.exit();
 });
