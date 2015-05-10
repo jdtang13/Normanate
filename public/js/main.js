@@ -9,8 +9,12 @@ var count = require('../../utils/count');
 var loader = require('./utils/load');
 var essays = require('./controllers/essays');
 
+require('./vendor/lightbox');
+
 
 $(document).ready(function() {
+
+    $('.fluidbox').lightbox();
 
     loader.init();
     require('./views/dashboard')();
@@ -106,15 +110,19 @@ $(document).ready(function() {
 });
 
 var area = $('#content')[0];
-if (area.addEventListener) {
-  area.addEventListener('input', function() {
-    updateCounter();
-  }, false);
-} else if (area.attachEvent) {
-  area.attachEvent('onpropertychange', function() {
-    updateCounter();
-  });
+if (area) {
+    if (area.addEventListener) {
+      area.addEventListener('input', function() {
+        updateCounter();
+      }, false);
+    } else if (area.attachEvent) {
+      area.attachEvent('onpropertychange', function() {
+        updateCounter();
+      });
+    }
+
 }
+
 
 function updateCounter() {
     var essayCount = count($('.essay-content').val() || "");
