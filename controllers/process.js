@@ -10,6 +10,7 @@ var chi = require("chi-squared");
 var expectedHeuristics = training.getExpectedHeuristics();
 var readingTime = require('reading-time');
 
+
 function prestigeOf(etymology) {
 
     var etymologies = ["Abnaki", "Afrikaans", "Akkadian", "Algonquian", "American English", 
@@ -257,6 +258,8 @@ function objectiveHeuristics(id, text, callback) {
 			var openNLP = require("opennlp");
 			var posTagger = new openNLP().posTagger;
 			var resultDict = {};
+			console.log("Calculating POS frequencies");
+
 			posTagger.tag(text, function(err, results) {
 				var adjectiveCount = 0;
 				var adverbCount = 0;
@@ -290,7 +293,11 @@ function objectiveHeuristics(id, text, callback) {
 				resultDict["pos_info"]["adv_count"] = adverbCount;
 				resultDict["pos_info"]["noun_count"] = nounCount;
 				resultDict["pos_info"]["verb_count"] = verbCount;
+				text = null;
+				openNLP = null;
 				posTagger = null;
+				results = null;
+				global.gc();
 				aCB(null, resultDict);
 			});
 		}
@@ -318,86 +325,86 @@ function subjectiveHeuristics(id, text, callback) {
 
 	async.parallel([
 		// tokenize essay and calculate 1) etymology score, and 2) cadence gap
-		// function(aCB) {
-		// 	var openNLP = require("opennlp");
-		// 	var tokenizer = new openNLP().tokenizer;
-		// 	resultDict = {};
-		// 	tokenizer.tokenize(text, function(err, results) {
-		// 		// need some way to fetch from database 
-		// 		// get the etymology associated with the word
-		// 		// calculate prestige value
-		// 		results = pruneResults(results);
-		// 		if (results == null || results.length == 0) {
-		// 			resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
-		// 			aCB(null, resultDict);
-		// 			return;
-		// 		}
-		// 		// take a running average of all words for etymology
-		// 		// calculate syllable cadence by taking the avg of all the gaps
-		// 		var avg = 0;
-		// 		var count = 0;
-		// 		var curGap = 0;
-		// 		var avgGap = 0;
-		// 		var numGaps = 0;
-		// 		var count2 = 0;
+		function(aCB) {
+			var openNLP = require("opennlp");
+			var tokenizer = new openNLP().tokenizer;
+			resultDict = {};
+			tokenizer.tokenize(text, function(err, results) {
+				// need some way to fetch from database 
+				// get the etymology associated with the word
+				// calculate prestige value
+				results = pruneResults(results);
+				if (results == null || results.length == 0) {
+					resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
+					aCB(null, resultDict);
+					return;
+				}
+				// take a running average of all words for etymology
+				// calculate syllable cadence by taking the avg of all the gaps
+				var avg = 0;
+				var count = 0;
+				var curGap = 0;
+				var avgGap = 0;
+				var numGaps = 0;
+				var count2 = 0;
 
-		// 		async.each(results, function(result, resultCB) {
-		// 			var queryWord = WordModel.findOne({'content':result});
-		// 			var queryWordCadence = WordCadenceModel.findOne({'content':result});
-		// 			async.parallel([
-		// 				// query database for etymology
-		// 				function(qCB) {
-		// 					queryWord.exec(function(err, word) {
-		// 						if (word != null) {
-		// 							var titleOrigin = word.etymology;
-		// 							if (titleOrigin != "none") {
-		// 								var prestige = prestigeOf(titleOrigin);
-		// 								avg += prestige;
-		// 							}
-		// 						}
-		// 						queryWord = null;
-		// 						qCB(null, result);
-		// 					});
-		// 				},
-		// 				// query database for cadence gap
-		// 				function(qCB) {
-		// 					queryWordCadence.exec(function(err, word) {
-		// 						if (word != null) {
-		// 							//syllable cadence
-		// 							var cadence = word.cadence; 
-		// 							if (cadence != null) {
-		// 								var index = cadence.indexOf("1");
-		// 								if (index == -1) {
-		// 									curGap += cadence.length;
-		// 								}
-		// 								else {
-		// 									curGap += index;
-		// 									numGaps++;
-		// 									avgGap += curGap;
-		// 									curGap = cadence.length - index - 1;
-		// 								}
-		// 							}
-		// 						}
-		// 						queryWordCadence = null;
-		// 						qCB(null, result);
-		// 					});
-		// 				}
-		// 			],function(err, results) {
-		// 				resultCB();
-		// 			});
-		// 		}, function(err) {
-		// 			avg /= results.length;
-		// 			avgGap /= numGaps;
-		// 			resultDict["etymology_score"] = avg;
-		// 			resultDict["cadence_gap"] = avgGap;
-		// 			console.log("done processing etymology, cadence");
-		// 			tokenizer = null;
-		// 			results = null;
-		// 			aCB(null, resultDict);
-		// 		});
-		// 	});
+				async.each(results, function(result, resultCB) {
+					var queryWord = WordModel.findOne({'content':result});
+					var queryWordCadence = WordCadenceModel.findOne({'content':result});
+					async.parallel([
+						// query database for etymology
+						function(qCB) {
+							queryWord.exec(function(err, word) {
+								if (word != null) {
+									var titleOrigin = word.etymology;
+									if (titleOrigin != "none") {
+										var prestige = prestigeOf(titleOrigin);
+										avg += prestige;
+									}
+								}
+								queryWord = null;
+								qCB(null, result);
+							});
+						},
+						// query database for cadence gap
+						function(qCB) {
+							queryWordCadence.exec(function(err, word) {
+								if (word != null) {
+									//syllable cadence
+									var cadence = word.cadence; 
+									if (cadence != null) {
+										var index = cadence.indexOf("1");
+										if (index == -1) {
+											curGap += cadence.length;
+										}
+										else {
+											curGap += index;
+											numGaps++;
+											avgGap += curGap;
+											curGap = cadence.length - index - 1;
+										}
+									}
+								}
+								queryWordCadence = null;
+								qCB(null, result);
+							});
+						}
+					],function(err, results) {
+						resultCB();
+					});
+				}, function(err) {
+					avg /= results.length;
+					avgGap /= numGaps;
+					resultDict["etymology_score"] = avg;
+					resultDict["cadence_gap"] = avgGap;
+					console.log("done processing etymology, cadence");
+					tokenizer = null;
+					results = null;
+					aCB(null, resultDict);
+				});
+			});
 
-		// },
+		},
 		// calculate sentiment using Indico's API
 		function(aCB) {
 			console.log("calculating sentiment");
@@ -411,7 +418,7 @@ function subjectiveHeuristics(id, text, callback) {
 				console.log("Indico error -- suppressed");
 			})
 		},
-		// calculate POS frequencies
+		//calculate POS frequencies
 		function(aCB) {
 			console.log("calculating POS frequencies");
 			resultDict = {};
@@ -537,7 +544,7 @@ function calculatePOSFreqs(text, callback) {
 		}
 		posTagger = null;
 		results = null;
-		callback(0, posPairDict, posTotalFreqs, totalWords);
+		callback(0, posPairDict, posTotalFreqs, 0);
 	});
 }
 
