@@ -3,19 +3,61 @@
 <div class="row">
 
 <div class='col-sm-8 col-sm-offset-2'>
-<div class='text-center'>
-<img src='/img/logo-icon.png'>
-<div class='logo-font'><span class='primary-color'>Lexica</span> Reader</div>
-<p class="lead">A personalized English writing analyzer.</p>
-</div>
-<hr/>
+    <div class='text-center'>
+    <img src='/img/logo-icon.png'>
+    <div class='logo-font'><span class='primary-color'>Lexica</span> Reader</div>
+    <p class="lead">A personalized English writing analyzer.</p>
+    </div>
+    <hr/>
 
-<div class='essay-container'>
-<textarea id='title' type='text' class='essay-title form-control expanding' placeholder='Title'></textarea>
-<textarea id='content' autofocus class='essay-content essay-content-truncated form-control expanding' placeholder='Paste your essay here.'></textarea>
-  
+    <div class='essay-container' id='essay'>
+    <textarea id='title' type='text' class='essay-title form-control expanding' placeholder='Title'></textarea>
+    <textarea id='content' autofocus class='essay-content essay-content-truncated form-control expanding' placeholder='Paste your essay here.'></textarea>
+
+    </div>
+    <div class='pull-right'>
+      <p>~<span id='word-count'>0</span> Words | <span id='char-count'>0</span> Characters</p>
+      </div>
+    <a id="create-essay-button" data-csrf="{{_csrf}}" role="button" class="btn btn-lg btn-default">Analyze</a>
+
+    <div class='alert alert-warning'>
+    <button class="close" data-dismiss="alert">&times;</button>
+        <p>Lexica Reader currently limits essays to 600 words and 3000 characters, whichever comes first, as we work on speeding up the analysis process.</p>
+    </div>
 </div>
-<a id="create-essay-button" data-csrf="{{_csrf}}" role="button" class="btn btn-lg btn-default">Analyze</a>
+
+
+</div>
+
+<hr>
+
+<div class='row'>
+<div class='col-sm-12 text-center'>
+<p class="lead">Lexica Reader is a fast and accurate English essay analyzer, supplied with training data from accredited sources of essay-writing literature. It analyzes each essay using the following metrics:</p>
+<div class='row'>
+<div class='col-sm-4'>
+<img src='/img/sound-wave.png'>
+<h3 class='light'>Aural Cadence</h3>
+<p>Analyzes how the essay flows and feels at a physical, sound-based level, and shows how easily your essay rolls off the tongue.</p>
+</div>
+
+<div class='col-sm-4'>
+<img src='/img/dictionary.png'>
+<h3 class='light'>Contextual Harmony</h3>
+<p>Provides insight to the context and meaning of the words you use, telling you how prestigious your essay is and the emotional sentiment level in it.</p>
+</div>
+
+<div class='col-sm-4'>
+<img src='/img/editor.png'>
+<h3 class='light'>Suggestions</h3>
+<p>Finds and highlights common writing pitfalls that could weaken your writing, displaying them in an easy-to-navigate manner.</p>
+</div>
+</div>
+<hr>
+<p class="lead">Get started by <a href='#essay'>analyzing an essay</a> above, or make an account to store and keep track of the essays you've analyzed.</p>
+
+<a class='btn btn-success btn-lg' href='/signup'>Login</a> <a class='btn btn-primary btn-lg' href='/signup'>Sign up</a>
+
 </div>
 </div>
 {% endblock %}

@@ -1,10 +1,19 @@
 {% extends '../layouts/layout.html' %}
 {% block content %}
 <div class='row'>
+
   <div class='col-sm-8'>
+
+  {% if !essay.author %}
+  <div class='alert alert-warning'>
+  <p>To return to this essay, use the link <code>http://lexicareader.com/essays/{{essay.id}}</code></p> 
+
+  <p>If you lose the link, there won't be a way to recover the essay. <a href='/login'><strong>Log in</strong></a> to keep all your essays in one place.</p>
+  </div>
+  {% endif %}
   <div class='essay-container'>
     <h1 class='essay-title'>{{essay.title}}</h1>
-    <p class='essay-content'>{{essay.content|striptags|replace('\n', '<br>', 'g')|safe}}</p>
+    <p class='essay-content'>{{essay.content|escape|replace('\n', '<br>', 'g')|safe}}</p>
     </div>
   </div>
   <div class='col-sm-4 essay-stats'>

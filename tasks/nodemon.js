@@ -13,7 +13,7 @@ module.exports = function nodemon(grunt) {
                 args: [],
                 ignore: ['public/**', 'node_modules/**'],
                 ext: 'js,html',
-                nodeArgs: ['--debug'],
+                nodeArgs: ['--debug', '--expose-gc'],
                 delayTime: 1,
                 env: {
                     PORT: 3000

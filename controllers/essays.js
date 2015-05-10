@@ -5,6 +5,9 @@ var training = require('./training');
 var async = require('async');
 var stats = require('./stats');
 
+var count = require('../utils/count');
+var escape = require('escape-html');
+
 var suggest = require('./suggestions');
 
 
@@ -27,6 +30,9 @@ exports.hasAuthorization = function(req, res, next) {
 };
 
 exports.getEditEssay = function(req, res) {
+    req.essay.content = escape(req.essay.content);
+    req.essay.title = escape(req.essay.title);
+
     res.render('essays/edit', {
         essay: req.essay
     });
@@ -35,9 +41,8 @@ exports.getEditEssay = function(req, res) {
 // GET an essay
 exports.getEssay = function(req, res) {
 
-    console.log(req.essay);
     var suggestions = suggest.getSuggestions(req.essay);
-    
+
     var MasterObjective = require('mongoose').model('MasterObjectiveHeuristic');
     async.series([
         function(callback) {
@@ -244,6 +249,19 @@ exports.postCreateEssay = function(req, res) {
         essay.author = req.user;
     }
 
+    var limits = require('../config/limits');
+
+    var essayCount = count(essay.content);
+    if (limits.characters > 0 && essayCount.characters > limits.characters) {
+        var error = {"message": "Reached maximum character limit of " + limits.characters + " characters"};
+        return res.status(400).json(error);
+    }
+
+    if (limits.words > 0 && essayCount.words > limits.words) {
+        var error = {"message": "Reached maximum word limit of " + limits.words + " words"};
+        return res.status(400).json(error);
+    }
+
     updateEssayMetrics(essay, req, res, function(error, e) {
         if (error) {
             return res.status(400).json(error);
@@ -265,6 +283,19 @@ exports.postCreateEssay = function(req, res) {
 exports.updateEssay = function(req, res) {
     var essay = req.essay;
     essay = _.extend(essay, req.body);
+    var limits = require('../config/limits');
+
+    var essayCount = count(essay.content);
+    if (limits.characters > 0 && essayCount.characters > limits.characters) {
+        var error = {"message": "Reached maximum character limit of " + limits.characters + " characters"};
+        return res.status(400).json(error);
+    }
+
+    if (limits.words > 0 && essayCount.words > limits.words) {
+        var error = {"message": "Reached maximum word limit of " + limits.words + " words"};
+        return res.status(400).json(error);
+    }
+
     essay.updated = Date.now();
 
     updateEssayMetrics(essay, req, res, function(error, e) {

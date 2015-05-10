@@ -2,6 +2,8 @@
 @import "vendor/font-awesome/font-awesome";
 @import "vendor/ionicons/ionicons";
 @import "vendor/bootstrap-social";
+@import "vendor/lightbox";
+
 
 @import "themes/theme";
 
@@ -31,6 +33,10 @@ html {
 body {
   padding-top: 60px;
   margin-bottom: 75px;
+
+  img {
+    max-width: 100%;
+  }
 }
 
 footer {
@@ -48,6 +54,10 @@ footer {
 
 .danger-color {
   color: @brand-danger;
+}
+
+.light {
+  font-weight: 300!important;
 }
 
 // Navbar

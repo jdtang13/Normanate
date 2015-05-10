@@ -1,0 +1,112 @@
+@lightbox-overlay: #FFFFFF;
+
+.lightbox {
+    cursor: pointer;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: @lightbox-overlay; /* IE Fallback (Solid Colour) */
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-filter: none !important;
+    z-index: 9997;
+    overflow: auto;
+
+    a {
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+.lightbox img {
+    max-width: 960px;
+    margin: auto auto;
+    margin-top: 24px;
+    display: block;
+    background-color: #fff;
+    border: 16px solid #fff;
+    border-radius: 1px;
+}
+body.blurred > * {
+  -webkit-filter: blur(2px);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+.lightbox-loading {
+    // background: url(loading.gif) center center no-repeat;
+    width: 31px;
+    height: 31px;
+    margin: -16px 0 0 -16px;
+    position: absolute;
+    top: 48%;
+    left: 50%;
+}
+.lightbox-caption {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 9998;
+    background: #000;
+    background: rgba(0,0,0,0.7);
+}
+
+.lightbox-caption p {
+    margin: 0 auto;
+    max-width: 70%;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    padding: 10px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.lightbox-button {
+    position: absolute;
+    z-index: 9999;
+    background: no-repeat center center;
+    width: 32px;
+    height: 32px;
+    opacity:0.4;
+    -webkit-transition: all 0.3s;
+    -moz-transition:    all 0.3s;
+    -ms-transition:     all 0.3s;
+    transition:         all 0.3s;
+}
+
+.lightbox-button:hover,
+.lightbox-button:focus {
+    opacity: 1;
+    -webkit-transform: scale(1.4);
+    -moz-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    transform: scale(1.4);
+}
+
+.lightbox-close {
+    right: 10px;
+    top: 10px;
+    // background-image: url('close.png');
+    .fa-icon();
+    color: @gray-darker;
+    &:before {
+        content: @fa-var-times;
+    }
+    font-size: 32px;
+    
+
+}
+.lightbox-next {
+    right: 10px;
+    top: 48%;
+    // background-image: url('next.png');
+}
+.lightbox-previous {
+    left: 10px;
+    top: 48%;
+    // background-image: url('previous.png');
+}
