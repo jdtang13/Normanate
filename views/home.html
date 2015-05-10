@@ -20,10 +20,12 @@
       </div>
     <a id="create-essay-button" data-csrf="{{_csrf}}" role="button" class="btn btn-lg btn-default">Analyze</a>
 
+    {% if limits.words > 0 || limits.characters > 0 %}
     <div class='alert alert-warning'>
     <button class="close" data-dismiss="alert">&times;</button>
-        <p>Lexica Reader currently limits essays to 600 words and 3000 characters, whichever comes first, as we work on speeding up the analysis process.</p>
+        <p>Lexica Reader currently limits essays to {{limits.words}} words and {{limits.characters}} characters, whichever comes first, as we work on speeding up the analysis process.</p>
     </div>
+    {% endif %}
 </div>
 
 

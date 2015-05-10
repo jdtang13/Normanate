@@ -14,6 +14,8 @@ var multer  = require('multer');
 
 var consolidate = require('consolidate');
 
+var limits = require('./config/limits');
+
 var _ = require('lodash');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
@@ -90,6 +92,12 @@ app.use(function(req, res, next) {
   res.locals.user = req.user;
   next();
 });
+
+app.use(function(req, res, next) {
+  res.locals.limits = limits;
+  next();
+});
+
 app.use(function(req, res, next) {
   if (/api/i.test(req.path)) req.session.returnTo = req.path;
   next();
