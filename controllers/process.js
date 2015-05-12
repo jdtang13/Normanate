@@ -258,7 +258,15 @@ function objectiveHeuristics(id, text, callback) {
 			// var openNLP = require("opennlp");
 			// var posTagger = new openNLP().posTagger;
 			var resultDict = {};
-			var analysis = compendium.analyse(text);
+			try {
+				var analysis = compendium.analyse(text);
+			}
+			catch (e) {
+				resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
+				aCB(null, resultDict);
+				return;
+			}
+
 			var results = [];
 			for (var i in analysis) {
 				var chunk = analysis[i];
@@ -526,7 +534,15 @@ function calculatePOSFreqs(text, callback) {
 	// store frequencies in a hash table, mapping from one POS -> next POS
 	// var openNLP = require("opennlp");
 	// var posTagger = new openNLP().posTagger;
-	var analysis = compendium.analyse(text);
+	try {
+		var analysis = compendium.analyse(text);
+	}
+	catch (e) {
+		resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
+		callback(0, {}, {}, 0);
+		return;
+	}
+
 	var results = [];
 	for (var i in analysis) {
 		var chunk = analysis[i];
