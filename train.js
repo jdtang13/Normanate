@@ -58,9 +58,6 @@ async.waterfall([
     function(callback){
 
         console.log("Begin training");
-
-        
-        
         
         console.log(files);
 
@@ -114,11 +111,6 @@ async.waterfall([
 
             console.log("Starting to train "+ file);
 
-            /*if (file.indexOf(".txt") == -1) {
-                console.log(file + " is not a .txt! skipping!");
-            }
-            else {*/
-
             var html = fs.readFileSync(dir + file, 'utf-8');
 
                 
@@ -155,7 +147,6 @@ async.waterfall([
                     //  add dict results to an ongoing average
                     averageDict["num_words"] += resultDict["num_words"];
                     averageDict["num_chars"] += resultDict["num_chars"];
-                    //averageDict["overused_words_num"] += resultDict["overused_words"].length;
                     averageDict["sentence_mean"] += resultDict["sentence_info"]["mean"];
                     averageDict["sentence_var"] += resultDict["sentence_info"]["var"];
                     averageDict["sentence_num"] += resultDict["sentence_info"]["num"];
@@ -276,11 +267,6 @@ async.waterfall([
             varDict["linking_verbs"][i] /= num_words;
         }
         var var_lv_ratio = stats.calculateVariance(varDict["linking_verbs"]);
-        // var_adj_count /= (numFiles * numFiles);
-        // var_adv_count /= (numFiles * numFiles);
-        // var_noun_count /= (numFiles * numFiles);
-        // var_verb_count /= (numFiles * numFiles);
-        // var_lv_ratio /= (numFiles * numFiles);
         console.log("sentiments! " + varDict["sentiment"]);
         var var_sentiment = stats.calculateVariance(varDict["sentiment"]);
 

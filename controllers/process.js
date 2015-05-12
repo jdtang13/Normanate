@@ -11,6 +11,9 @@ var expectedHeuristics = training.getExpectedHeuristics();
 var readingTime = require('reading-time');
 var compendium = require('compendium-js');
 
+
+// Helper function that returns the prestige of a word, given the etymology
+// All etymology terms are defined from the Online Etymology Dictionary
 function prestigeOf(etymology) {
 
     var etymologies = ["Abnaki", "Afrikaans", "Akkadian", "Algonquian", "American English", 
@@ -59,6 +62,8 @@ function prestigeOf(etymology) {
 
 }
 
+// Helper function to identify a "blacklisted word": A word so common
+// that it might not be worth processing
 function blacklistedWord(word) {
 	if (!word) {
 		return false;
@@ -77,6 +82,7 @@ function blacklistedWord(word) {
 	return false;
 }
 
+// Helper function to identify a linking verb
 function linkingVerb(word) {
 	if (!word) {
 		return false;
@@ -91,15 +97,23 @@ function linkingVerb(word) {
 	return false;
 }
 
-/* calculate objective heuristics */
+//Helper function that prunes result data so that punctuation 
+//is not included. 
+function pruneResults(results) {
+	var temp = [];
+	for(var i in results) {
+		var result = results[i];
+		if (result.match(/^([A-Za-z0-9]|[-])+$/)) {
+			temp.push(result);
+		}
+	}
+	return temp;
+}
 
-/* 
-Ideal schema:
 
-
-*/
-
-// basic structure of a result object. This should apply to both objective and subjective heuristics.
+// In the functions below, i have methods for calculating objective and subjecitve heuristics. They
+// will return two parts of a "result dictionary" that will have the schema shown below: 
+// Basic structure of a result object. This should apply to both objective and subjective heuristics.
 	// {
 	//  id:
 	//	num_words:
@@ -123,17 +137,13 @@ Ideal schema:
 	//		
 	//	
 	// }
-function pruneResults(results) {
-	var temp = [];
-	for(var i in results) {
-		var result = results[i];
-		if (result.match(/^([A-Za-z0-9]|[-])+$/)) {
-			temp.push(result);
-		}
-	}
-	return temp;
-}
 
+
+
+// Calculate objective heuristics - word count, sentence length,
+// sentence variance, linking verbs, verb/noun/adjective/adverb count.
+// These are all heuristics that can evaluated easily on an 
+// objective level. 
 function objectiveHeuristics(id, text, callback) {
 
 	async.parallel([
@@ -209,12 +219,10 @@ function objectiveHeuristics(id, text, callback) {
 						break;
 					}
 					if (blacklistedWord(keys[i])) {
-						// console.log("BLACKLISTED word:");
 						i++;
 						continue;
 					}
 					resultDict["overused_words"].push(keys[i]);
-					// console.log(keys[i] + " " + freqTable[keys[i]]);
 					i++;
 				}
 				tokenizer = null;
@@ -270,7 +278,6 @@ function objectiveHeuristics(id, text, callback) {
 				var chunk = analysis[i];
 				results = results.concat(chunk["tags"]);
 			}
-			console.log("Calculating POS frequencies");
 
 			var adjectiveCount = 0;
 			var adverbCount = 0;
@@ -315,15 +322,17 @@ function objectiveHeuristics(id, text, callback) {
 				resultDict[key] = result[key];
 			}
 		}
-		console.log("after objective heuristics: %j", resultDict);
+		console.log("objective heuristics: %j", resultDict);
 		callback(null, resultDict);
 	});
 
 }
 
-/* Wordnik: http://videlais.com/2015/03/25/starting-with-the-wordnik-api-in-node-js/ */
-/* API Key: 8f7a98ece2c502050b0070ea7420d05f07b7e17ec1aca1b27 */
 
+// Calculate subjective heuristics: the syllable cadence, the etymology ratio,
+// the part of speech flow, the sentiment, and the reading time. These are all
+// heuristics that carry a large degree of subjectivity; we evaluate them
+// through the creation of our own models and external APIs. 
 function subjectiveHeuristics(id, text, callback) {
 
 	console.log("calculating subjective heuristics");
@@ -417,7 +426,6 @@ function subjectiveHeuristics(id, text, callback) {
 			console.log("calculating sentiment");
 			resultDict = {};
 			indico.sentiment(text).then(function(res){
-				console.log("SENTIMENT: " + res);
 				resultDict["sentiment"] = res;
 				aCB(null, resultDict);
 			})
@@ -434,8 +442,6 @@ function subjectiveHeuristics(id, text, callback) {
 				resultDict["pos_match_info"] = {};
 				resultDict["pos_match_info"]["pairFreqs"] = posPairDict;
 				resultDict["pos_match_info"]["totalFreqs"] = posTotalFreqs;
-				console.log("posPairDict: %j", posPairDict);
-				console.log("posTotalFreqs: %j", posTotalFreqs);
 				posPairDict = null;
 				posTotalFreqs = null;
 				aCB(null, resultDict);
@@ -468,10 +474,7 @@ function subjectiveHeuristics(id, text, callback) {
 	});
 }
 
-/* todo -- uncomment and debug */
 
-// helper function to calculate the frequency table for the POS match 
-// callback parameters: err, posPairDict, posTotalFreqs, totalWords
 // return values:
 // NOU - noun
 // PRO - pronoun
@@ -483,12 +486,14 @@ function subjectiveHeuristics(id, text, callback) {
 // INT - interjection
 // DET - determinant
 // NUL - null
-
 function getPosTags() {
 	var posTags = ["NOU","PRO","ADJ","VER","ADV","PRE","CON","INT","DET","NUL"];
 	return posTags;
 }
 
+// Function returns a mapping dictionary that maps 
+// Penn Treebank POS Tags (which are what NLP libraries use for POS tagging)
+// to a more limited set of POS tags that we've identified above. 
 function getPosMapping() {
 	var NOU = 0;
 	var PRO = 1;
@@ -509,17 +514,18 @@ function getPosMapping() {
 	return posDict;
 }
 
+// Given a Penn Treebank POS tag, function identifies the corresponding mapping
+// for our purposes. If the tag doesn't exist in the mapping, return null.
 function identifyPOS(posTag) {
 	var posMapping = getPosMapping();
 	var posTags = getPosTags();
 	if (posTag in posMapping) {
 		return posTags[posMapping[posTag]];
 	}
-	return null; //NUL tag
-	
+	return null;
 }
-
-// calculate the POS frequencies
+// Helper function to calculate the frequency table for the POS match 
+// callback parameters: err, posPairDict, posTotalFreqs, totalWords
 function calculatePOSFreqs(text, callback) {
 	// store frequencies in a hash table, mapping from one POS -> next POS
 	try {
@@ -538,8 +544,6 @@ function calculatePOSFreqs(text, callback) {
 	var posPairDict = new Object(); //2-d dict
 	var posTotalFreqs = new Object();
 
-	console.log("Calculating POS frequencies");
-
 	// initialize the dictionaries
 	var posTags = getPosTags();
 	for(var i in posTags) {
@@ -550,7 +554,6 @@ function calculatePOSFreqs(text, callback) {
 		posTotalFreqs[posTags[i]] = 1;
 	}
 
-	console.log("RESULTS: %j", results);
 	for(var i = results.length - 1; i >= 0; i--) {
 		if (identifyPOS(results[i]) == null) {
 			results.splice(i, 1);
@@ -570,8 +573,10 @@ function calculatePOSFreqs(text, callback) {
 	callback(0, posPairDict, posTotalFreqs, 0);
 }
 
-// calculate POS match - DON'T USE FOR TRAINING DATA, shouldn't really be in process.js
-// callback: pass prob as the parameter
+// calculate POS match - DON'T USE FOR TRAINING DATA. The idea is that
+// this function takes the frequency tables from both training and test data,
+// and performs a chi-squared goodness of fit test.
+// Returns the p-value as the POS match statistic. 
 function calculatePOSMatch(posPairDict, posTotalFreqs,
 	expectedPairFreqs,expectedTotalFreqs) {
 	var chiSquaredDict = new Object();
@@ -590,23 +595,18 @@ function calculatePOSMatch(posPairDict, posTotalFreqs,
 		for(var key2 in expectedPosFreqs) {
 			var temp = Math.pow(expectedPosFreqs[key2] - posPairDict[key][key2], 2);
 			temp /= expectedPosFreqs[key2];
-			// console.log("temp: " + temp);
 			chiSquaredValue += temp;
 		}
 		chiSquaredDict[key] = chiSquaredValue;
-		// console.log("chi squared value: " + chiSquaredValue);
 		finalChiSquared += (chiSquaredValue) * (posTotalFreqs[key]) / totalWords;
 	}
 
-	// console.log("final chi squared: " + finalChiSquared);
-
 	// 5) Now that we have the final chi-squared static, calculate the probability
-	// console.log("df: " + Object.keys(posTotalFreqs).length);
 	var prob = 1 - chi.cdf(finalChiSquared, Object.keys(posTotalFreqs).length * 5);
 	return prob;
 }
 
-/* deformats into a 1-d array for storage in Mongo */
+// Helper function, deformats into a 1-d array for storage in Mongo
 function deformatPairFreqs(pairFreqs) {
 	var posTags = getPosTags();
 	var results = [];
@@ -618,6 +618,7 @@ function deformatPairFreqs(pairFreqs) {
 	return results;
 }
 
+// Helper function, deformats into a 1-d array for storage in Mongo
 function deformatTotalFreqs(totalFreqs) {
 	var posTags = getPosTags();
 	var results = [];
@@ -627,7 +628,7 @@ function deformatTotalFreqs(totalFreqs) {
 	return results;
 }
 
-/* formats from a 1-d array into a 2-d dictionary */
+// Helper function, formats from a 1-d array into a 2-d dictionary
 function formatPairFreqs(pairFreqsArr) {
 	var posTags = getPosTags();
 	var results = {};
@@ -641,6 +642,7 @@ function formatPairFreqs(pairFreqsArr) {
 	}
 	return results;
 }
+// Helper function, formats from a 1-d array into a 1-d dictionary
 function formatTotalFreqs(totalFreqsArr) {
 	var posTags = getPosTags();
 	var results = {};
@@ -650,6 +652,7 @@ function formatTotalFreqs(totalFreqsArr) {
 	return results;
 }
 
+// Exportable functions that can be called from other js files. 
 module.exports = {
 	prestigeOf: prestigeOf,
 	objectiveHeuristics: objectiveHeuristics,
