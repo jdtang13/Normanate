@@ -77,8 +77,6 @@ while line != None:
 	if word <= "butter":
 		line = f.readline()
 		continue
-	#url = 'http://en.wiktionary.org/wiki/' + word
-	#url = 'http://www.thefreedictionary.com/' + word
 	url = 'http://dictionary.reference.com/browse/' + word
 	try:
 		response = urllib2.urlopen(url)
@@ -90,14 +88,3 @@ while line != None:
 	parser.feed(html)
 	parser.close()
 	line = f.readline()
-# url = 'http://dictionary.reference.com/browse/acquire'
-# try:
-# 	response = urllib2.urlopen(url)
-# except:
-# 	print "error"
-# html = response.read()
-# parser = MyHTMLParser()
-# parser.cur_word = 'acquire'
-# parser.feed(html)
-# parser.close()
-

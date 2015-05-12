@@ -63,13 +63,11 @@ class MyHTMLParser(HTMLParser):
 			self.title += result
 		if self.description_enabled:
 			self.description += " " + data
-		#print "Encountered some data :", data
 	def handle_starttag(self, tag, attrs):
 		if tag == 'a':
 			attrs_dict = dict(attrs)
 			if "class" in attrs_dict:
 				return
-			# print attrs_dict['href']
 			if re.search('/index.php\\?term=.*&allowed_in_frame=0', attrs_dict['href']):
 				self.title_enabled = True
 		elif tag == 'dd':
@@ -82,10 +80,6 @@ class MyHTMLParser(HTMLParser):
 		if tag == 'dd':
 			self.description_enabled = False
 			words = self.description.split()
-			# for word in words:
-			# 	if word in etymologies:
-			# 		print word
-			# 		break
 			cur_start = 999999
 			cur_root = ""
 			for root in etymologies:
@@ -111,12 +105,6 @@ for i in range(26):
 		parser = MyHTMLParser()
 		parser.feed(html)
 		parser.close()
-
-# response = urllib2.urlopen('http://www.etymonline.com/index.php?l=a&p=0&allowed_in_frame=0')
-# html = response.read()
-# parser = MyHTMLParser()
-# parser.feed(html)
-# parser.close()
 
 
 
