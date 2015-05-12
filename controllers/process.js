@@ -258,15 +258,7 @@ function objectiveHeuristics(id, text, callback) {
 			// var openNLP = require("opennlp");
 			// var posTagger = new openNLP().posTagger;
 			var resultDict = {};
-			try {
-				var analysis = compendium.analyse(text);
-			}
-			catch (e) {
-				resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
-				aCB(null, resultDict);
-				return;
-			}
-
+			var analysis = compendium.analyse(text);
 			var results = [];
 			for (var i in analysis) {
 				var chunk = analysis[i];
@@ -308,11 +300,11 @@ function objectiveHeuristics(id, text, callback) {
 				resultDict["pos_info"]["adv_count"] = adverbCount;
 				resultDict["pos_info"]["noun_count"] = nounCount;
 				resultDict["pos_info"]["verb_count"] = verbCount;
-				text = null;
-				openNLP = null;
-				posTagger = null;
-				results = null;
-				global.gc();
+				//text = null;
+				//openNLP = null;
+				//posTagger = null;
+				//results = null;
+				//global.gc();
 				aCB(null, resultDict);
 			//});
 		}
@@ -534,15 +526,7 @@ function calculatePOSFreqs(text, callback) {
 	// store frequencies in a hash table, mapping from one POS -> next POS
 	// var openNLP = require("opennlp");
 	// var posTagger = new openNLP().posTagger;
-	try {
-		var analysis = compendium.analyse(text);
-	}
-	catch (e) {
-		resultDict["error"] = {"message": "Write more words! We can't process your essay like this."};
-		callback(0, {}, {}, 0);
-		return;
-	}
-
+	var analysis = compendium.analyse(text);
 	var results = [];
 	for (var i in analysis) {
 		var chunk = analysis[i];
