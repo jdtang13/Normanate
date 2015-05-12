@@ -3,7 +3,6 @@
 var passportConf = require('../config/passport');
 var homeController = require('../controllers/home');
 var userController = require('../controllers/user');
-var contactController = require('../controllers/contact');
 
 /**
  * Primary app routes.
@@ -13,8 +12,7 @@ module.exports = function(app) {
     app.get('/', homeController.index);
     app.get('/about', homeController.about);
     app.get('/privacy', homeController.privacy);
-    //app.get('/about', );
-
+    
     app.get('/login', userController.getLogin);
     app.post('/login', userController.postLogin);
     app.get('/logout', userController.logout);

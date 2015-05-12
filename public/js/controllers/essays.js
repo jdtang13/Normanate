@@ -1,5 +1,6 @@
 var _ = require('lodash');
 
+// front end AJAX controllers
 module.exports = {
     createEssay: function(data, error) {
     // Create a piece, redirect to editing that piece

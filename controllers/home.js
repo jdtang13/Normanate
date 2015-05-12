@@ -4,7 +4,7 @@
  */
 
 
-
+// render the index
 exports.index = function(req, res) {
 	if (req.isAuthenticated()) {
 		return res.redirect('/essays');
@@ -17,6 +17,7 @@ exports.index = function(req, res) {
   });
 };
 
+// static pages
 exports.about = function(req, res) {
 	res.render('pages/about');
 }
