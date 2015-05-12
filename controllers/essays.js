@@ -375,8 +375,8 @@ var updateEssayMetrics = function(essay, req, res, cb) {
     async.series([
         function(callback) {
             console.log("hello world");
-            //process.objectiveHeuristics(-1, essay.content, callback);
-            callback(null, {});
+            process.objectiveHeuristics(-1, essay.content, callback);
+            //callback(null, {});
         },
         function(callback) {
             console.log("hello world2");
@@ -399,28 +399,28 @@ var updateEssayMetrics = function(essay, req, res, cb) {
 
         //convert pos_match_info into 1-d arrays for 
         //insertion into Mongo
-        // var posPairArr = process.deformatPairFreqs(resultDict2["pos_match_info"]["pairFreqs"]);
-        // var posTotalArr = process.deformatTotalFreqs(resultDict2["pos_match_info"]["totalFreqs"]);
+         var posPairArr = process.deformatPairFreqs(resultDict2["pos_match_info"]["pairFreqs"]);
+        var posTotalArr = process.deformatTotalFreqs(resultDict2["pos_match_info"]["totalFreqs"]);
 
         var oh = new ObjectiveModel( 
         {
-           // num_words: resultDict["num_words"],
-           // num_chars: resultDict["num_chars"],
-           // linking_verbs: resultDict["linking_verbs"],
+           num_words: resultDict["num_words"],
+           num_chars: resultDict["num_chars"],
+           linking_verbs: resultDict["linking_verbs"],
            etymology_score: resultDict2["etymology_score"],
            cadence_gap: resultDict2["cadence_gap"],
-           // overused_words: resultDict["overused_words"],
-           // sentence_mean: resultDict["sentence_info"]["mean"],
-           //  sentence_var: resultDict["sentence_info"]["var"],
-           //  sentence_num: resultDict["sentence_info"]["num"],
-           //  adj_count: resultDict["pos_info"]["adj_count"],
-           //  adv_count: resultDict["pos_info"]["adv_count"],
-           //  noun_count: resultDict["pos_info"]["noun_count"],
-           //  verb_count: resultDict["pos_info"]["verb_count"],
+           overused_words: resultDict["overused_words"],
+           sentence_mean: resultDict["sentence_info"]["mean"],
+            sentence_var: resultDict["sentence_info"]["var"],
+            sentence_num: resultDict["sentence_info"]["num"],
+            adj_count: resultDict["pos_info"]["adj_count"],
+            adv_count: resultDict["pos_info"]["adv_count"],
+            noun_count: resultDict["pos_info"]["noun_count"],
+            verb_count: resultDict["pos_info"]["verb_count"],
             sentiment: resultDict2["sentiment"],
             reading_time: resultDict2["reading_time"],
-            // pos_match_pairFreqs: posPairArr,
-            // pos_match_totalFreqs: posTotalArr,
+            pos_match_pairFreqs: posPairArr,
+            pos_match_totalFreqs: posTotalArr,
 
         });
         oh.save(function (err) {

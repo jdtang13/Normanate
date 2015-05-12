@@ -255,8 +255,7 @@ function objectiveHeuristics(id, text, callback) {
 		// calculate various part of speech -level statistics
 		function(aCB) {
 			console.log("calculating POS statistics");
-			// var openNLP = require("opennlp");
-			// var posTagger = new openNLP().posTagger;
+
 			var resultDict = {};
 			try {
 				var analysis = compendium.analyse(text);
@@ -266,7 +265,6 @@ function objectiveHeuristics(id, text, callback) {
 				aCB(null, resultDict);
 				return;
 			}
-
 			var results = [];
 			for (var i in analysis) {
 				var chunk = analysis[i];
@@ -274,47 +272,39 @@ function objectiveHeuristics(id, text, callback) {
 			}
 			console.log("Calculating POS frequencies");
 
-			//posTagger.tag(text, function(err, results) {
-				//console.log("INITIAL RESULTS: %j", results);
-				var adjectiveCount = 0;
-				var adverbCount = 0;
-				var nounCount = 0;
-				var verbCount = 0;
-				for(var i in results) {
-					var result = results[i];
-					if (result == "JJ" || result == "JJR" || result == "JJS") {
-						adjectiveCount++;
-					}
-					else if (result == "RB" || result == "RBR" 
-						|| result == "RBS" || result == "WRB") {
-						adverbCount++;
-					}
-					else if (result == "NN" || result == "NNS" || 
-						result == "NNP" || result == "NNPS" || 
-						result == "PRP" || result == "PP$" || 
-						result == "WP" || result == "WP$") {
-						nounCount++;
-					}
-					else if (result == "VB" || result == "VBD" ||
-						result == "VBG" || result == "VBN" || 
-						result == "VBP" || result == "VBZ") {
-						verbCount++;
-					}
+			var adjectiveCount = 0;
+			var adverbCount = 0;
+			var nounCount = 0;
+			var verbCount = 0;
+			for(var i in results) {
+				var result = results[i];
+				if (result == "JJ" || result == "JJR" || result == "JJS") {
+					adjectiveCount++;
 				}
-				if (resultDict['pos_info'] == null) {
-					resultDict['pos_info'] = {};
+				else if (result == "RB" || result == "RBR" 
+					|| result == "RBS" || result == "WRB") {
+					adverbCount++;
 				}
-				resultDict["pos_info"]["adj_count"] = adjectiveCount;
-				resultDict["pos_info"]["adv_count"] = adverbCount;
-				resultDict["pos_info"]["noun_count"] = nounCount;
-				resultDict["pos_info"]["verb_count"] = verbCount;
-				text = null;
-				openNLP = null;
-				posTagger = null;
-				results = null;
-				global.gc();
-				aCB(null, resultDict);
-			//});
+				else if (result == "NN" || result == "NNS" || 
+					result == "NNP" || result == "NNPS" || 
+					result == "PRP" || result == "PP$" || 
+					result == "WP" || result == "WP$") {
+					nounCount++;
+				}
+				else if (result == "VB" || result == "VBD" ||
+					result == "VBG" || result == "VBN" || 
+					result == "VBP" || result == "VBZ") {
+					verbCount++;
+				}
+			}
+			if (resultDict['pos_info'] == null) {
+				resultDict['pos_info'] = {};
+			}
+			resultDict["pos_info"]["adj_count"] = adjectiveCount;
+			resultDict["pos_info"]["adv_count"] = adverbCount;
+			resultDict["pos_info"]["noun_count"] = nounCount;
+			resultDict["pos_info"]["verb_count"] = verbCount;
+			aCB(null, resultDict);
 		}
 	], function(err, results) {
 		//load everything in result dictionary
@@ -532,8 +522,6 @@ function identifyPOS(posTag) {
 // calculate the POS frequencies
 function calculatePOSFreqs(text, callback) {
 	// store frequencies in a hash table, mapping from one POS -> next POS
-	// var openNLP = require("opennlp");
-	// var posTagger = new openNLP().posTagger;
 	try {
 		var analysis = compendium.analyse(text);
 	}
@@ -542,7 +530,6 @@ function calculatePOSFreqs(text, callback) {
 		callback(0, {}, {}, 0);
 		return;
 	}
-
 	var results = [];
 	for (var i in analysis) {
 		var chunk = analysis[i];
@@ -563,26 +550,24 @@ function calculatePOSFreqs(text, callback) {
 		posTotalFreqs[posTags[i]] = 1;
 	}
 
-	//posTagger.tag(text, function(err, results) {
-		console.log("RESULTS: %j", results);
-		for(var i = results.length - 1; i >= 0; i--) {
-			if (identifyPOS(results[i]) == null) {
-				results.splice(i, 1);
-			}
+	console.log("RESULTS: %j", results);
+	for(var i = results.length - 1; i >= 0; i--) {
+		if (identifyPOS(results[i]) == null) {
+			results.splice(i, 1);
 		}
-		var totalWords = 0;
-		for(var i = 0; i < results.length - 1; i++) {
-			var pos = identifyPOS(results[i]);
-			var pos2 = identifyPOS(results[i+1]);
+	}
+	var totalWords = 0;
+	for(var i = 0; i < results.length - 1; i++) {
+		var pos = identifyPOS(results[i]);
+		var pos2 = identifyPOS(results[i+1]);
 
-			posPairDict[pos][pos2] += 1;
-			posTotalFreqs[pos] += 1;
-			totalWords++;
-		}
-		posTagger = null;
-		results = null;
-		callback(0, posPairDict, posTotalFreqs, 0);
-	//});
+		posPairDict[pos][pos2] += 1;
+		posTotalFreqs[pos] += 1;
+		totalWords++;
+	}
+	posTagger = null;
+	results = null;
+	callback(0, posPairDict, posTotalFreqs, 0);
 }
 
 // calculate POS match - DON'T USE FOR TRAINING DATA, shouldn't really be in process.js
