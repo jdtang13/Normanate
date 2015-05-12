@@ -9,7 +9,7 @@ indico.apiKey = "f3292eb312b6b9baef4895bc8d919604";
 var chi = require("chi-squared");
 var expectedHeuristics = training.getExpectedHeuristics();
 var readingTime = require('reading-time');
-
+var compendium = require('compendium-js');
 
 function prestigeOf(etymology) {
 
@@ -255,12 +255,19 @@ function objectiveHeuristics(id, text, callback) {
 		// calculate various part of speech -level statistics
 		function(aCB) {
 			console.log("calculating POS statistics");
-			var openNLP = require("opennlp");
-			var posTagger = new openNLP().posTagger;
+			// var openNLP = require("opennlp");
+			// var posTagger = new openNLP().posTagger;
 			var resultDict = {};
+			var analysis = compendium.analyse(text);
+			var results = [];
+			for (var i in analysis) {
+				var chunk = analysis[i];
+				results = results.concat(chunk["tags"]);
+			}
 			console.log("Calculating POS frequencies");
 
-			posTagger.tag(text, function(err, results) {
+			//posTagger.tag(text, function(err, results) {
+				//console.log("INITIAL RESULTS: %j", results);
 				var adjectiveCount = 0;
 				var adverbCount = 0;
 				var nounCount = 0;
@@ -276,7 +283,7 @@ function objectiveHeuristics(id, text, callback) {
 					}
 					else if (result == "NN" || result == "NNS" || 
 						result == "NNP" || result == "NNPS" || 
-						result == "PRP" || result == "PRP$" || 
+						result == "PRP" || result == "PP$" || 
 						result == "WP" || result == "WP$") {
 						nounCount++;
 					}
@@ -299,7 +306,7 @@ function objectiveHeuristics(id, text, callback) {
 				results = null;
 				global.gc();
 				aCB(null, resultDict);
-			});
+			//});
 		}
 	], function(err, results) {
 		//load everything in result dictionary
@@ -510,15 +517,21 @@ function identifyPOS(posTag) {
 	if (posTag in posMapping) {
 		return posTags[posMapping[posTag]];
 	}
-	return posTags[9]; //NUL tag
+	return null; //NUL tag
 	
 }
 
 // calculate the POS frequencies
 function calculatePOSFreqs(text, callback) {
 	// store frequencies in a hash table, mapping from one POS -> next POS
-	var openNLP = require("opennlp");
-	var posTagger = new openNLP().posTagger;
+	// var openNLP = require("opennlp");
+	// var posTagger = new openNLP().posTagger;
+	var analysis = compendium.analyse(text);
+	var results = [];
+	for (var i in analysis) {
+		var chunk = analysis[i];
+		results = results.concat(chunk["tags"]);
+	}
 	var posPairDict = new Object(); //2-d dict
 	var posTotalFreqs = new Object();
 
@@ -534,7 +547,13 @@ function calculatePOSFreqs(text, callback) {
 		posTotalFreqs[posTags[i]] = 1;
 	}
 
-	posTagger.tag(text, function(err, results) {
+	//posTagger.tag(text, function(err, results) {
+		console.log("RESULTS: %j", results);
+		for(var i = results.length - 1; i >= 0; i--) {
+			if (identifyPOS(results[i]) == null) {
+				results.splice(i, 1);
+			}
+		}
 		var totalWords = 0;
 		for(var i = 0; i < results.length - 1; i++) {
 			var pos = identifyPOS(results[i]);
@@ -547,7 +566,7 @@ function calculatePOSFreqs(text, callback) {
 		posTagger = null;
 		results = null;
 		callback(0, posPairDict, posTotalFreqs, 0);
-	});
+	//});
 }
 
 // calculate POS match - DON'T USE FOR TRAINING DATA, shouldn't really be in process.js
