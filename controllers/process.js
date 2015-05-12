@@ -394,7 +394,9 @@ function subjectiveHeuristics(id, text, callback) {
 					});
 				}, function(err) {
 					avg /= results.length;
-					avgGap /= numGaps;
+					if (numGaps !== 0) {
+						avgGap /= numGaps;
+					}
 					resultDict["etymology_score"] = avg;
 					resultDict["cadence_gap"] = avgGap;
 					console.log("done processing etymology, cadence");
